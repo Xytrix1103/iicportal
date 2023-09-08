@@ -13,5 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "IICPortal"
-include ':app'
+rootProject.name = "iicportal"
+include(":app")
+ 
