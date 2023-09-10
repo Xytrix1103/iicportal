@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">IICPortal</string>
+    <string name="app_name">iicportal</string>
+    <string name="welcomeText">Welcome to IICPortal</string>
+    <string name="login">Login</string>
+    <string name="forgotPassword">Forgot Password?</string>
+    <string name="emailLabel">Email</string>
+    <string name="emailHint">Please enter email</string>
+    <string name="passwordLabel">Password</string>
+    <string name="passwordHint">Please enter password</string>
+    <string name="confirmPasswordLabel">Confirm Password</string>
+    <string name="confirmPasswordHint">Please confirm password</string>
+    <string name="register">Register</string>
+    <string name="fullNameLabel">Full Name</string>
+    <string name="fullNameHint">Please enter full name</string>
+    <string name="phoneNumberHint">Please enter phone number</string>
+    <string name="phoneNumberLabel">Phone No.</string>
 </resources>
