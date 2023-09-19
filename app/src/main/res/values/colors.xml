@@ -2,7 +2,8 @@
 <resources>
     <color name="background_color">#9d4adf</color>
 
-    <color name="colorPrimary">#1976D2</color>
+    //red shade
+    <color name="colorPrimary">#E53935</color>
     <color name="colorPrimary_disabled">#801976D2</color>
     <color name="colorPrimaryDark">#1565C0</color>
     <color name="colorPrimaryLight">#1E88E5</color>

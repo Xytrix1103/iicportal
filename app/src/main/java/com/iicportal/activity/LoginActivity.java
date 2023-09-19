@@ -76,7 +76,11 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         });
 
-        forgotPasswordButton.setOnClickListener(v -> Toast.makeText(LoginActivity.this, "Forgot password", Toast.LENGTH_SHORT).show());
+        forgotPasswordButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     @Override

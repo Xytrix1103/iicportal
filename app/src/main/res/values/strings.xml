@@ -14,4 +14,8 @@
     <string name="fullNameHint">Please enter full name</string>
     <string name="phoneNumberHint">Please enter phone number</string>
     <string name="phoneNumberLabel">Phone No.</string>
+    <string name="back">Back</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="forgot_password_description">Enter the email that is registered to your account</string>
+    <string name="submit">Submit</string>
 </resources>

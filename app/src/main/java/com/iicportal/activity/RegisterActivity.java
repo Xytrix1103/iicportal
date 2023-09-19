@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,6 +29,8 @@ public class RegisterActivity extends AppCompatActivity {
     TextInputEditText fullNameEdit, phoneNumberEdit, emailEdit, passwordEdit, confirmPasswordEdit;
 
     Button registerButton;
+
+    RelativeLayout backButton;
 
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
@@ -55,6 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
         passwordEdit = findViewById(R.id.password);
         confirmPasswordEdit = findViewById(R.id.confirmPassword);
         registerButton = findViewById(R.id.registerBtn);
+        backButton = findViewById(R.id.backBtn);
 
         String TAG = "RegisterActivity";
 
@@ -89,6 +93,11 @@ public class RegisterActivity extends AppCompatActivity {
                 });
             }
         });
+
+        backButton.setOnClickListener(v -> {
+            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+            finish();
+        });
     }
 
     @Override
@@ -116,7 +125,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Log.d("RegisterActivity", "createUserWithEmail:success");
                         currentUser = mAuth.getCurrentUser();
-                        usersRef.child(currentUser.getUid()).setValue(new User(fullName, phoneNumber, email, password));
+                        usersRef.child(currentUser.getUid()).setValue(new User(fullName, phoneNumber));
                         updateUI(currentUser);
                     } else {
                         Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
