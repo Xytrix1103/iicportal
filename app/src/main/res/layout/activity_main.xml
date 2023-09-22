@@ -71,11 +71,25 @@
         </androidx.cardview.widget.CardView>
 
         <Button
-            android:id="@+id/logoutBtn"
+            android:id="@+id/canteenBtn"
             android:theme="@style/Button.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/loginCard"
+            android:padding="10dp"
+            android:text="Canteen Menu"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            input:cornerRadius="40dp"
+            input:elevation="20dp" />
+
+        <Button
+            android:id="@+id/logoutBtn"
+            android:theme="@style/Button.Primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/canteenBtn"
             android:padding="10dp"
             android:text="Logout"
             android:layout_centerHorizontal="true"
