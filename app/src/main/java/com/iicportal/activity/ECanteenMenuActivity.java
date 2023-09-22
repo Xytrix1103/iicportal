@@ -38,6 +38,7 @@ public class ECanteenMenuActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
 
     List<String> categories = new ArrayList<>();
+    List<FoodItem> foodItems = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,11 +54,16 @@ public class ECanteenMenuActivity extends AppCompatActivity {
         sharedPreferences.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
             if (key.equals("category")) {
                 menuItemAdaptor.stopListening();
-                menuItemAdaptor = new MenuItemAdaptor(new FirebaseRecyclerOptions.Builder<FoodItem>()
-                        .setLifecycleOwner(this)
+                menuRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+                FirebaseRecyclerOptions<FoodItem> options = new FirebaseRecyclerOptions.Builder<FoodItem>()
                         .setQuery(menuRef.child(sharedPreferences.getString("category", "Sandwich")), FoodItem.class)
-                        .build());
+                        .build();
+
+                menuItemAdaptor = new MenuItemAdaptor(options, context);
+
                 menuRecyclerView.setAdapter(menuItemAdaptor);
+
                 menuItemAdaptor.startListening();
             }
         });
@@ -66,11 +72,10 @@ public class ECanteenMenuActivity extends AppCompatActivity {
         menuRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         FirebaseRecyclerOptions<FoodItem> options = new FirebaseRecyclerOptions.Builder<FoodItem>()
-                .setLifecycleOwner(this)
                 .setQuery(menuRef.child(sharedPreferences.getString("category", "Sandwich")), FoodItem.class)
                 .build();
 
-        menuItemAdaptor = new MenuItemAdaptor(options);
+        menuItemAdaptor = new MenuItemAdaptor(options, context);
 
         menuRecyclerView.setAdapter(menuItemAdaptor);
 
