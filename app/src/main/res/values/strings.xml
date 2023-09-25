@@ -25,4 +25,9 @@
     <string name="price">Price</string>
     <string name="food_description">Food Description</string>
     <string name="category">Category</string>
+    <string name="cart">Cart</string>
+    <string name="cart_empty">Cart is empty.
+        Please add items to cart.</string>
+    <string name="total">Total:</string>
+    <string name="checkout">Checkout</string>
 </resources>

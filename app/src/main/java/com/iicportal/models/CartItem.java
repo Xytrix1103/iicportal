@@ -1,34 +1,37 @@
 package com.iicportal.models;
 
-public class FoodItem {
+public class CartItem {
+
     private String name;
     private String description;
     Double price;
     private String image;
 
-    private int quantity = 1;
+    private int quantity;
 
     private String category;
 
-    public FoodItem() {
+    private boolean selected;
+
+    public CartItem() {
     }
 
-    public FoodItem(String name, String description, Double price, String image, String category) {
+    public CartItem(String name, String description, Double price, String image, String category) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.image = image;
         this.category = category;
-        this.quantity = 1;
     }
 
-    public FoodItem(String name, String description, Double price, String image, String category, int quantity) {
+    public CartItem(String name, String description, Double price, String image, String category, int quantity, boolean selected) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.image = image;
         this.category = category;
-        this.quantity = 1;
+        this.quantity = quantity;
+        this.selected = selected;
     }
 
     public String getName() {
@@ -55,6 +58,10 @@ public class FoodItem {
         return quantity;
     }
 
+    public boolean getSelected() {
+        return selected;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -79,36 +86,7 @@ public class FoodItem {
         this.quantity = quantity;
     }
 
-    @Override
-    public String toString() {
-        return "FoodItem{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", image='" + image + '\'' +
-                ", quantity=" + quantity +
-                ", category='" + category + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof FoodItem) {
-            FoodItem foodItem = (FoodItem) obj;
-            return foodItem.getName().equals(this.getName()) && foodItem.getDescription().equals(this.getDescription()) && foodItem.getPrice().equals(this.getPrice()) && foodItem.getImage().equals(this.getImage()) && foodItem.getCategory().equals(this.getCategory());
-        }
-        return false;
-    }
-
-    public void resetQuantity() {
-        this.quantity = 1;
-    }
-
-    public void incrementQuantity() {
-        this.quantity++;
-    }
-
-    public void decrementQuantity() {
-        this.quantity--;
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

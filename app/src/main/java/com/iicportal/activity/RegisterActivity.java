@@ -51,6 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         usersRef = database.getReference("users");
+        usersRef.keepSynced(true);
 
         fullNameEdit = findViewById(R.id.fullName);
         phoneNumberEdit = findViewById(R.id.phoneNumber);

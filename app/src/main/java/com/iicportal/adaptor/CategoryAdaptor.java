@@ -11,54 +11,59 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.iicportal.R;
+import com.iicportal.models.Category;
 
-import java.util.List;
-
-public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.CategoryViewHolder> {
-
+public class CategoryAdaptor extends FirebaseRecyclerAdapter<Category, CategoryAdaptor.CategoryViewHolder> {
     Context context;
-    List<String> categories;
 
     SharedPreferences sharedPreferences;
 
-    public CategoryAdaptor(Context context, List<String> categories) {
+    public CategoryAdaptor(@NonNull FirebaseRecyclerOptions<Category> options, Context context) {
+        super(options);
         this.context = context;
-        this.categories = categories;
-        sharedPreferences = context.getSharedPreferences("com.iicportal", Context.MODE_PRIVATE);
+        this.sharedPreferences = context.getSharedPreferences("com.iicportal", Context.MODE_PRIVATE);
+    }
+
+    public void onDataChanged() {
+        super.onDataChanged();
+        if (super.getItemCount() > 0) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("category", super.getItem(0).getCategory());
+            editor.apply();
+        }
+    }
+
+    @Override
+    protected void onBindViewHolder(@NonNull CategoryViewHolder holder, int position, @NonNull Category model) {
+        holder.categoryName.setText(model.getCategory());
+        holder.itemView.setSelected(sharedPreferences.getString("category", "").equals(model.getCategory()));
+
+        holder.itemView.setOnClickListener(v -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("category", model.getCategory());
+            editor.apply();
+
+            Log.d("CategoryAdaptor", "Category changed to " + sharedPreferences.getString("category", ""));
+            notifyDataSetChanged();
+        });
     }
 
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.category, parent, false);
-        return new CategoryAdaptor.CategoryViewHolder(view);
+        return new CategoryViewHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
-        holder.category.setText(categories.get(position));
-        holder.itemView.setSelected(sharedPreferences.getString("category", "Sandwich").equals(categories.get(position)));
-    }
-
-    @Override
-    public int getItemCount() {
-        return categories.size();
-    }
-
-    class CategoryViewHolder extends RecyclerView.ViewHolder {
-        TextView category;
+    public class CategoryViewHolder extends RecyclerView.ViewHolder {
+        TextView categoryName;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
-            category = itemView.findViewById(R.id.category);
-
-            itemView.setOnClickListener(v -> {
-                Log.d("CategoryAdaptor", "Category changed to " + category.getText().toString());
-                sharedPreferences.edit().putString("category", category.getText().toString()).apply();
-                notifyDataSetChanged();
-                notifyItemChanged(categories.indexOf(sharedPreferences.getString("category", "Sandwich")));
-            });
+            categoryName = itemView.findViewById(R.id.category);
         }
     }
 }
