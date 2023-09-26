@@ -124,7 +124,7 @@ public class CheckoutActivity extends AppCompatActivity {
         checkoutBtn = findViewById(R.id.checkoutBtn);
 
         checkoutBtn.setOnClickListener(v -> {
-            Order order = new Order(user.getUid(), String.valueOf(System.currentTimeMillis()), paymentMethod, orderOption, orderTotal, takeawayFee, total, checkoutItemAdaptor.getItems());
+            Order order = new Order(user.getUid(), String.valueOf(System.currentTimeMillis()), paymentMethod, orderOption, orderTotal, takeawayFee, total, "PREPARING", checkoutItemAdaptor.getItems());
 
             database.getReference("orders/").push().setValue(order).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {

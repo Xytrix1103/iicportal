@@ -10,13 +10,14 @@ public class Order {
     double orderTotal;
     double takeawayFee;
     double total;
+    String status;
 
     List<CartItem> items;
 
     public Order() {
     }
 
-    public Order(String uid, String timestamp, String paymentMethod, String orderOption, double orderTotal, double takeawayFee, double total, List<CartItem> items) {
+    public Order(String uid, String timestamp, String paymentMethod, String orderOption, double orderTotal, double takeawayFee, double total, String status, List<CartItem> items) {
         this.uid = uid;
         this.timestamp = timestamp;
         this.paymentMethod = paymentMethod;
@@ -25,6 +26,7 @@ public class Order {
         this.takeawayFee = takeawayFee;
         this.total = total;
         this.items = items;
+        this.status = status;
     }
 
     public String getUid() {
@@ -89,5 +91,13 @@ public class Order {
 
     public void setItems(List<CartItem> items) {
         this.items = items;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

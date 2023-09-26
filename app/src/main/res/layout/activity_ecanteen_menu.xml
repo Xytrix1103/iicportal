@@ -34,6 +34,15 @@
             android:textSize="24sp"
             android:textStyle="bold"/>
 
+        <ImageView
+            android:id="@+id/historyBtnIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/cartBtn"
+            android:src="@drawable/baseline_history_24"
+            android:scaleType="fitCenter"/>
+
         <FrameLayout
             android:id="@+id/cartBtn"
             android:layout_width="wrap_content"

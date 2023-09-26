@@ -40,4 +40,6 @@
     <string name="total">Total</string>
     <string name="touch_n_go">TNG eWallet</string>
     <string name="cash">Cash</string>
+    <string name="orderHistory">Order History</string>
+    <string name="order_history_empty">You have no previous orders.</string>
 </resources>

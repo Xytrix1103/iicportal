@@ -48,7 +48,7 @@ public class ECanteenMenuActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
 
     FrameLayout cartBtn;
-    ImageView cartIcon;
+    ImageView cartIcon, historyBtnIcon;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -132,6 +132,12 @@ public class ECanteenMenuActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+        });
+
+        historyBtnIcon = findViewById(R.id.historyBtnIcon);
+        historyBtnIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(context, OrderHistoryActivity.class);
+            startActivity(intent);
         });
     }
 
