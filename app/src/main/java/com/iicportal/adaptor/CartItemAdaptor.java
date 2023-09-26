@@ -23,7 +23,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
-import com.iicportal.activity.CartActivity;
 import com.iicportal.models.CartItem;
 
 public class CartItemAdaptor extends FirebaseRecyclerAdapter<CartItem, CartItemAdaptor.CartItemViewHolder> {
@@ -31,14 +30,12 @@ public class CartItemAdaptor extends FirebaseRecyclerAdapter<CartItem, CartItemA
 
     FirebaseDatabase database;
     DatabaseReference cartRef;
-
     FirebaseAuth mAuth;
     FirebaseUser user;
 
     public CartItemAdaptor(@NonNull FirebaseRecyclerOptions<CartItem> options, Context context) {
         super(options);
         this.context = context;
-
         this.database = FirebaseDatabase.getInstance();
         this.cartRef = database.getReference("carts/");
         this.cartRef.keepSynced(true);
@@ -46,50 +43,26 @@ public class CartItemAdaptor extends FirebaseRecyclerAdapter<CartItem, CartItemA
         this.user = mAuth.getCurrentUser();
     }
 
-    public void onDataChanged() {
-        super.onDataChanged();
-        TextView cartEmptyText = ((CartActivity) context).findViewById(R.id.cartEmptyText);
-        TextView cartTotalPrice = ((CartActivity) context).findViewById(R.id.cartTotalPrice);
-
-        if (super.getItemCount() == 0) {
-            Log.d("CartActivity", "Cart is empty");
-            ((CartActivity) context).findViewById(R.id.cartCheckoutBtn).setEnabled(false);
-            cartEmptyText.setVisibility(TextView.VISIBLE);
-        } else {
-            Log.d("CartActivity", "Cart is not empty");
-            ((CartActivity) context).findViewById(R.id.cartCheckoutBtn).setEnabled(true);
-            cartEmptyText.setVisibility(TextView.GONE);
-        }
-
-        double total = 0;
-        for (int i = 0; i < super.getItemCount(); i++) {
-            if(super.getItem(i).getSelected()) {
-                Log.d("CartActivity", "Item " + i + " is selected");
-                Log.d("CartActivity", "Item " + i + " price: " + super.getItem(i).getPrice());
-                Log.d("CartActivity", "Item " + i + " quantity: " + super.getItem(i).getQuantity());
-                total += super.getItem(i).getPrice() * super.getItem(i).getQuantity();
-            }
-        }
-
-        Log.d("CartActivity", "Total price: " + total);
-        ((CartActivity) context).totalPrice = total;
-        cartTotalPrice.setText(String.format("RM %.2f", total));
-    }
-
     @Override
     protected void onBindViewHolder(@NonNull CartItemViewHolder holder, int position, @NonNull CartItem model) {
+        int pos = position;
+
+        if (pos >= getItemCount()) {
+            return;
+        }
+
         holder.name.setText(model.getName());
         holder.price.setText(String.format("RM %.2f", model.getPrice()));
         Glide.with(holder.image.getContext()).load(model.getImage()).into(holder.image);
         holder.quantity.setText(String.valueOf(model.getQuantity()));
 
         holder.plusBtn.setOnClickListener(v -> {
-            getRef(position).child("quantity").setValue(Integer.parseInt(holder.quantity.getText().toString()) + 1);
+            getRef(pos).child("quantity").setValue(Integer.parseInt(holder.quantity.getText().toString()) + 1);
         });
 
         holder.minusBtn.setOnClickListener(v -> {
             if (Integer.parseInt(holder.quantity.getText().toString()) > 1) {
-                getRef(position).child("quantity").setValue(Integer.parseInt(holder.quantity.getText().toString()) - 1);
+                getRef(pos).child("quantity").setValue(Integer.parseInt(holder.quantity.getText().toString()) - 1);
             }
         });
 
@@ -100,7 +73,7 @@ public class CartItemAdaptor extends FirebaseRecyclerAdapter<CartItem, CartItemA
             builder.setTitle("Remove Item");
             builder.setMessage("Are you sure you want to remove this item from your cart?");
             builder.setPositiveButton("OK", (dialog, which) -> {
-                getRef(position).removeValue();
+                getRef(pos).removeValue();
                 dialog.dismiss();
                 Toast.makeText(context, "Item removed from cart", Toast.LENGTH_SHORT).show();
             });
@@ -112,11 +85,29 @@ public class CartItemAdaptor extends FirebaseRecyclerAdapter<CartItem, CartItemA
 
         holder.selected.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                getRef(position).child("selected").setValue(true);
+                getRef(pos).child("selected").setValue(true);
             } else {
-                getRef(position).child("selected").setValue(false);
+                getRef(pos).child("selected").setValue(false);
             }
         });
+    }
+
+    public void onDataChanged() {
+        super.onDataChanged();
+        Log.d("CartItemAdaptor", "Cart items count: " + super.getItemCount());
+
+        notifyDataSetChanged();
+    }
+
+    public int getSelectedItemsCount() {
+        int count = 0;
+        for (int i = 0; i < getItemCount(); i++) {
+            if (getItem(i).getSelected()) {
+                count++;
+            }
+        }
+
+        return count;
     }
 
     @NonNull

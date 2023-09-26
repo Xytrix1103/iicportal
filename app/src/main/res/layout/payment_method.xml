@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/paymentMethodBody"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/radioButton"
+        android:layout_centerVertical="true"
+        android:buttonTint="@color/black"/>
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_toEndOf="@id/radioButton"
+        android:layout_centerVertical="true"
+        android:src="@drawable/outline_account_balance_wallet_24"/>
+
+    <TextView
+        android:id="@+id/method"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/icon"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:text="@string/cash"
+        android:textColor="@color/black"
+        android:textSize="16sp"/>
+
+</RelativeLayout>

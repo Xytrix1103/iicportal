@@ -63,6 +63,7 @@ public class ECanteenMenuActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         categoriesRef = database.getReference("ecanteen/categories");
+        categoriesRef.keepSynced(true);
         menuRef = database.getReference("ecanteen/fooditems/");
         menuRef.keepSynced(true);
         cartRef = database.getReference("carts/").child(user.getUid());
@@ -137,30 +138,16 @@ public class ECanteenMenuActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         sharedPreferences.edit().remove("category").apply();
-
-        if (menuItemAdaptor != null) {
-            menuItemAdaptor.startListening();
-        }
-
-        if (categoryAdaptor != null) {
-            categoryAdaptor.startListening();
-        }
+        menuItemAdaptor.startListening();
+        categoryAdaptor.startListening();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-
         sharedPreferences.edit().remove("category").apply();
-
-        if (menuItemAdaptor != null) {
-            menuItemAdaptor.stopListening();
-        }
-
-        if (categoryAdaptor != null) {
-            categoryAdaptor.stopListening();
-        }
+        menuItemAdaptor.stopListening();
+        categoryAdaptor.stopListening();
     }
 }

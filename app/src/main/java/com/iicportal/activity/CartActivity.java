@@ -1,8 +1,9 @@
 package com.iicportal.activity;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,9 +33,9 @@ public class CartActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference cartRef;
 
-    SharedPreferences sharedPreferences;
-
     TextView cartEmptyText, cartTotalPrice;
+
+    Button checkoutBtn;
 
     ImageView backBtnIcon;
 
@@ -52,14 +53,12 @@ public class CartActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         cartRef = database.getReference("carts/");
-
-        sharedPreferences = context.getSharedPreferences("com.iicportal", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
+        cartRef.keepSynced(true);
         cartEmptyText = findViewById(R.id.cartEmptyText);
         cartTotalPrice = findViewById(R.id.cartTotalPrice);
 
         backBtnIcon = findViewById(R.id.backBtnIcon);
+        checkoutBtn = findViewById(R.id.cartCheckoutBtn);
 
         cartRecyclerView = findViewById(R.id.cartRecyclerView);
         cartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -72,8 +71,41 @@ public class CartActivity extends AppCompatActivity {
         cartItemAdaptor = new CartItemAdaptor(options, context);
         cartRecyclerView.setAdapter(cartItemAdaptor);
 
+        cartItemAdaptor.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                if (cartItemAdaptor.getItemCount() == 0) {
+                    cartEmptyText.setVisibility(TextView.VISIBLE);
+                    checkoutBtn.setEnabled(false);
+                } else {
+                    cartEmptyText.setVisibility(TextView.GONE);
+                    if (cartItemAdaptor.getSelectedItemsCount() == 0) {
+                        checkoutBtn.setEnabled(false);
+                    } else {
+                        checkoutBtn.setEnabled(true);
+                    }
+                }
+
+                double total = 0;
+                for (int i = 0; i < cartItemAdaptor.getItemCount(); i++) {
+                    if(cartItemAdaptor.getItem(i).getSelected()) {
+                        total += cartItemAdaptor.getItem(i).getPrice() * cartItemAdaptor.getItem(i).getQuantity();
+                    }
+                }
+
+                totalPrice = total;
+                cartTotalPrice.setText(String.format("RM %.2f", total));
+            }
+        });
+
         backBtnIcon.setOnClickListener(v -> {
             finish();
+        });
+
+        checkoutBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(context, CheckoutActivity.class);
+            startActivity(intent);
         });
     }
 

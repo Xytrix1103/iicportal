@@ -34,6 +34,8 @@ public class CategoryAdaptor extends FirebaseRecyclerAdapter<Category, CategoryA
             editor.putString("category", super.getItem(0).getCategory());
             editor.apply();
         }
+
+        notifyDataSetChanged();
     }
 
     @Override

@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:id="@+id/backBtnIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/baseline_arrow_back_24"/>
+
+        <TextView
+            android:id="@+id/checkoutHeaderText"
+            android:layout_toEndOf="@id/backBtnIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/checkout"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/checkoutScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        android:layout_marginBottom="90dp">
+
+        <RelativeLayout
+            android:windowSoftInputMode="adjustNothing"
+            android:fillViewport="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/itemsBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="20dp">
+
+                <TextView
+                    android:id="@+id/itemsTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/items"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/itemsCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/itemsTitle"
+                    card:contentPadding="10dp"
+                    card:cardCornerRadius="10dp"
+                    card:cardElevation="5dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/itemsRecyclerView"
+                        android:overScrollMode="never"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/paymentMethodBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/itemsBody"
+                android:gravity="center"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="20dp">
+
+                <TextView
+                    android:id="@+id/paymentMethodTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/payment_method"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/paymentMethodCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/paymentMethodTitle"
+                    android:layout_marginTop="10dp"
+                    card:contentPadding="20dp"
+                    card:cardCornerRadius="10dp"
+                    card:cardElevation="5dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:overScrollMode="never"
+                        android:id="@+id/paymentMethodRecyclerView"/>
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/dineInTakeAwayBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/paymentMethodBody"
+                android:gravity="center"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="20dp">
+
+                <TextView
+                    android:id="@+id/dineInTakeAwayTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/order_option"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/dineInTakeAwayCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/dineInTakeAwayTitle"
+                    android:layout_marginTop="10dp"
+                    android:paddingHorizontal="10dp"
+                    card:contentPadding="20dp"
+                    card:cardCornerRadius="10dp"
+                    card:cardElevation="5dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:overScrollMode="never"
+                        android:id="@+id/dineInTakeAwayRecyclerView"/>
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/totalBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/dineInTakeAwayBody"
+                android:gravity="center"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="20dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    card:contentPadding="20dp"
+                    card:cardCornerRadius="10dp"
+                    card:cardElevation="5dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:id="@+id/orderTotalBody"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true">
+
+                            <TextView
+                                android:id="@+id/orderTotalTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/orderTotal"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"/>
+
+                            <TextView
+                                android:id="@+id/orderTotal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:text="@string/price"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                android:textStyle="bold"/>
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/takeawayFeeBody"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/orderTotalBody"
+                            android:layout_marginTop="10dp">
+
+                            <TextView
+                                android:id="@+id/takeawayFeeTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/takeaway_fee"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"/>
+
+                            <TextView
+                                android:id="@+id/takeawayFee"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:text="@string/price"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                android:textStyle="bold"/>
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/takeawayFeeBody"
+                            android:layout_marginTop="10dp">
+
+                            <TextView
+                                android:id="@+id/totalTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/total"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"/>
+
+                            <TextView
+                                android:id="@+id/total"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:text="@string/price"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                android:textStyle="bold"/>
+
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:gravity="center"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp">
+
+        <Button
+            android:id="@+id/checkoutBtn"
+            android:theme="@style/Button.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/checkout"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

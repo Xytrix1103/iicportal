@@ -28,6 +28,16 @@
     <string name="cart">Cart</string>
     <string name="cart_empty">Cart is empty.
         Please add items to cart.</string>
-    <string name="total">Total:</string>
+    <string name="orderTotal">Order Total:</string>
     <string name="checkout">Checkout</string>
+    <string name="items">Items</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="credit_card">Credit Card</string>
+    <string name="order_option">Order Option</string>
+    <string name="dine_in">Dine-in</string>
+    <string name="order">Order</string>
+    <string name="takeaway_fee">Takeaway Fee:</string>
+    <string name="total">Total</string>
+    <string name="touch_n_go">TNG eWallet</string>
+    <string name="cash">Cash</string>
 </resources>
