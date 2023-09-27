@@ -342,5 +342,7 @@
         <item type="color">#ff9800</item>
     </array>
 
+    <color name="text_color_default">#000000</color> <!-- Default text color (black) -->
+    <color name="text_color_pressed">#FFFFFF</color> <!-- Text color when pressed (white) -->
 
 </resources>

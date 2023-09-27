@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     Button logoutButton;
+    Button facilityButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -21,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         logoutButton = findViewById(R.id.logoutBtn);
+        facilityButton = findViewById(R.id.facilityBtn);
+
 
         if (mAuth.getCurrentUser() == null) {
             startActivity(new Intent(this, LoginActivity.class));
@@ -31,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
             mAuth.signOut();
             startActivity(new Intent(this, LoginActivity.class));
             finish();
+        });
+
+        facilityButton.setOnClickListener(v-> {
+            startActivity(new Intent(this,FacilityMenuActivity.class));
         });
     }
 }
