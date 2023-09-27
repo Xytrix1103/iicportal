@@ -82,6 +82,8 @@ public class ECanteenMenuActivity extends AppCompatActivity {
                 menuItemAdaptor = new MenuItemAdaptor(options, context);
                 menuRecyclerView.setAdapter(menuItemAdaptor);
                 menuItemAdaptor.startListening();
+
+                menuItemAdaptor.notifyDataSetChanged();
             }
         });
 
@@ -122,10 +124,16 @@ public class ECanteenMenuActivity extends AppCompatActivity {
                 badgeDrawable.setBadgeGravity(BadgeDrawable.TOP_END);
                 badgeDrawable.setNumber(count);
 
-                cartBtn.setForeground(badgeDrawable);
-                cartBtn.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-                    badgeDrawable.updateBadgeCoordinates(cartIcon, cartBtn);
-                });
+                if (count == 0) {
+                    cartBtn.setForeground(null);
+                    badgeDrawable.setVisible(false);
+                } else {
+                    cartBtn.setForeground(badgeDrawable);
+                    cartBtn.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+                        badgeDrawable.updateBadgeCoordinates(cartIcon, cartBtn);
+                    });
+                    badgeDrawable.setVisible(true);
+                }
             }
 
             @Override

@@ -41,6 +41,11 @@ public class CheckoutItemAdaptor extends FirebaseRecyclerAdapter<CartItem, Check
         Glide.with(context).load(model.getImage()).into(holder.image);
     }
 
+    public void onDataChanged() {
+        super.onDataChanged();
+        notifyDataSetChanged();
+    }
+
     public class CheckoutItemViewHolder extends RecyclerView.ViewHolder {
         TextView name, price, quantity;
         ImageView image;
@@ -56,5 +61,9 @@ public class CheckoutItemAdaptor extends FirebaseRecyclerAdapter<CartItem, Check
 
     public List<CartItem> getItems() {
         return getSnapshots();
+    }
+
+    public String getKey(int position) {
+        return getRef(position).getKey();
     }
 }

@@ -5,16 +5,16 @@
     android:id="@+id/orderHistoryItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="12dp"
-    android:paddingHorizontal="12dp"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="5dp"
     android:clipChildren="false"
     android:clipToPadding="false">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:contentPadding="12dp"
-        app:cardCornerRadius="12dp"
+        app:contentPadding="10dp"
+        app:cardCornerRadius="10dp"
         app:cardElevation="5dp">
 
         <RelativeLayout
@@ -47,7 +47,7 @@
                     android:layout_centerVertical="true"
                     android:text="COMPLETED"
                     android:textColor="@color/light_green_800"
-                    android:textSize="12dp"/>
+                    android:textSize="14sp"/>
 
                 <View
                     android:id="@+id/divider"
@@ -90,7 +90,7 @@
                         android:layout_height="wrap_content"
                         android:text="Datetime: "
                         android:textColor="@color/black"
-                        android:textSize="12dp"/>
+                        android:textSize="14sp"/>
 
                     <TextView
                         android:id="@+id/datetime"
@@ -99,82 +99,7 @@
                         android:layout_alignParentEnd="true"
                         android:text="01/01/2021"
                         android:textColor="@color/black"
-                        android:textSize="12dp"/>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/orderOptionLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/datetimeLayout">
-
-                    <TextView
-                        android:id="@+id/orderOptionTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Order Option: "
-                        android:textColor="@color/black"
-                        android:textSize="12dp"/>
-
-                    <TextView
-                        android:id="@+id/orderOption"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:text="Dine In"
-                        android:textColor="@color/black"
-                        android:textSize="12dp"/>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/paymentMethodLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/orderOptionLayout">
-
-                    <TextView
-                        android:id="@+id/paymentMethodTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Payment Method: "
-                        android:textColor="@color/black"
-                        android:textSize="12dp"/>
-
-                    <TextView
-                        android:id="@+id/paymentMethod"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:text="Cash"
-                        android:textColor="@color/black"
-                        android:textSize="12dp"/>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/quantityLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/paymentMethodLayout">
-
-                    <TextView
-                        android:id="@+id/quantityTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Quantity: "
-                        android:textColor="@color/black"
-                        android:textSize="12dp"/>
-
-                    <TextView
-                        android:id="@+id/quantity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:text="1"
-                        android:textColor="@color/black"
-                        android:textSize="12dp"/>
+                        android:textSize="14sp"/>
 
                 </RelativeLayout>
 
@@ -182,7 +107,7 @@
                     android:id="@+id/totalLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/quantityLayout">
+                    android:layout_below="@id/datetimeLayout">
 
                     <TextView
                         android:id="@+id/totalTitle"
@@ -190,7 +115,7 @@
                         android:layout_height="wrap_content"
                         android:text="Total: "
                         android:textColor="@color/black"
-                        android:textSize="12dp"/>
+                        android:textSize="14dp"/>
 
                     <TextView
                         android:id="@+id/total"
@@ -199,7 +124,7 @@
                         android:layout_alignParentEnd="true"
                         android:text="RM 10.00"
                         android:textColor="@color/black"
-                        android:textSize="12dp"/>
+                        android:textSize="14dp"/>
 
                 </RelativeLayout>
 

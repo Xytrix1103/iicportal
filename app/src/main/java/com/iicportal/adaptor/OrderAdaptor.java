@@ -1,6 +1,7 @@
 package com.iicportal.adaptor;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
+import com.iicportal.activity.OrderDetailsActivity;
 import com.iicportal.models.Order;
 
 import java.text.SimpleDateFormat;
@@ -46,19 +48,10 @@ public class OrderAdaptor extends FirebaseRecyclerAdapter<Order, OrderAdaptor.Or
             totalQuantity += model.getItems().get(i).getQuantity();
         }
 
-        holder.orderID.setText(getRef(position).getKey());
-        //am/pm in capital letters
+        holder.orderID.setText(String.format("ORDER-%08d", position + 1));
         SimpleDateFormat datetimeFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
         Date date = new Date(Long.parseLong(model.getTimestamp()));
         holder.datetime.setText(datetimeFormat.format(date));
-
-        orderOptionsRef.child(model.getOrderOption()).child("option").get().addOnSuccessListener(snapshot -> {
-            holder.orderOption.setText(snapshot.getValue().toString());
-        });
-
-        paymentMethodsRef.child(model.getPaymentMethod()).child("method").get().addOnSuccessListener(snapshot -> {
-            holder.paymentMethod.setText(snapshot.getValue().toString());
-        });
 
         holder.status.setText(model.getStatus());
 
@@ -68,8 +61,13 @@ public class OrderAdaptor extends FirebaseRecyclerAdapter<Order, OrderAdaptor.Or
             holder.status.setTextColor(context.getResources().getColor(R.color.yellow_900));
         }
 
-        holder.quantity.setText(String.valueOf(totalQuantity));
         holder.total.setText(String.format("RM %.2f", model.getTotal()));
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, OrderDetailsActivity.class);
+            intent.putExtra("orderID", getRef(position).getKey());
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -79,16 +77,21 @@ public class OrderAdaptor extends FirebaseRecyclerAdapter<Order, OrderAdaptor.Or
     }
 
     public void onDataChanged() {
+        super.onDataChanged();
         Log.d("OrderAdaptor", "onDataChanged: ");
         notifyDataSetChanged();
 
         if (orderItemAdaptor != null) {
+            orderItemAdaptor.onDataChanged();
             orderItemAdaptor.notifyDataSetChanged();
         }
     }
 
     public static class OrderViewHolder extends RecyclerView.ViewHolder {
-        TextView orderID, status, datetime, orderOption, paymentMethod, quantity, orderTotal, takeawayFee, total;
+        TextView orderID;
+        TextView status;
+        TextView datetime;
+        TextView total;
         RecyclerView orderItems;
 
         public OrderViewHolder(View itemView) {
@@ -97,11 +100,6 @@ public class OrderAdaptor extends FirebaseRecyclerAdapter<Order, OrderAdaptor.Or
             orderID = itemView.findViewById(R.id.orderID);
             status = itemView.findViewById(R.id.status);
             datetime = itemView.findViewById(R.id.datetime);
-            orderOption = itemView.findViewById(R.id.orderOption);
-            paymentMethod = itemView.findViewById(R.id.paymentMethod);
-            quantity = itemView.findViewById(R.id.quantity);
-            orderTotal = itemView.findViewById(R.id.orderTotal);
-            takeawayFee = itemView.findViewById(R.id.takeawayFee);
             total = itemView.findViewById(R.id.total);
             orderItems = itemView.findViewById(R.id.recyclerView);
         }

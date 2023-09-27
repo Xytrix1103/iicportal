@@ -2,6 +2,7 @@ package com.iicportal.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +33,8 @@ public class OrderHistoryActivity extends AppCompatActivity {
 
     TextView noOrderText;
 
+    ImageView backBtnIcon;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +45,9 @@ public class OrderHistoryActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         ordersRef = database.getReference("orders/");
+
+        backBtnIcon = findViewById(R.id.backBtnIcon);
+        backBtnIcon.setOnClickListener(v -> finish());
 
         ordersRecyclerView = findViewById(R.id.orderHistoryRecyclerView);
         ordersRecyclerView.setLayoutManager(new LinearLayoutManager(context));

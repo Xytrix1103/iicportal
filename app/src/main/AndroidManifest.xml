@@ -80,6 +80,10 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activity.OrderDetailsActivity"
+            android:exported="true">
+        </activity>
+
     </application>
 
 </manifest>

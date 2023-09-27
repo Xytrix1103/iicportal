@@ -128,11 +128,11 @@ public class CheckoutActivity extends AppCompatActivity {
 
             database.getReference("orders/").push().setValue(order).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    cartRef.child(user.getUid()).orderByChild("selected").equalTo(true).getRef().removeValue().addOnCompleteListener(task1 -> {
-                        if (task1.isSuccessful()) {
-                            finish();
+                    for (int i = 0; i < checkoutItemAdaptor.getItemCount(); i++) {
+                        if (checkoutItemAdaptor.getItem(i).getSelected()) {
+                            cartRef.child(user.getUid()).child(checkoutItemAdaptor.getKey(i)).removeValue();
                         }
-                    });
+                    }
                 }
             });
         });

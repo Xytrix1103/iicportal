@@ -40,6 +40,10 @@ public class OrderItemAdaptor extends RecyclerView.Adapter<OrderItemAdaptor.Orde
         Glide.with(context).load(cartItems.get(position).getImage()).into(holder.image);
     }
 
+    public void onDataChanged() {
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return cartItems.size();

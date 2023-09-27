@@ -31,15 +31,22 @@
     <string name="orderTotal">Order Total:</string>
     <string name="checkout">Checkout</string>
     <string name="items">Items</string>
-    <string name="payment_method">Payment Method</string>
+    <string name="payment_method">Payment Method:</string>
     <string name="credit_card">Credit Card</string>
-    <string name="order_option">Order Option</string>
+    <string name="order_option">Order Option:</string>
     <string name="dine_in">Dine-in</string>
     <string name="order">Order</string>
     <string name="takeaway_fee">Takeaway Fee:</string>
-    <string name="total">Total</string>
+    <string name="total">Total:</string>
     <string name="touch_n_go">TNG eWallet</string>
     <string name="cash">Cash</string>
     <string name="orderHistory">Order History</string>
     <string name="order_history_empty">You have no previous orders.</string>
+    <string name="orderID">Order ID:</string>
+    <string name="orderDateTime">Order Datetime:</string>
+    <string name="sent_to_kitchen">Sent To Kitchen</string>
+    <string name="ready_for_pickup">Ready for Pickup</string>
+    <string name="completed">Completed</string>
+    <string name="status">Status</string>
+    <string name="orderStatusTitle">Order Status</string>
 </resources>
