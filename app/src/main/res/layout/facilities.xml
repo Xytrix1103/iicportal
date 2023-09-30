@@ -2,8 +2,12 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/facilityBody"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_width="335dp"
+    android:layout_height="68dp"
+    android:layout_marginTop="10dp"
+    android:layout_centerInParent="true"
+    android:padding="10dp"
+    android:background="@drawable/box">
 
     <ImageView
         android:id="@+id/facility_image"
@@ -25,10 +29,10 @@
         android:textSize="20sp"/>
 
     <Button
+        android:id="@+id/booknowBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:id="@+id/booknowBtn"
         android:text="Book Now"
         android:textAllCaps="false"
         android:textSize="15sp"

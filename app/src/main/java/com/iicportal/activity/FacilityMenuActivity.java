@@ -15,17 +15,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
+import com.iicportal.adapter.BookingAdapter;
 import com.iicportal.adapter.FacilityAdapter;
-import com.iicportal.models.Facilities;
-import com.iicportal.models.Timeslot;
+import com.iicportal.models.BookingItem;
 
-public class FacilityMenuActivity extends AppCompatActivity {
+public class FacilityMenuActivity extends AppCompatActivity  {
     Context context = this;
     RecyclerView facilitiesRecyclerView;
-    RecyclerView timeslotRecyclerView;
+    RecyclerView bookingRecyclerView;
 
-    //    TimeslotAdaptor timeslotAdaptor;
     FacilityAdapter facilityAdaptor;
+    BookingAdapter bookingAdaptor;
 
     FirebaseDatabase database;
     DatabaseReference timeslotRef;
@@ -56,11 +56,22 @@ public class FacilityMenuActivity extends AppCompatActivity {
             if (key.equals("facility")) {
                 Log.d("FacilityMenuActivity", "Facility changed to " + sharedPreferences.getString("facility", ""));
                 facilityAdaptor.notifyDataSetChanged();
+
+//                bookingAdaptor.stopListening();
+//                FirebaseRecyclerOptions<BookingItem> bookingOptions = new FirebaseRecyclerOptions.Builder<BookingItem>()
+//                        .setQuery(timeslotRef.child(sharedPreferences.getString("facility", "")), BookingItem.class)
+//                        .build();
+//
+//                bookingAdaptor = new BookingAdapter(bookingOptions, context);
+//                bookingRecyclerView.setAdapter(bookingAdaptor);
+//                bookingAdaptor.startListening();
+//
+//                bookingAdaptor.notifyDataSetChanged();
             }
         });
 
-        FirebaseRecyclerOptions<Facilities> facilityOptions = new FirebaseRecyclerOptions.Builder<Facilities>()
-                .setQuery(facilitiesRef, Facilities.class)
+        FirebaseRecyclerOptions<BookingItem> facilityOptions = new FirebaseRecyclerOptions.Builder<BookingItem>()
+                .setQuery(facilitiesRef, BookingItem.class)
                 .build();
 
         facilitiesRecyclerView = findViewById(R.id.facilityRecyclerView);
@@ -68,10 +79,14 @@ public class FacilityMenuActivity extends AppCompatActivity {
         facilityAdaptor = new FacilityAdapter(facilityOptions, context);
         facilitiesRecyclerView.setAdapter(facilityAdaptor);
 
-
-        FirebaseRecyclerOptions<Timeslot> timeslotOptions = new FirebaseRecyclerOptions.Builder<Timeslot>()
-                .setQuery(timeslotRef, Timeslot.class)
-                .build();
+//        FirebaseRecyclerOptions<BookingItem> bookingOptions = new FirebaseRecyclerOptions.Builder<BookingItem>()
+//                .setQuery(timeslotRef.orderByChild("facility").equalTo(sharedPreferences.getString("facility","")),BookingItem.class)
+//                .build();
+//
+//        bookingRecyclerView = findViewById(R.id.bookingRecyclerView);
+//        bookingRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        bookingAdaptor = new BookingAdapter(bookingOptions, context);
+//        bookingRecyclerView.setAdapter(bookingAdaptor);
     }
 
         @Override
@@ -79,7 +94,7 @@ public class FacilityMenuActivity extends AppCompatActivity {
             super.onStart();
             sharedPreferences.edit().remove("facility").apply();
             facilityAdaptor.startListening();
-//            categoryAdaptor.startListening();
+//            bookingAdaptor.startListening();
         }
 
         @Override
@@ -87,6 +102,6 @@ public class FacilityMenuActivity extends AppCompatActivity {
             super.onStop();
             sharedPreferences.edit().remove("facility").apply();
             facilityAdaptor.stopListening();
-//            categoryAdaptor.stopListening();
+//            bookingAdaptor.stopListening();
         }
     }
