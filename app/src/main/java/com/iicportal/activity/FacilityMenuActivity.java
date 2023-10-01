@@ -15,17 +15,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
-import com.iicportal.adapter.BookingAdapter;
 import com.iicportal.adapter.FacilityAdapter;
 import com.iicportal.models.BookingItem;
 
 public class FacilityMenuActivity extends AppCompatActivity  {
     Context context = this;
     RecyclerView facilitiesRecyclerView;
-    RecyclerView bookingRecyclerView;
-
     FacilityAdapter facilityAdaptor;
-    BookingAdapter bookingAdaptor;
 
     FirebaseDatabase database;
     DatabaseReference timeslotRef;
@@ -94,7 +90,6 @@ public class FacilityMenuActivity extends AppCompatActivity  {
             super.onStart();
             sharedPreferences.edit().remove("facility").apply();
             facilityAdaptor.startListening();
-//            bookingAdaptor.startListening();
         }
 
         @Override
@@ -102,6 +97,5 @@ public class FacilityMenuActivity extends AppCompatActivity  {
             super.onStop();
             sharedPreferences.edit().remove("facility").apply();
             facilityAdaptor.stopListening();
-//            bookingAdaptor.stopListening();
         }
     }
