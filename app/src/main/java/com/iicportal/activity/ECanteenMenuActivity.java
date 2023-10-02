@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -49,6 +50,7 @@ public class ECanteenMenuActivity extends AppCompatActivity {
 
     FrameLayout cartBtn;
     ImageView cartIcon, historyBtnIcon;
+    BottomNavigationView bottomNavigationView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -146,6 +148,35 @@ public class ECanteenMenuActivity extends AppCompatActivity {
         historyBtnIcon.setOnClickListener(v -> {
             Intent intent = new Intent(context, OrderHistoryActivity.class);
             startActivity(intent);
+        });
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.ecanteen);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.home) {
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+                return true;
+            } else if (id == R.id.ecanteen) {
+                startActivity(new Intent(this, ECanteenMenuActivity.class));
+                finish();
+                return true;
+            } else if (id == R.id.facilities) {
+                Log.d("MainActivity", "Facilities");
+                return true;
+            } else if (id == R.id.profile) {
+                Log.d("MainActivity", "Profile");
+                return true;
+            }
+
+            return false;
+        });
+
+        bottomNavigationView.setOnItemReselectedListener(item -> {
+            Log.d("MainActivity", "Reselected");
         });
     }
 
