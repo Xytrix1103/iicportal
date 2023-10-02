@@ -2,13 +2,17 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="android:actionModeBackground">@color/blue_grey_600</item>
         <item name="fontFamily">@font/lato</item>
+    </style>
+
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="buttonStyle">@style/Button.Small</item>
     </style>
 
     <style name="EditText.Default" parent="AppTheme">
@@ -30,6 +34,18 @@
         <item name="android:textSize">14sp</item>
         <item name="android:padding">15dp</item>
         <item name="android:letterSpacing">0.1</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Button.Small" parent="@style/Widget.AppCompat.TextView">
+        <item name="colorButtonNormal">@color/colorPrimary</item>
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@drawable/red_rounded_rectangle</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:padding">0dp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
