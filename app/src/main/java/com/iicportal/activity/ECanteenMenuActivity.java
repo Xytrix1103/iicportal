@@ -152,32 +152,8 @@ public class ECanteenMenuActivity extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.ecanteen);
-
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-
-            if (id == R.id.home) {
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
-                return true;
-            } else if (id == R.id.ecanteen) {
-                startActivity(new Intent(this, ECanteenMenuActivity.class));
-                finish();
-                return true;
-            } else if (id == R.id.facilities) {
-                Log.d("MainActivity", "Facilities");
-                return true;
-            } else if (id == R.id.profile) {
-                Log.d("MainActivity", "Profile");
-                return true;
-            }
-
-            return false;
-        });
-
-        bottomNavigationView.setOnItemReselectedListener(item -> {
-            Log.d("MainActivity", "Reselected");
-        });
+        bottomNavigationView.setOnItemSelectedListener(MainActivity.getOnItemSelectedListener(context));
+        bottomNavigationView.setOnItemReselectedListener(MainActivity.getOnItemReselectedListener(context));
     }
 
     @Override
