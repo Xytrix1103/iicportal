@@ -33,6 +33,8 @@ import com.iicportal.R;
 import com.iicportal.models.BookingItem;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
@@ -126,8 +128,6 @@ public class FacilityAdapter extends FirebaseRecyclerAdapter<BookingItem,Facilit
         });
     }
 
-
-
     @Override
     protected void onBindViewHolder(@NonNull FacilityViewHolder holder, int position, @NonNull BookingItem model) {
         holder.facilityName.setText(model.getName());
@@ -159,10 +159,18 @@ public class FacilityAdapter extends FirebaseRecyclerAdapter<BookingItem,Facilit
 
             price.setText(String.valueOf(model.getPrice()));
 
+            ArrayList<String> timeSlotsList = new ArrayList<>();
+            String[] timeSlotsArray = context.getResources().getStringArray(R.array.timeslot);
+            timeSlotsList.addAll(Arrays.asList(timeSlotsArray));
+
+            // Assuming you have identified the bookedTimeSlot as a String
+            timeSlotsList.remove(bookingSpinner.getSelectedItem().toString());
+
             // Populate the Spinner with time slots from resources
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.timeslot, android.R.layout.simple_spinner_item);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, timeSlotsList);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             bookingSpinner.setAdapter(adapter);
+
 
 
             confirm.setOnClickListener(v1 -> {
@@ -182,6 +190,7 @@ public class FacilityAdapter extends FirebaseRecyclerAdapter<BookingItem,Facilit
                         if (dataSnapshot.exists()) {
                             // The selected time slot is already taken, show an error message
                             Toast.makeText(context.getApplicationContext(), "Time slot is already booked for this facility", Toast.LENGTH_SHORT).show();
+
                         } else {
                             // Generate a unique booking ID
                             String bookingId = bookingRef.push().getKey();
