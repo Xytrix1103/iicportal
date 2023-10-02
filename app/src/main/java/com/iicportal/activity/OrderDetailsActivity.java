@@ -160,7 +160,9 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
         backBtnIcon = findViewById(R.id.backBtnIcon);
 
-        backBtnIcon.setOnClickListener(v -> finish());
+        backBtnIcon.setOnClickListener(v -> {
+            finish();
+        });
     }
 
     @Override

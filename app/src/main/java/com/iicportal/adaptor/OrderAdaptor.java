@@ -39,6 +39,7 @@ public class OrderAdaptor extends FirebaseRecyclerAdapter<Order, OrderAdaptor.Or
 
     @Override
     protected void onBindViewHolder(OrderViewHolder holder, int position, Order model) {
+        int pos = position;
         holder.orderItems.setLayoutManager(new LinearLayoutManager(context));
         orderItemAdaptor = new OrderItemAdaptor(context, model.getItems());
         holder.orderItems.setAdapter(orderItemAdaptor);
@@ -48,24 +49,31 @@ public class OrderAdaptor extends FirebaseRecyclerAdapter<Order, OrderAdaptor.Or
             totalQuantity += model.getItems().get(i).getQuantity();
         }
 
-        holder.orderID.setText(String.format("ORDER-%08d", position + 1));
+        holder.orderID.setText(String.format("ORDER-%08d", pos + 1));
         SimpleDateFormat datetimeFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
-        Date date = new Date(Long.parseLong(model.getTimestamp()));
+        Date date = new Date(model.getTimestamp());
         holder.datetime.setText(datetimeFormat.format(date));
 
         holder.status.setText(model.getStatus());
 
-        if (model.getStatus().equals("COMPLETED")) {
-            holder.status.setTextColor(context.getResources().getColor(R.color.light_blue_900));
-        } else if (model.getStatus().equals("PREPARING")) {
-            holder.status.setTextColor(context.getResources().getColor(R.color.yellow_900));
+        Log.d("OrderAdaptor", "onBindViewHolder: " + model.getTimestamp() + " " + model.getReadyTimestamp() + " " + model.getCompletedTimestamp());
+
+        if(model.getCompletedTimestamp() != null) {
+            holder.status.setText("COMPLETED");
+            holder.status.setTextColor(context.getResources().getColor(R.color.light_green_800));
+        } else if(model.getReadyTimestamp() != null) {
+            holder.status.setText("READY FOR PICKUP");
+            holder.status.setTextColor(context.getResources().getColor(R.color.black));
+        } else if(model.getTimestamp() != null) {
+            holder.status.setText("PREPARING");
+            holder.status.setTextColor(context.getResources().getColor(R.color.black));
         }
 
         holder.total.setText(String.format("RM %.2f", model.getTotal()));
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, OrderDetailsActivity.class);
-            intent.putExtra("orderID", getRef(position).getKey());
+            intent.putExtra("orderID", getRef(pos).getKey());
             context.startActivity(intent);
         });
     }
@@ -80,11 +88,6 @@ public class OrderAdaptor extends FirebaseRecyclerAdapter<Order, OrderAdaptor.Or
         super.onDataChanged();
         Log.d("OrderAdaptor", "onDataChanged: ");
         notifyDataSetChanged();
-
-        if (orderItemAdaptor != null) {
-            orderItemAdaptor.onDataChanged();
-            orderItemAdaptor.notifyDataSetChanged();
-        }
     }
 
     public static class OrderViewHolder extends RecyclerView.ViewHolder {

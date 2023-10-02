@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Order {
     String uid;
-    String timestamp;
+    Long timestamp, readyTimestamp, completedTimestamp;
     String paymentMethod;
     String orderOption;
     double orderTotal;
@@ -17,9 +17,11 @@ public class Order {
     public Order() {
     }
 
-    public Order(String uid, String timestamp, String paymentMethod, String orderOption, double orderTotal, double takeawayFee, double total, String status, List<CartItem> items) {
+    public Order(String uid, Long timestamp, Long readyTimestamp, Long completedTimestamp, String paymentMethod, String orderOption, double orderTotal, double takeawayFee, double total, String status, List<CartItem> items) {
         this.uid = uid;
         this.timestamp = timestamp;
+        this.readyTimestamp = readyTimestamp;
+        this.completedTimestamp = completedTimestamp;
         this.paymentMethod = paymentMethod;
         this.orderOption = orderOption;
         this.orderTotal = orderTotal;
@@ -33,7 +35,7 @@ public class Order {
         return uid;
     }
 
-    public String getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
@@ -65,7 +67,7 @@ public class Order {
         this.uid = uid;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -99,5 +101,21 @@ public class Order {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Long getReadyTimestamp() {
+        return readyTimestamp;
+    }
+
+    public void setReadyTimestamp(Long readyTimestamp) {
+        this.readyTimestamp = readyTimestamp;
+    }
+
+    public Long getCompletedTimestamp() {
+        return completedTimestamp;
+    }
+
+    public void setCompletedTimestamp(Long completedTimestamp) {
+        this.completedTimestamp = completedTimestamp;
     }
 }

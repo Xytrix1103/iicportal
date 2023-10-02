@@ -152,7 +152,18 @@ public class ECanteenMenuActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        sharedPreferences.edit().remove("category").apply();
+        if(categoryAdaptor.getItemCount() == 0) {
+            sharedPreferences.edit().remove("category").apply();
+        } else {
+            sharedPreferences.edit().putString("category", categoryAdaptor.getItem(0).getCategory()).apply();
+        }
+        menuItemAdaptor.startListening();
+        categoryAdaptor.startListening();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         menuItemAdaptor.startListening();
         categoryAdaptor.startListening();
     }

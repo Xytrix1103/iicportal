@@ -45,6 +45,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         ordersRef = database.getReference("orders/");
+        ordersRef.keepSynced(true);
 
         backBtnIcon = findViewById(R.id.backBtnIcon);
         backBtnIcon.setOnClickListener(v -> finish());
@@ -53,6 +54,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
         ordersRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         FirebaseRecyclerOptions<Order> options = new FirebaseRecyclerOptions.Builder<Order>()
+                .setLifecycleOwner(this)
                 .setQuery(ordersRef.orderByChild("uid").equalTo(user.getUid()), Order.class)
                 .build();
 
