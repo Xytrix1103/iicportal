@@ -1,6 +1,7 @@
 package com.iicportal.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +33,7 @@ public class FacilityMenuActivity extends AppCompatActivity  {
     FirebaseUser user;
 
     SharedPreferences sharedPreferences;
+    BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +86,31 @@ public class FacilityMenuActivity extends AppCompatActivity  {
 //        bookingRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 //        bookingAdaptor = new BookingAdapter(bookingOptions, context);
 //        bookingRecyclerView.setAdapter(bookingAdaptor);
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.facilities);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.home) {
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+                return true;
+            } else if (id == R.id.ecanteen) {
+                startActivity(new Intent(this, ECanteenMenuActivity.class));
+                finish();
+                return true;
+            } else if (id == R.id.facilities) {
+                startActivity(new Intent(this, FacilityMenuActivity.class));
+                finish();
+                return true;
+            } else if (id == R.id.profile) {
+                Log.d("MainActivity", "Profile");
+                return true;
+            }
+
+            return false;
+        });
     }
 
         @Override

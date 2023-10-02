@@ -18,13 +18,43 @@
     <string name="forgot_password">Forgot Password?</string>
     <string name="forgot_password_description">Enter the email that is registered to your account</string>
     <string name="submit">Submit</string>
+    <string name="ecanteen">E-Canteen</string>
+    <string name="categories">Categories</string>
+    <string name="menu">Menu</string>
+    <string name="food_name">Food Name</string>
+    <string name="price">Price</string>
+    <string name="food_description">Food Description</string>
+    <string name="category">Category</string>
+    <string name="cart">Cart</string>
+    <string name="cart_empty">Cart is empty.
+        Please add items to cart.</string>
+    <string name="orderTotal">Order Total:</string>
+    <string name="checkout">Checkout</string>
+    <string name="items">Items</string>
+    <string name="payment_method">Payment Method:</string>
+    <string name="credit_card">Credit Card</string>
+    <string name="order_option">Order Option:</string>
+    <string name="dine_in">Dine-in</string>
+    <string name="order">Order</string>
+    <string name="takeaway_fee">Takeaway Fee:</string>
+    <string name="total">Total:</string>
+    <string name="touch_n_go">TNG eWallet</string>
+    <string name="cash">Cash</string>
+    <string name="orderHistory">Order History</string>
+    <string name="order_history_empty">You have no previous orders.</string>
+    <string name="orderID">Order ID:</string>
+    <string name="orderDateTime">Order Datetime:</string>
+    <string name="sent_to_kitchen">Sent To Kitchen</string>
+    <string name="ready_for_pickup">Ready for Pickup</string>
+    <string name="completed">Completed</string>
+    <string name="status">Status</string>
+    <string name="orderStatusTitle">Order Status</string>
     // Newly added stuff
     <string name="facility">Facilities</string>
     <string name="facility_name">Facility Name</string>
     <string name="booking_time">Booking Time</string>
     <string name="booking_date">Booking Date</string>
-    <string name="price">Price</string>
-    
+
     <string-array name="timeslot">
         <item>9:00AM - 10:00AM</item>
         <item>10:00AM - 11:00AM</item>
