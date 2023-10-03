@@ -104,7 +104,6 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             updateUI(currentUser);
@@ -126,7 +125,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Log.d("RegisterActivity", "createUserWithEmail:success");
                         currentUser = mAuth.getCurrentUser();
-                        usersRef.child(currentUser.getUid()).setValue(new User(fullName, phoneNumber));
+                        usersRef.child(currentUser.getUid()).setValue(new User(fullName, phoneNumber, email, getRole(email)));
                         updateUI(currentUser);
                     } else {
                         Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
@@ -137,70 +136,17 @@ public class RegisterActivity extends AppCompatActivity {
         return true;
     }
 
+    private String getRole(String email) {
+        String role = "";
+        if (email.contains("@student.newinti.edu.my")) {
+            role = "Student";
+        } else if (email.contains("@newinti.edu.my")) {
+            role = "Staff";
+        }
+        return role;
+    }
+
     private boolean validateFields(String fullName, String phoneNumber, String email, String password, String confirmPassword) {
-//        if (!validateField(fullName, fullNameEdit, "Full name is required")) {
-//            return false;
-//        }
-//
-//        if (!validateField(phoneNumber, phoneNumberEdit, "Phone number is required")) {
-//            return false;
-//        }
-//
-//        if (!validateField(email, emailEdit, "Email is required")) {
-//            return false;
-//        }
-//
-//        if (!validateField(password, passwordEdit, "Password is required")) {
-//            return false;
-//        }
-//
-//        if (!validateField(confirmPassword, confirmPasswordEdit, "Confirm password is required")) {
-//            return false;
-//        }
-//
-//        if (!isValidEmail(email)) {
-//            emailEdit.setError("Invalid email");
-//            emailEdit.requestFocus();
-//            return false;
-//        }
-//
-//        if (!isValidPhoneNumber(phoneNumber)) {
-//            phoneNumberEdit.setError("Invalid phone number");
-//            phoneNumberEdit.requestFocus();
-//            return false;
-//        }
-//
-//        if (!isValidPassword(password)) {
-//            passwordEdit.setError("Password must be at least 8 characters long, contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character");
-//            passwordEdit.requestFocus();
-//        }
-//
-//        if (!isValidEmail(email)) {
-//            emailEdit.setError("Invalid email");
-//            emailEdit.requestFocus();
-//            return false;
-//        }
-//
-//        if (!isValidPhoneNumber(phoneNumber)) {
-//            phoneNumberEdit.setError("Invalid phone number");
-//            phoneNumberEdit.requestFocus();
-//            return false;
-//        }
-//
-//        if (!isValidPassword(password)) {
-//            passwordEdit.setError("Invalid password");
-//            passwordEdit.requestFocus();
-//            return false;
-//        }
-//
-//        if (!password.equals(confirmPassword)) {
-//            confirmPasswordEdit.setError("Password and confirm password must be the same");
-//            confirmPasswordEdit.requestFocus();
-//            return false;
-//        }
-//
-//        return true;
-        //shortened version of above code
         return validateField(fullName, fullNameEdit, "Full name is required") &&
                 validateField(phoneNumber, phoneNumberEdit, "Phone number is required") &&
                 validateField(email, emailEdit, "Email is required") &&
@@ -225,8 +171,7 @@ public class RegisterActivity extends AppCompatActivity {
     private boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
                 "[a-zA-Z0-9_+&*-]+)*@" +
-                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
-                "A-Z]{2,7}$";
+                "(?:student.newinti.edu.my|newinti.edu.my)$";
 
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(email);
