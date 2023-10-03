@@ -31,10 +31,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
 import com.iicportal.models.BookingItem;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -170,6 +172,20 @@ public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, Facili
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             bookingSpinner.setAdapter(adapter);
 
+            // Disable time slots that have already passed
+            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma", Locale.getDefault());
+            String currentTime = timeFormat.format(Calendar.getInstance().getTime());
+            String thresholdTime = "08:00AM";
+
+            for (int i = 0; i < timeSlotsList.size(); i++) {
+                String timeSlot = timeSlotsList.get(i);
+                if (isTimeSlotPassed(currentTime, timeSlot) || isBeforeThreshold(currentTime, thresholdTime)) {
+                    // If the time slot has passed or it's before the threshold time, remove it from the list
+                    timeSlotsList.remove(i);
+                    i--; // Adjust the index to account for the removed item
+                }
+            }
+
 
 
             confirm.setOnClickListener(v1 -> {
@@ -223,6 +239,33 @@ public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, Facili
             dialog.show();
         });
     }
+
+    // Helper method to check if a time slot has already passed
+    private boolean isTimeSlotPassed(String currentTime, String timeSlot) {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma", Locale.getDefault());
+        try {
+            Date currentTimeDate = timeFormat.parse(currentTime);
+            Date timeSlotDate = timeFormat.parse(timeSlot);
+            return currentTimeDate.after(timeSlotDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false; // Handle parsing error as needed
+        }
+    }
+
+    // Helper method to check if a time is before the threshold time
+    private boolean isBeforeThreshold(String currentTime, String thresholdTime) {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma", Locale.getDefault());
+        try {
+            Date currentTimeDate = timeFormat.parse(currentTime);
+            Date thresholdTimeDate = timeFormat.parse(thresholdTime);
+            return currentTimeDate.before(thresholdTimeDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false; // Handle parsing error as needed
+        }
+    }
+
 
     @NonNull
     @Override
