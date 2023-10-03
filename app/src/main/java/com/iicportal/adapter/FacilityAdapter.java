@@ -235,7 +235,7 @@ public class FacilityAdapter extends FirebaseRecyclerAdapter<BookingItem,Facilit
     public class FacilityViewHolder extends RecyclerView.ViewHolder {
         TextView facilityName;
         ImageView facilityImage;
-        Button booknowBtn;
+        TextView booknowBtn;
 
         public FacilityViewHolder(@NonNull View itemView) {
             super(itemView);
