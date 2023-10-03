@@ -1,7 +1,6 @@
 package com.iicportal.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -89,33 +88,14 @@ public class FacilityMenuActivity extends AppCompatActivity  {
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.facilities);
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-
-            if (id == R.id.home) {
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
-                return true;
-            } else if (id == R.id.ecanteen) {
-                startActivity(new Intent(this, ECanteenMenuActivity.class));
-                finish();
-                return true;
-            } else if (id == R.id.facilities) {
-                startActivity(new Intent(this, FacilityMenuActivity.class));
-                finish();
-                return true;
-            } else if (id == R.id.profile) {
-                Log.d("MainActivity", "Profile");
-                return true;
-            }
-
-            return false;
-        });
+        bottomNavigationView.setOnItemSelectedListener(MainActivity.getOnItemSelectedListener(this));
+        bottomNavigationView.setOnItemReselectedListener(MainActivity.getOnItemReselectedListener(this));
     }
 
         @Override
         protected void onStart() {
             super.onStart();
+            bottomNavigationView.setSelectedItemId(R.id.facilities);
             sharedPreferences.edit().remove("facility").apply();
             facilityAdaptor.startListening();
         }
