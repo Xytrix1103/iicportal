@@ -1,4 +1,4 @@
-package com.iicportal.adapter;
+package com.iicportal.adaptor;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -40,7 +39,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class FacilityAdapter extends FirebaseRecyclerAdapter<BookingItem,FacilityAdapter.FacilityViewHolder> {
+public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, FacilityAdaptor.FacilityViewHolder> {
     Context context;
     FirebaseDatabase database;
     DatabaseReference bookingRef;
@@ -50,7 +49,7 @@ public class FacilityAdapter extends FirebaseRecyclerAdapter<BookingItem,Facilit
     SharedPreferences sharedPreferences;
 
 
-    public FacilityAdapter(@NonNull FirebaseRecyclerOptions<BookingItem> options, Context context) {
+    public FacilityAdaptor(@NonNull FirebaseRecyclerOptions<BookingItem> options, Context context) {
         super(options);
         this.context = context;
         this.database = FirebaseDatabase.getInstance();
@@ -146,8 +145,8 @@ public class FacilityAdapter extends FirebaseRecyclerAdapter<BookingItem,Facilit
             Spinner bookingSpinner = dialog.findViewById(R.id.booking_time);
             TextView date = dialog.findViewById(R.id.booking_date);
             TextView price = dialog.findViewById(R.id.price);
-            Button confirm = dialog.findViewById(R.id.confirmBtn);
-            Button cancel = dialog.findViewById(R.id.cancelBtn);
+            TextView confirm = dialog.findViewById(R.id.confirmBtn);
+            TextView cancel = dialog.findViewById(R.id.cancelBtn);
 
             facilityName.setText(model.getName());
             Glide.with(context).load(model.getImage()).into(facilityImage);
@@ -227,7 +226,7 @@ public class FacilityAdapter extends FirebaseRecyclerAdapter<BookingItem,Facilit
 
     @NonNull
     @Override
-    public FacilityAdapter.FacilityViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FacilityAdaptor.FacilityViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.facilities,parent,false);
         return new FacilityViewHolder(view);
     }

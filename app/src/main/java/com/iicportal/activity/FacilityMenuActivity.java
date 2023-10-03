@@ -17,13 +17,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
-import com.iicportal.adapter.FacilityAdapter;
+import com.iicportal.adaptor.FacilityAdaptor;
 import com.iicportal.models.BookingItem;
 
 public class FacilityMenuActivity extends AppCompatActivity  {
     Context context = this;
     RecyclerView facilitiesRecyclerView;
-    FacilityAdapter facilityAdaptor;
+    FacilityAdaptor facilityAdaptor;
 
     FirebaseDatabase database;
     DatabaseReference timeslotRef;
@@ -75,7 +75,7 @@ public class FacilityMenuActivity extends AppCompatActivity  {
 
         facilitiesRecyclerView = findViewById(R.id.facilityRecyclerView);
         facilitiesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        facilityAdaptor = new FacilityAdapter(facilityOptions, context);
+        facilityAdaptor = new FacilityAdaptor(facilityOptions, context);
         facilitiesRecyclerView.setAdapter(facilityAdaptor);
 
 //        FirebaseRecyclerOptions<BookingItem> bookingOptions = new FirebaseRecyclerOptions.Builder<BookingItem>()
