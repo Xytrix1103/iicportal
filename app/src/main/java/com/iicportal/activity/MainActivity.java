@@ -82,7 +82,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             } else if (id == R.id.facilities) {
                 if (!current.equals("Facilities")) {
-                    Log.d("MainActivity", "Facilities");
+                    Intent intent = new Intent(context, FacilityMenuActivity.class);
+                    context.startActivity(intent, options.toBundle());
                 }
             } else if (id == R.id.profile) {
                 if (!current.equals("Profile")) {
