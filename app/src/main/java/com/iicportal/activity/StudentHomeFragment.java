@@ -35,16 +35,10 @@ public class StudentHomeFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
         logoutButton = view.findViewById(R.id.logoutBtn);
-        menuButton = view.findViewById(R.id.canteenBtn);
 
         logoutButton.setOnClickListener(v -> {
             mAuth.signOut();
             Intent intent = new Intent(context, LoginActivity.class);
-            startActivity(intent);
-        });
-
-        menuButton.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ECanteenMenuActivity.class);
             startActivity(intent);
         });
 

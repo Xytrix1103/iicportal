@@ -1,6 +1,5 @@
 package com.iicportal.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.iicportal.R;
 
@@ -20,23 +18,10 @@ public class MainActivity extends AppCompatActivity {
     FrameLayout container;
     Fragment ecanteenMenuFragment;
     Fragment studentHomeFragment;
+    Fragment facilitiesMenuFragment;
+    Fragment profileFragment;
     BottomNavigationView bottomNavigationView;
 
-    public static NavigationBarView.OnItemReselectedListener getOnItemReselectedListener(Context context) {
-        return item -> {
-            int id = item.getItemId();
-
-            if (id == R.id.home) {
-                Log.d("MainActivity", "Home");
-            } else if (id == R.id.ecanteen) {
-                Log.d("MainActivity", "ECanteen");
-            } else if (id == R.id.facilities) {
-                Log.d("MainActivity", "Facilities");
-            } else if (id == R.id.profile) {
-                Log.d("MainActivity", "Profile");
-            }
-        };
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
         ecanteenMenuFragment = new ECanteenMenuFragment();
         studentHomeFragment = new StudentHomeFragment();
+        facilitiesMenuFragment = new FacilityMenuFragment();
+        profileFragment = new ProfileFragment();
 
         if (mAuth.getCurrentUser() == null) {
             startActivity(new Intent(this, LoginActivity.class));
@@ -68,14 +55,28 @@ public class MainActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, ecanteenMenuFragment).commit();
                 return true;
             } else if (id == R.id.facilities) {
-                Log.d("MainActivity", "Facilities");
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, facilitiesMenuFragment).commit();
+                return true;
             } else if (id == R.id.profile) {
-                Log.d("MainActivity", "Profile");
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, profileFragment).commit();
+                return true;
             }
             return false;
         });
 
-        bottomNavigationView.setOnItemReselectedListener(getOnItemReselectedListener(this));
+        bottomNavigationView.setOnItemReselectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.home) {
+                Log.d("MainActivity", "Home");
+            } else if (id == R.id.ecanteen) {
+                Log.d("MainActivity", "ECanteen");
+            } else if (id == R.id.facilities) {
+                Log.d("MainActivity", "Facilities");
+            } else if (id == R.id.profile) {
+                Log.d("MainActivity", "Profile");
+            }
+        });
     }
 
     public void onResume() {

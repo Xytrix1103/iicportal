@@ -51,14 +51,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.ECanteenMenuActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
         <activity android:name=".activity.CartActivity"
             android:exported="true">
             <intent-filter>
@@ -85,14 +77,6 @@
 
         <activity android:name=".activity.OrderDetailsActivity"
             android:exported="true">
-        </activity>
-
-        <activity android:name=".activity.FacilityMenuActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
     </application>
