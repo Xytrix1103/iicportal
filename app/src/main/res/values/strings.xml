@@ -49,4 +49,20 @@
     <string name="completed">Completed</string>
     <string name="status">Status</string>
     <string name="orderStatusTitle">Order Status</string>
+    // Newly added stuff
+    <string name="facility">Facilities</string>
+    <string name="facility_name">Facility Name</string>
+    <string name="booking_time">Booking Time</string>
+    <string name="booking_date">Booking Date</string>
+
+    <string-array name="timeslot">
+        <item>9:00AM - 10:00AM</item>
+        <item>10:00AM - 11:00AM</item>
+        <item>11:00AM - 12:00PM</item>
+        <item>12:00PM - 1:00PM</item>
+        <item>1:00PM - 2:00PM</item>
+        <item>2:00PM - 3:00PM</item>
+        <item>3:00PM - 4:00PM</item>
+        <item>4:00PM - 5:00PM</item>
+    </string-array>
 </resources>
