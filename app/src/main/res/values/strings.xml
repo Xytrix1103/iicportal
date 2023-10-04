@@ -61,4 +61,21 @@
     <string name="phone_hint">e.g. 0120000000</string>
     <string name="message_hint_label"><b>Message <font color="#FF0000">*</font></b></string>
     <string name="message_hint">Your message</string>
+
+    // Newly added stuff
+    <string name="facility">Facilities</string>
+    <string name="facility_name">Facility Name</string>
+    <string name="booking_time">Booking Time</string>
+    <string name="booking_date">Booking Date</string>
+
+    <string-array name="timeslot">
+        <item>9:00AM - 10:00AM</item>
+        <item>10:00AM - 11:00AM</item>
+        <item>11:00AM - 12:00PM</item>
+        <item>12:00PM - 1:00PM</item>
+        <item>1:00PM - 2:00PM</item>
+        <item>2:00PM - 3:00PM</item>
+        <item>3:00PM - 4:00PM</item>
+        <item>4:00PM - 5:00PM</item>
+    </string-array>
 </resources>

@@ -8,6 +8,9 @@
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="android:actionModeBackground">@color/blue_grey_600</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowEnterTransition">@android:transition/fade</item>
+        <item name="android:windowExitTransition">@android:transition/fade</item>
         <item name="fontFamily">@font/lato</item>
     </style>
 
@@ -40,6 +43,17 @@
     <style name="Button.Primary" parent="@style/Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">@color/colorPrimary</item>
         <item name="android:textColor">@android:color/white</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Button.Dialog" parent="@style/Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorPrimary</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@drawable/big_red_rounded_rectangle</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textSize">14sp</item>
         <item name="android:padding">15dp</item>

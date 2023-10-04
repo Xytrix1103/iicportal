@@ -5,17 +5,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.badge.BadgeDrawable;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,36 +31,44 @@ import com.iicportal.adaptor.MenuItemAdaptor;
 import com.iicportal.models.Category;
 import com.iicportal.models.FoodItem;
 
-public class ECanteenMenuActivity extends AppCompatActivity {
+public class ECanteenMenuFragment extends Fragment {
 
-    Context context = this;
-    RecyclerView menuRecyclerView;
-    RecyclerView categoryRecyclerView;
+    private Context context;
+    private RecyclerView menuRecyclerView;
+    private RecyclerView categoryRecyclerView;
 
-    MenuItemAdaptor menuItemAdaptor;
-    CategoryAdaptor categoryAdaptor;
+    private MenuItemAdaptor menuItemAdaptor;
+    private CategoryAdaptor categoryAdaptor;
 
-    FirebaseDatabase database;
-    DatabaseReference menuRef;
-    DatabaseReference categoriesRef;
-    DatabaseReference cartRef;
+    private FirebaseDatabase database;
+    private DatabaseReference menuRef;
+    private DatabaseReference categoriesRef;
+    private DatabaseReference cartRef;
 
-    FirebaseAuth mAuth;
-    FirebaseUser user;
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
 
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
 
-    FrameLayout cartBtn;
-    ImageView cartIcon, historyBtnIcon;
-    BottomNavigationView bottomNavigationView;
+    private FrameLayout cartBtn;
+    private ImageView cartIcon, historyBtnIcon;
+
+    public ECanteenMenuFragment() {
+        super(R.layout.ecanteen_menu_fragment);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ecanteen_menu);
+        context = requireContext();
+    }
 
-        cartBtn = findViewById(R.id.cartBtn);
-        cartIcon = findViewById(R.id.cartBtnIcon);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.ecanteen_menu_fragment, container, false);
+
+        cartBtn = view.findViewById(R.id.cartBtn);
+        cartIcon = view.findViewById(R.id.cartBtnIcon);
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -93,8 +103,8 @@ public class ECanteenMenuActivity extends AppCompatActivity {
                 .setQuery(categoriesRef, Category.class)
                 .build();
 
-        categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
-        categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        categoryRecyclerView = view.findViewById(R.id.categoryRecyclerView);
+        categoryRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         categoryAdaptor = new CategoryAdaptor(categoryOptions, context);
         categoryRecyclerView.setAdapter(categoryAdaptor);
 
@@ -102,8 +112,8 @@ public class ECanteenMenuActivity extends AppCompatActivity {
                 .setQuery(menuRef.orderByChild("category").equalTo(sharedPreferences.getString("category", "")), FoodItem.class)
                 .build();
 
-        menuRecyclerView = findViewById(R.id.menuRecyclerView);
-        menuRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        menuRecyclerView = view.findViewById(R.id.menuRecyclerView);
+        menuRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         menuItemAdaptor = new MenuItemAdaptor(options, context);
         menuRecyclerView.setAdapter(menuItemAdaptor);
 
@@ -144,20 +154,17 @@ public class ECanteenMenuActivity extends AppCompatActivity {
             }
         });
 
-        historyBtnIcon = findViewById(R.id.historyBtnIcon);
+        historyBtnIcon = view.findViewById(R.id.historyBtnIcon);
         historyBtnIcon.setOnClickListener(v -> {
             Intent intent = new Intent(context, OrderHistoryActivity.class);
             startActivity(intent);
         });
 
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.ecanteen);
-        bottomNavigationView.setOnItemSelectedListener(MainActivity.getOnItemSelectedListener(context));
-        bottomNavigationView.setOnItemReselectedListener(MainActivity.getOnItemReselectedListener(context));
+        return view;
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         if(categoryAdaptor.getItemCount() == 0) {
             sharedPreferences.edit().remove("category").apply();
@@ -169,14 +176,14 @@ public class ECanteenMenuActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         menuItemAdaptor.startListening();
         categoryAdaptor.startListening();
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         sharedPreferences.edit().remove("category").apply();
         menuItemAdaptor.stopListening();

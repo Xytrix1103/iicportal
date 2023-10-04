@@ -56,18 +56,18 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("LoginActivity", "Username: " + username + ", Password: " + password);
 
             mAuth.signInWithEmailAndPassword(username, password)
-                    .addOnCompleteListener(this, task -> {
-                        Log.d("LoginActivity", "signInWithEmail:onComplete:" + task.isSuccessful());
-                        if (task.isSuccessful()) {
-                            Log.d("LoginActivity", "signInWithEmail:success");
-                            user = mAuth.getCurrentUser();
-                            reload();
-                        } else {
-                            Log.w("LoginActivity", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                .addOnCompleteListener(this, task -> {
+                    Log.d("LoginActivity", "signInWithEmail:onComplete:" + task.isSuccessful());
+                    if (task.isSuccessful()) {
+                        Log.d("LoginActivity", "signInWithEmail:success");
+                        user = mAuth.getCurrentUser();
+                        reload();
+                    } else {
+                        Log.w("LoginActivity", "signInWithEmail:failure", task.getException());
+                        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
         });
 
         registerButton.setOnClickListener(v -> {
