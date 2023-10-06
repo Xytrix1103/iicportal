@@ -1,4 +1,4 @@
-package com.iicportal.activity;
+package com.iicportal.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
+import com.iicportal.activity.CartActivity;
+import com.iicportal.activity.OrderHistoryActivity;
 import com.iicportal.adaptor.CategoryAdaptor;
 import com.iicportal.adaptor.MenuItemAdaptor;
 import com.iicportal.models.Category;
