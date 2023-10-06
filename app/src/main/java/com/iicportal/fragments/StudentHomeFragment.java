@@ -1,4 +1,4 @@
-package com.iicportal.activity;
+package com.iicportal.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.iicportal.R;
+import com.iicportal.activity.LoginActivity;
 
 public class StudentHomeFragment extends Fragment {
     private Context context;
