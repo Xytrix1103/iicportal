@@ -1,4 +1,4 @@
-package com.iicportal.activity;
+package com.iicportal.fragments;
 
 import androidx.fragment.app.Fragment;
 

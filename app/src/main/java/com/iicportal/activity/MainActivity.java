@@ -11,6 +11,10 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.iicportal.R;
+import com.iicportal.fragments.ECanteenMenuFragment;
+import com.iicportal.fragments.FacilityMenuFragment;
+import com.iicportal.fragments.ProfileFragment;
+import com.iicportal.fragments.StudentHomeFragment;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
