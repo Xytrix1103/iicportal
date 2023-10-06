@@ -5,11 +5,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
 import com.iicportal.fragments.VerticalViewFragment;
 
@@ -35,7 +39,16 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, verticalViewFragment).commit();
+        FirebaseDatabase.getInstance().getReference("users/" + mAuth.getCurrentUser().getUid() + "/role").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                sharedPreferences.edit().putString("role", snapshot.getValue().toString()).apply();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, verticalViewFragment).commit();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
     }
 
     public void onResume() {
@@ -55,10 +68,5 @@ public class MainActivity extends AppCompatActivity {
                 sharedPreferences.edit().putString("role", task.getResult().getValue().toString()).apply();
             }
         });
-    }
-
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
     }
 }
