@@ -1,6 +1,8 @@
 package com.iicportal.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -12,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -23,6 +27,10 @@ public class LoginActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseUser user;
+    FirebaseDatabase database;
+    DatabaseReference usersRef;
+
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +38,11 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        usersRef = database.getReference("users");
+        usersRef.keepSynced(true);
+
+        sharedPreferences = this.getSharedPreferences("com.iicportal", Context.MODE_PRIVATE);
 
         usernameEdit = findViewById(R.id.username);
         passwordEdit = findViewById(R.id.password);
@@ -61,6 +74,17 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Log.d("LoginActivity", "signInWithEmail:success");
                         user = mAuth.getCurrentUser();
+
+                        usersRef.child(user.getUid()).child("role").get().addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()) {
+                                String role = task1.getResult().getValue(String.class);
+                                Log.d("LoginActivity", "Role: " + role);
+                                sharedPreferences.edit().putString("role", role).apply();
+                            } else {
+                                Log.d("LoginActivity", "Error getting role: " + task1.getException());
+                            }
+                        });
+
                         reload();
                     } else {
                         Log.w("LoginActivity", "signInWithEmail:failure", task.getException());
