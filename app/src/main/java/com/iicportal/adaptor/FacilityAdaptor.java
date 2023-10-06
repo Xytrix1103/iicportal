@@ -1,25 +1,21 @@
 package com.iicportal.adaptor;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,17 +25,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
+import com.iicportal.fragments.BookingDialogFragment;
 import com.iicportal.models.BookingItem;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, FacilityAdaptor.FacilityViewHolder> {
     Context context;
@@ -49,9 +40,10 @@ public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, Facili
     FirebaseAuth mAuth;
     FirebaseUser user;
     SharedPreferences sharedPreferences;
+    FragmentManager childFragmentManager;
 
 
-    public FacilityAdaptor(@NonNull FirebaseRecyclerOptions<BookingItem> options, Context context) {
+    public FacilityAdaptor(@NonNull FirebaseRecyclerOptions<BookingItem> options, Context context, FragmentManager childFragmentManager) {
         super(options);
         this.context = context;
         this.database = FirebaseDatabase.getInstance();
@@ -62,7 +54,7 @@ public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, Facili
         this.mAuth = FirebaseAuth.getInstance();
         this.user = mAuth.getCurrentUser();
         this.sharedPreferences = context.getSharedPreferences("com.iicportal", Context.MODE_PRIVATE);
-
+        this.childFragmentManager = childFragmentManager;
     }
 
     public void onDataChanged() {
@@ -139,133 +131,10 @@ public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, Facili
 
         holder.booknowBtn.setOnClickListener(v -> {
             Log.d("BookingAdapter", "Book button clicked");
-            Dialog dialog = new BottomSheetDialog(context);
-            dialog.setContentView(R.layout.booking_dialog);
-
-            TextView facilityName = dialog.findViewById(R.id.facility_name);
-            ImageView facilityImage = dialog.findViewById(R.id.facility_image);
-            Spinner bookingSpinner = dialog.findViewById(R.id.booking_time);
-            TextView date = dialog.findViewById(R.id.booking_date);
-            TextView price = dialog.findViewById(R.id.price);
-            TextView confirm = dialog.findViewById(R.id.confirmBtn);
-            TextView cancel = dialog.findViewById(R.id.cancelBtn);
-
-            facilityName.setText(model.getName());
-            Glide.with(context).load(model.getImage()).into(facilityImage);
-
-            // Display the current date
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-            String currentDate = dateFormat.format(Calendar.getInstance().getTime());
-            date.setText(currentDate);
-
-            price.setText(String.valueOf(model.getPrice()));
-
-            ArrayList<String> timeSlotsList = new ArrayList<>();
-            String[] timeSlotsArray = context.getResources().getStringArray(R.array.timeslot);
-            timeSlotsList.addAll(Arrays.asList(timeSlotsArray));
-
-            // Assuming you have identified the bookedTimeSlot as a String
-            timeSlotsList.remove(bookingSpinner.getSelectedItem().toString());
-
-            // Populate the Spinner with time slots from resources
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, timeSlotsList);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            bookingSpinner.setAdapter(adapter);
-
-            // Disable time slots that have already passed
-            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma", Locale.getDefault());
-            String currentTime = timeFormat.format(Calendar.getInstance().getTime());
-            String thresholdTime = "08:00AM";
-
-            for (int i = 0; i < timeSlotsList.size(); i++) {
-                String timeSlot = timeSlotsList.get(i);
-                if (isTimeSlotPassed(currentTime, timeSlot) || isBeforeThreshold(currentTime, thresholdTime)) {
-                    // If the time slot has passed or it's before the threshold time, remove it from the list
-                    timeSlotsList.remove(i);
-                    i--; // Adjust the index to account for the removed item
-                }
-            }
-
-
-
-            confirm.setOnClickListener(v1 -> {
-                Log.d("BookingAdapter", "Confirm button clicked");
-
-                // Retrieve the selected time slot from the Spinner
-                String selectedBooking = bookingSpinner.getSelectedItem().toString();
-
-                // Query the database to check if the selected time slot is available for this facility
-                Query query = bookingRef.child(model.getName())
-                        .orderByChild("selectedTimeSlot")
-                        .equalTo(selectedBooking);
-
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            // The selected time slot is already taken, show an error message
-                            Toast.makeText(context.getApplicationContext(), "Time slot is already booked for this facility", Toast.LENGTH_SHORT).show();
-
-                        } else {
-                            // Generate a unique booking ID
-                            String bookingId = bookingRef.push().getKey();
-
-                            BookingItem bookingItem = new BookingItem(model.getName(), model.getImage(), model.getPrice(), selectedBooking, currentDate);
-
-                            // Create a map to store the booking data
-                            Map<String, Object> bookingData = new HashMap<>();
-                            bookingData.put("userId", user.getUid());
-                            bookingData.put("facilityName", model.getName());
-                            bookingData.put("facilityImage", model.getImage());
-                            bookingData.put("facilityPrice", model.getPrice());
-                            bookingData.put("selectedDate", currentDate);
-                            bookingData.put("selectedTimeSlot", selectedBooking);
-
-                            // Save the booking data under the "bookings" node with the unique booking ID
-                            bookingRef.child(model.getName()).child(bookingId).setValue(bookingData);
-                            dialog.dismiss();
-                        }
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.d("BookingAdapter", "Database error: " + databaseError.getMessage());
-                    }
-                });
-            });
-            cancel.setOnClickListener(v1 -> {
-                Log.d("BookingAdapter", "Cancel button clicked");
-                dialog.dismiss();
-            });
-            dialog.show();
+            BookingDialogFragment bookingDialogFragment = new BookingDialogFragment(model, context, getRef(position).getKey());
+            bookingDialogFragment.show(childFragmentManager, "BookingDialogFragment");
         });
     }
-
-    // Helper method to check if a time slot has already passed
-    private boolean isTimeSlotPassed(String currentTime, String timeSlot) {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma", Locale.getDefault());
-        try {
-            Date currentTimeDate = timeFormat.parse(currentTime);
-            Date timeSlotDate = timeFormat.parse(timeSlot);
-            return currentTimeDate.after(timeSlotDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return false; // Handle parsing error as needed
-        }
-    }
-
-    // Helper method to check if a time is before the threshold time
-    private boolean isBeforeThreshold(String currentTime, String thresholdTime) {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma", Locale.getDefault());
-        try {
-            Date currentTimeDate = timeFormat.parse(currentTime);
-            Date thresholdTimeDate = timeFormat.parse(thresholdTime);
-            return currentTimeDate.before(thresholdTimeDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return false; // Handle parsing error as needed
-        }
-    }
-
 
     @NonNull
     @Override

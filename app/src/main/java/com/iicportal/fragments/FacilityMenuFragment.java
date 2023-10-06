@@ -68,12 +68,13 @@ public class FacilityMenuFragment extends Fragment {
         });
 
         FirebaseRecyclerOptions<BookingItem> facilityOptions = new FirebaseRecyclerOptions.Builder<BookingItem>()
+                .setLifecycleOwner(this)
                 .setQuery(facilitiesRef, BookingItem.class)
                 .build();
 
         facilitiesRecyclerView = view.findViewById(R.id.facilityRecyclerView);
         facilitiesRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        facilityAdaptor = new FacilityAdaptor(facilityOptions, context);
+        facilityAdaptor = new FacilityAdaptor(facilityOptions, context, getChildFragmentManager());
         facilitiesRecyclerView.setAdapter(facilityAdaptor);
 
         return view;

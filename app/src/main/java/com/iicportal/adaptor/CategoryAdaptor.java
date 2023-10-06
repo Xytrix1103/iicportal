@@ -1,7 +1,6 @@
 package com.iicportal.adaptor;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,21 +17,20 @@ import com.iicportal.models.Category;
 
 public class CategoryAdaptor extends FirebaseRecyclerAdapter<Category, CategoryAdaptor.CategoryViewHolder> {
     Context context;
+    OnCategoryClickListener onCategoryClickListener;
 
-    SharedPreferences sharedPreferences;
 
-    public CategoryAdaptor(@NonNull FirebaseRecyclerOptions<Category> options, Context context) {
+    public CategoryAdaptor(@NonNull FirebaseRecyclerOptions<Category> options, Context context, OnCategoryClickListener onCategoryClickListener) {
         super(options);
         this.context = context;
-        this.sharedPreferences = context.getSharedPreferences("com.iicportal", Context.MODE_PRIVATE);
+        this.onCategoryClickListener = onCategoryClickListener;
     }
 
     public void onDataChanged() {
         super.onDataChanged();
+
         if (super.getItemCount() > 0) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("category", super.getItem(0).getCategory());
-            editor.apply();
+            onCategoryClickListener.onCategoryClick(getItem(0).getCategory());
         }
 
         notifyDataSetChanged();
@@ -41,14 +39,11 @@ public class CategoryAdaptor extends FirebaseRecyclerAdapter<Category, CategoryA
     @Override
     protected void onBindViewHolder(@NonNull CategoryViewHolder holder, int position, @NonNull Category model) {
         holder.categoryName.setText(model.getCategory());
-        holder.itemView.setSelected(sharedPreferences.getString("category", "").equals(model.getCategory()));
+        holder.itemView.setSelected(model.getCategory().equals(onCategoryClickListener.getCategory()));
 
         holder.itemView.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("category", model.getCategory());
-            editor.apply();
-
-            Log.d("CategoryAdaptor", "Category changed to " + sharedPreferences.getString("category", ""));
+            onCategoryClickListener.onCategoryClick(model.getCategory());
+            Log.d("CategoryAdaptor", "Category changed to " + model.getCategory());
             notifyDataSetChanged();
         });
     }
@@ -67,5 +62,10 @@ public class CategoryAdaptor extends FirebaseRecyclerAdapter<Category, CategoryA
             super(itemView);
             categoryName = itemView.findViewById(R.id.category);
         }
+    }
+
+    public interface OnCategoryClickListener {
+        void onCategoryClick(String category);
+        String getCategory();
     }
 }
