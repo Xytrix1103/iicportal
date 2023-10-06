@@ -117,6 +117,14 @@ public class VerticalViewFragment extends Fragment {
         });
     }
 
+    public void onStart() {
+        super.onStart();
+        if (mAuth.getCurrentUser() == null) {
+            startActivity(new Intent(requireContext(), LoginActivity.class));
+            requireActivity().finish();
+        }
+    }
+
     public void onResume() {
         super.onResume();
         if (mAuth.getCurrentUser() == null) {
