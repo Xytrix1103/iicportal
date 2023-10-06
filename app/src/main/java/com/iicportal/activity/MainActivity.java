@@ -1,30 +1,24 @@
 package com.iicportal.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
-import com.iicportal.fragments.ECanteenMenuFragment;
-import com.iicportal.fragments.FacilityMenuFragment;
-import com.iicportal.fragments.ProfileFragment;
-import com.iicportal.fragments.StudentHomeFragment;
+import com.iicportal.fragments.VerticalViewFragment;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    SharedPreferences sharedPreferences;
 
     FrameLayout container;
-    Fragment ecanteenMenuFragment;
-    Fragment studentHomeFragment;
-    Fragment facilitiesMenuFragment;
-    Fragment profileFragment;
-    BottomNavigationView bottomNavigationView;
+    Fragment verticalViewFragment;
 
 
     @Override
@@ -33,58 +27,34 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-
-        ecanteenMenuFragment = new ECanteenMenuFragment();
-        studentHomeFragment = new StudentHomeFragment();
-        facilitiesMenuFragment = new FacilityMenuFragment();
-        profileFragment = new ProfileFragment();
+        sharedPreferences = this.getSharedPreferences("com.iicportal", MODE_PRIVATE);
+        verticalViewFragment = new VerticalViewFragment();
 
         if (mAuth.getCurrentUser() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
 
-        container = findViewById(R.id.fragment_container);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, studentHomeFragment).commit();
-
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-
-            container.removeAllViews();
-            if (id == R.id.home) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, studentHomeFragment).commit();
-                return true;
-            } else if (id == R.id.ecanteen) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, ecanteenMenuFragment).commit();
-                return true;
-            } else if (id == R.id.facilities) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, facilitiesMenuFragment).commit();
-                return true;
-            } else if (id == R.id.profile) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, profileFragment).commit();
-                return true;
-            }
-            return false;
-        });
-
-        bottomNavigationView.setOnItemReselectedListener(item -> {
-            int id = item.getItemId();
-
-            if (id == R.id.home) {
-                Log.d("MainActivity", "Home");
-            } else if (id == R.id.ecanteen) {
-                Log.d("MainActivity", "ECanteen");
-            } else if (id == R.id.facilities) {
-                Log.d("MainActivity", "Facilities");
-            } else if (id == R.id.profile) {
-                Log.d("MainActivity", "Profile");
-            }
-        });
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, verticalViewFragment).commit();
     }
 
     public void onResume() {
         super.onResume();
+        FirebaseDatabase.getInstance().getReference("users/" + mAuth.getCurrentUser().getUid() + "/role").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                sharedPreferences.edit().putString("role", task.getResult().getValue().toString()).apply();
+            }
+        });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseDatabase.getInstance().getReference("users/" + mAuth.getCurrentUser().getUid() + "/role").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                sharedPreferences.edit().putString("role", task.getResult().getValue().toString()).apply();
+            }
+        });
     }
 
     public void onBackPressed() {
