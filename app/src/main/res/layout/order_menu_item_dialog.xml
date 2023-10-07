@@ -58,7 +58,7 @@
 
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/order_menu_item_dialog_quantity_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,17 +72,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
+            android:layout_alignParentStart="true"
             android:orientation="horizontal">
 
-            <TextView
+            <Button
                 android:id="@+id/order_menu_item_dialog_minus_button"
-                android:background="@drawable/red_rounded_rectangle"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="-"
-                android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:layout_marginEnd="10dp"/>
 
             <TextView
@@ -95,15 +94,13 @@
                 android:gravity="center"
                 android:layout_marginEnd="10dp"/>
 
-            <TextView
+            <Button
                 android:id="@+id/order_menu_item_dialog_plus_button"
-                android:background="@drawable/red_rounded_rectangle"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="+"
-                android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:layout_marginEnd="10dp"/>
 
         </LinearLayout>
@@ -113,11 +110,11 @@
             android:background="@drawable/red_rounded_rectangle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_alignParentEnd="true"
             android:text="Add"
             android:textSize="14sp"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/order_menu_item_dialog_button_layout"
