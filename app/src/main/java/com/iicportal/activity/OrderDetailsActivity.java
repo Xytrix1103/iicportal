@@ -49,7 +49,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     ImageView backBtnIcon;
 
     TextView sentToKitchenDateTime, readyForPickupDateTime, completedDateTime, status;
-    RelativeLayout sentToKitchenBody, readyForPickupBody, completedBody;
+    RelativeLayout sentToKitchenBody, readyForPickupBody, completedBody, takeawayFeesBody;
 
     LinearProgressIndicator progressBar;
 
@@ -83,15 +83,14 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
         itemAdaptor = new CheckoutItemAdaptor(options, context);
         recyclerView.setAdapter(itemAdaptor);
-        itemsCard = findViewById(R.id.itemsCard);
 
-        paymentMethod = findViewById(R.id.paymentMethod);
-        orderOption = findViewById(R.id.orderOption);
+        paymentMethod = findViewById(R.id.payment_method);
+        orderOption = findViewById(R.id.collect_by);
         orderID = findViewById(R.id.orderID);
-        orderTotal = findViewById(R.id.orderTotal);
-        takeawayFee = findViewById(R.id.takeawayFee);
+        orderTotal = findViewById(R.id.subtotal);
+        takeawayFee = findViewById(R.id.takeawayFees);
         total = findViewById(R.id.total);
-
+        takeawayFeesBody = findViewById(R.id.takeawayFeesBody);
         sentToKitchenDateTime = findViewById(R.id.sentToKitchenDateTime);
         readyForPickupDateTime = findViewById(R.id.readyForPickupDateTime);
         completedDateTime = findViewById(R.id.completedDateTime);
@@ -141,6 +140,12 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
                 orderID.setText(snapshot.getKey());
                 orderTotal.setText(String.format("RM %.2f", Double.parseDouble(snapshot.child("total").getValue().toString())));
+                if(Integer.parseInt(snapshot.child("takeawayFee").getValue().toString()) > 0) {
+                    takeawayFeesBody.setVisibility(TextView.VISIBLE);
+                    takeawayFee.setText(String.format("RM %.2f", Double.parseDouble(snapshot.child("takeawayFee").getValue().toString())));
+                } else {
+                    takeawayFeesBody.setVisibility(TextView.GONE);
+                }
                 takeawayFee.setText(String.format("RM %.2f", Double.parseDouble(snapshot.child("takeawayFee").getValue().toString())));
                 total.setText(String.format("RM %.2f", Double.parseDouble(snapshot.child("total").getValue().toString()) + Double.parseDouble(snapshot.child("takeawayFee").getValue().toString())));
 

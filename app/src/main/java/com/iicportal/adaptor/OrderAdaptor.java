@@ -6,11 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
@@ -43,29 +45,40 @@ public class OrderAdaptor extends FirebaseRecyclerAdapter<Order, OrderAdaptor.Or
         holder.orderItems.setLayoutManager(new LinearLayoutManager(context));
         orderItemAdaptor = new OrderItemAdaptor(context, model.getItems());
         holder.orderItems.setAdapter(orderItemAdaptor);
+        paymentMethodsRef.child(model.getPaymentMethod()).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                Glide.with(context).load(task.getResult().child("icon").getValue()).into(holder.paymentMethodIcon);
+            }
+        });
+
+        orderOptionsRef.child(model.getOrderOption()).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                holder.orderOption.setText(task.getResult().child("option").getValue().toString());
+                Glide.with(context).load(task.getResult().child("icon").getValue()).into(holder.orderOptionIcon);
+            }
+        });
 
         int totalQuantity = 0;
         for (int i = 0; i < model.getItems().size(); i++) {
             totalQuantity += model.getItems().get(i).getQuantity();
         }
 
-        holder.orderID.setText(String.format("ORDER-%08d", pos + 1));
-        SimpleDateFormat datetimeFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
+        SimpleDateFormat datetimeFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date(model.getTimestamp());
-        holder.datetime.setText(datetimeFormat.format(date));
+        holder.date.setText(datetimeFormat.format(date));
 
         holder.status.setText(model.getStatus());
 
         Log.d("OrderAdaptor", "onBindViewHolder: " + model.getTimestamp() + " " + model.getReadyTimestamp() + " " + model.getCompletedTimestamp());
 
         if(model.getCompletedTimestamp() != null) {
-            holder.status.setText("COMPLETED");
+            holder.status.setText("Completed");
             holder.status.setTextColor(context.getResources().getColor(R.color.light_green_800));
         } else if(model.getReadyTimestamp() != null) {
-            holder.status.setText("READY FOR PICKUP");
+            holder.status.setText("Ready For Pickup");
             holder.status.setTextColor(context.getResources().getColor(R.color.black));
         } else if(model.getTimestamp() != null) {
-            holder.status.setText("PREPARING");
+            holder.status.setText("Preparing");
             holder.status.setTextColor(context.getResources().getColor(R.color.black));
         }
 
@@ -91,19 +104,22 @@ public class OrderAdaptor extends FirebaseRecyclerAdapter<Order, OrderAdaptor.Or
     }
 
     public static class OrderViewHolder extends RecyclerView.ViewHolder {
-        TextView orderID;
         TextView status;
-        TextView datetime;
+        TextView date;
         TextView total;
+        ImageView paymentMethodIcon;
+        TextView orderOption;
+        ImageView orderOptionIcon;
         RecyclerView orderItems;
 
         public OrderViewHolder(View itemView) {
             super(itemView);
-
-            orderID = itemView.findViewById(R.id.orderID);
             status = itemView.findViewById(R.id.status);
-            datetime = itemView.findViewById(R.id.datetime);
+            date = itemView.findViewById(R.id.date);
             total = itemView.findViewById(R.id.total);
+            paymentMethodIcon = itemView.findViewById(R.id.payment_method_icon);
+            orderOption = itemView.findViewById(R.id.order_option);
+            orderOptionIcon = itemView.findViewById(R.id.order_option_icon);
             orderItems = itemView.findViewById(R.id.recyclerView);
         }
     }
