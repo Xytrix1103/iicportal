@@ -4,7 +4,6 @@
     android:layout_height="80dp"
     android:orientation="horizontal"
     android:paddingVertical="10dp"
-    android:paddingHorizontal="10dp"
     android:gravity="center_vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
 

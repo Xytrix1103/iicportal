@@ -51,7 +51,10 @@ public class OrderHistoryActivity extends AppCompatActivity {
         backBtnIcon.setOnClickListener(v -> finish());
 
         ordersRecyclerView = findViewById(R.id.orderHistoryRecyclerView);
-        ordersRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
+        ordersRecyclerView.setLayoutManager(mLayoutManager);
 
         FirebaseRecyclerOptions<Order> options = new FirebaseRecyclerOptions.Builder<Order>()
                 .setLifecycleOwner(this)
