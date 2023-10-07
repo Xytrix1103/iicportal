@@ -9,7 +9,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
+        android:layout_marginHorizontal="10dp"
         android:layout_marginTop="10dp">
 
         <ImageView
@@ -54,8 +54,8 @@
                 android:gravity="center"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:paddingVertical="10dp"
-                android:paddingHorizontal="20dp">
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="10dp">
 
                 <TextView
                     android:id="@+id/itemsTitle"
@@ -94,8 +94,8 @@
                 android:gravity="center"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:paddingVertical="10dp"
-                android:paddingHorizontal="20dp">
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="10dp">
 
                 <TextView
                     android:id="@+id/paymentMethodTitle"
@@ -134,8 +134,8 @@
                 android:gravity="center"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:paddingVertical="10dp"
-                android:paddingHorizontal="20dp">
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="10dp">
 
                 <TextView
                     android:id="@+id/dineInTakeAwayTitle"
@@ -175,8 +175,8 @@
                 android:gravity="center"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:paddingVertical="10dp"
-                android:paddingHorizontal="20dp">
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="10dp">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
