@@ -62,6 +62,9 @@
 	<string name="prices_title">Prices (RM)</string>
     <string name="subtotal_title">Subtotal</string>
 	<string name="takeaway_fees_title">Takeaway Fees</string>
+	<string name="dashboard">Dashboard</string>
+	<string name="users">Users</string>
+	<string name="search">Search</string>
 
 	<string-array name="timeslot">
         <item>9:00AM - 10:00AM</item>

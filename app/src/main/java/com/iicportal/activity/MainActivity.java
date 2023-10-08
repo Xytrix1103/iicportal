@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
+import com.iicportal.fragments.HorizontalViewFragment;
 import com.iicportal.fragments.VerticalViewFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     FrameLayout container;
     Fragment verticalViewFragment;
-
+    Fragment horizontalViewFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         sharedPreferences = this.getSharedPreferences("com.iicportal", MODE_PRIVATE);
         verticalViewFragment = new VerticalViewFragment();
+        horizontalViewFragment = new HorizontalViewFragment();
 
         if (mAuth.getCurrentUser() == null) {
             startActivity(new Intent(this, LoginActivity.class));
@@ -43,30 +45,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 sharedPreferences.edit().putString("role", snapshot.getValue().toString()).apply();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, verticalViewFragment).commit();
+                if (snapshot.getValue().toString().equals("Student") || snapshot.getValue().toString().equals("Staff")) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, verticalViewFragment).commit();
+                } else if (snapshot.getValue().toString().equals("Admin") || snapshot.getValue().toString().equals("Vendor")) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, horizontalViewFragment).commit();
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
-        });
-    }
-
-    public void onResume() {
-        super.onResume();
-        FirebaseDatabase.getInstance().getReference("users/" + mAuth.getCurrentUser().getUid() + "/role").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                sharedPreferences.edit().putString("role", task.getResult().getValue().toString()).apply();
-            }
-        });
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        FirebaseDatabase.getInstance().getReference("users/" + mAuth.getCurrentUser().getUid() + "/role").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                sharedPreferences.edit().putString("role", task.getResult().getValue().toString()).apply();
-            }
         });
     }
 }

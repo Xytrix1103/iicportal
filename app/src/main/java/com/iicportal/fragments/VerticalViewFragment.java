@@ -28,11 +28,11 @@ public class VerticalViewFragment extends Fragment {
     BottomNavigationView bottomNavigationView;
 
     public VerticalViewFragment() {
-        super(R.layout.vertical_user_view);
+        super(R.layout.vertical_view_fragment);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.vertical_user_view, container, false);
+        View view = inflater.inflate(R.layout.vertical_view_fragment, container, false);
         mAuth = FirebaseAuth.getInstance();
         sharedPreferences = requireActivity().getSharedPreferences("com.iicportal", 0);
         bottomNavigationView = view.findViewById(R.id.bottom_navigation);
