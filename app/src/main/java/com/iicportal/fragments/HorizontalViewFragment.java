@@ -88,6 +88,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, UserListFragment).commit();
                     break;
             }
+            drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
     }
@@ -111,6 +112,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, ECanteenMenuFragment).commit();
                     break;
             }
+            drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
     }

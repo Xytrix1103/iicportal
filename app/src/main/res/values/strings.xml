@@ -65,6 +65,7 @@
 	<string name="dashboard">Dashboard</string>
 	<string name="users">Users</string>
 	<string name="search">Search</string>
+	<string name="userRoleHint">User Role</string>
 
 	<string-array name="timeslot">
         <item>9:00AM - 10:00AM</item>

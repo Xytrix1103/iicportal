@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	xmlns:input="http://schemas.android.com/tools">
+
+	<RelativeLayout
+		android:id="@+id/userImageWidget"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="10dp"
+		android:layout_marginTop="10dp">
+
+		<androidx.cardview.widget.CardView
+			android:layout_width="160dp"
+			android:layout_height="160dp"
+			android:layout_centerInParent="true"
+			android:layout_margin="10dp"
+			android:background="@color/colorPrimary"
+			app:contentPadding="10dp"
+			app:cardCornerRadius="100dp"
+			app:cardElevation="10dp">
+
+			<ImageView
+				android:id="@+id/userImage"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:scaleType="centerCrop"
+				android:src="@drawable/baseline_person_24" />
+
+		</androidx.cardview.widget.CardView>
+
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:id="@+id/userDetailsWidget"
+		android:layout_below="@id/userImageWidget"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_marginTop="10dp"
+		android:paddingHorizontal="30dp">
+
+		<TextView
+			android:id="@+id/fullNameHint"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/fullNameLabel"
+			android:textColor="@color/black"
+			android:textSize="16sp"
+			android:textStyle="bold" />
+
+		<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/fullNameLayout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/fullNameHint"
+			android:layout_marginBottom="10dp"
+			android:hint="@string/fullNameHint"
+			android:theme="@style/EditText.Default"
+			input:startIconDrawable="@drawable/baseline_person_24"
+			input:errorEnabled="true"
+			input:errorTextAppearance="@style/TextAppearance.AppCompat.Small"
+			input:hintEnabled="false">
+
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/fullName"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@color/transparent"
+				android:inputType="text"
+				android:paddingVertical="15dp"
+				android:textSize="16sp"
+				android:textColor="@color/black"/>
+
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<TextView
+			android:id="@+id/phoneNumberHint"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/fullNameLayout"
+			android:text="@string/phoneNumberLabel"
+			android:textColor="@color/black"
+			android:textSize="16sp"
+			android:textStyle="bold" />
+
+		<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/phoneNumberLayout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/phoneNumberHint"
+			android:layout_marginBottom="10dp"
+			android:hint="@string/phoneNumberHint"
+			android:theme="@style/EditText.Default"
+			input:startIconDrawable="@drawable/baseline_phone_24"
+			input:hintEnabled="false">
+
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/phoneNumber"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@color/transparent"
+				android:inputType="text"
+				android:paddingVertical="15dp"
+				android:textColor="@color/black"
+				android:textSize="16sp" />
+
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<TextView
+			android:id="@+id/emailHint"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/phoneNumberLayout"
+			android:text="@string/emailLabel"
+			android:textColor="@color/black"
+			android:textSize="16sp"
+			android:textStyle="bold" />
+
+		<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/emailLayout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/emailHint"
+			android:layout_marginBottom="10dp"
+			android:hint="@string/emailHint"
+			android:theme="@style/EditText.Default"
+			input:startIconDrawable="@drawable/baseline_email_24"
+			input:hintEnabled="false">
+
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/email"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@color/transparent"
+				android:inputType="text"
+				android:paddingVertical="15dp"
+				android:textColor="@color/black"
+				android:textSize="16sp" />
+
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<TextView
+			android:id="@+id/passwordHint"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/emailLayout"
+			android:text="@string/passwordLabel"
+			android:textColor="@color/black"
+			android:textSize="16sp"
+			android:textStyle="bold" />
+
+		<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/passwordLayout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/passwordHint"
+			android:layout_marginBottom="10dp"
+			android:hint="@string/passwordHint"
+			android:theme="@style/EditText.Default"
+			input:startIconDrawable="@drawable/baseline_lock_24"
+			input:hintEnabled="false">
+
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/password"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@color/transparent"
+				android:inputType="text"
+				android:paddingVertical="15dp"
+				android:textColor="@color/black"
+				android:textSize="16sp" />
+
+		</com.google.android.material.textfield.TextInputLayout>
+
+<!--		<Spinner-->
+<!--			android:layout_width="match_parent"-->
+<!--			android:layout_height="wrap_content"-->
+<!--			android:layout_below="@id/passwordLayout"-->
+<!--			android:layout_marginBottom="10dp"-->
+<!--			android:textSize="16sp"-->
+<!--			android:paddingVertical="15dp"-->
+<!--			android:id="@+id/userRole"-->
+<!--			android:entries="@array/userRole"-->
+<!--			android:prompt="@string/userRoleHint"-->
+<!--			android:spinnerMode="dropdown"/>-->
+
+	</RelativeLayout>
+
+</RelativeLayout>
