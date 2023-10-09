@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,14 +28,17 @@ import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
 import com.iicportal.adaptor.StatusAdaptor;
 import com.iicportal.models.BookingStatus;
+import com.iicportal.models.Facilities;
 import com.iicportal.models.OrderStatus;
 import com.iicportal.models.Status;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 
 public class StudentHomeFragment extends Fragment {
@@ -46,12 +51,14 @@ public class StudentHomeFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private FirebaseDatabase database;
-    private DatabaseReference userRef, bookingRef, orderRef;
+    private DatabaseReference userRef, facilityRef, bookingRef, orderRef;
 
     private RecyclerView statusRecyclerView;
     private StatusAdaptor statusAdaptor;
 
+    private ArrayList<String> facilityNameList;
     private ArrayList<Status> statusList;
+
     private static final String STUDENT_HOME_TAG = "StudentHomeFragment";
 
     public StudentHomeFragment() {
@@ -68,6 +75,7 @@ public class StudentHomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.student_home_fragment, container, false);
 
+        facilityNameList = new ArrayList<String>();
         statusList = new ArrayList<Status>();
 
         // Initialize firebase objects
@@ -75,11 +83,9 @@ public class StudentHomeFragment extends Fragment {
         currentUser = mAuth.getCurrentUser();
         database = FirebaseDatabase.getInstance();
         userRef = database.getReference("users/").child(currentUser.getUid());
+        facilityRef = database.getReference("facilities/facility/");
         bookingRef = database.getReference("bookings/");
         orderRef = database.getReference("orders/");
-
-        bookingRef.keepSynced(true);
-        orderRef.keepSynced(true);
 
         // Set reference to views
         messageButtonIcon = view.findViewById(R.id.messageBtnIcon);
@@ -90,13 +96,12 @@ public class StudentHomeFragment extends Fragment {
         statusRecyclerView = view.findViewById(R.id.statusRecyclerView);
         statusRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        // Update views with data
-        //region Welcome message
-        // TODO: uncomment this when user profile pictures are implemented
-        // Glide.with(userImage.getContext()).load(currentUser.getImage()).into(userImage);
+        //region Welcome section
         userRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 usernameText.setText(task.getResult().child("fullName").getValue().toString());
+                // TODO: uncomment this when user profile pictures are implemented
+                // Glide.with(userImage.getContext()).load(task.getResult().child("image").getValue().toString().into(userImage);
             } else {
                 Log.e(STUDENT_HOME_TAG, "Error getting user data", task.getException());
             }
@@ -108,48 +113,67 @@ public class StudentHomeFragment extends Fragment {
         //endregion
 
         //region Status/Reminders
-        // Retrieve the user's imminent facility bookings
-        Query bookingQuery = bookingRef.orderByChild("uid").equalTo(currentUser.getUid());
-        bookingQuery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Calendar calendar = Calendar.getInstance();
+        // Retrieve all facilities
+        facilityRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (DataSnapshot facilitySnapshot : task.getResult().getChildren())
+                    facilityNameList.add(facilitySnapshot.child("name").getValue().toString());
 
-                for (DataSnapshot snapshotItem : snapshot.getChildren()) {
-                    String bookingId = snapshotItem.getKey();
-                    Long currentTimestamp = System.currentTimeMillis();
-                    Long bookingTimestamp = Long.parseLong(snapshotItem.child("date").getValue().toString());
+                // Retrieve the user's upcoming facility bookings
+                for (String facility : facilityNameList) {
+                    Query bookingQuery = bookingRef.child(facility).orderByChild("userId").equalTo(currentUser.getUid());
+                    bookingQuery.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Calendar calendar = Calendar.getInstance();
 
-                    calendar.setTimeInMillis(currentTimestamp);
-                    int currentDay = calendar.get(Calendar.DATE);
-                    calendar.setTimeInMillis(bookingTimestamp);
-                    int bookingDay = calendar.get(Calendar.DATE);
+                            for (DataSnapshot snapshotItem : snapshot.getChildren()) {
+                                String bookingId = snapshotItem.getKey();
+                                Long currentTimestamp = System.currentTimeMillis();
 
-                    // Only provide status reminder if booking is within the same day
-                    if (currentDay == bookingDay) {
-                        String facilityImage = snapshotItem.child("image").getValue().toString();
-                        String facilityName = snapshotItem.child("name").getValue().toString();
-                        String bookingTime = snapshotItem.child("time").getValue().toString();
-                        String description = String.format("Hey there, don't pocket this reminder: Your %s booking for today at %s is just around the corner!",
-                                facilityName, new SimpleDateFormat("hh:mm a").format(bookingTime));
+                                Date selectedDate = null;
+                                try {
+                                    selectedDate = new SimpleDateFormat("dd/MM/yyyy").parse(snapshotItem.child("selectedDate").getValue().toString());
+                                } catch (ParseException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                Long bookingTimestamp = selectedDate.getTime();
 
-                        BookingStatus newBookingStatus = new BookingStatus(currentUser.getUid(), bookingId, "REMINDER!!!", description, "booking", System.currentTimeMillis(), facilityImage, facilityName);
-                        removeStatusFromList(statusList, bookingId);
-                        statusList.add(newBookingStatus);
-                        statusAdaptor.notifyDataSetChanged();
-                    }
+                                calendar.setTimeInMillis(currentTimestamp);
+                                int currentDay = calendar.get(Calendar.DATE);
+                                calendar.setTimeInMillis(bookingTimestamp);
+                                int bookingDay = calendar.get(Calendar.DATE);
 
-                    // Delete old status reminder if booking time is past current time
-                    if (currentTimestamp > bookingTimestamp) {
-                        removeStatusFromList(statusList, bookingId);
-                        statusAdaptor.notifyDataSetChanged();
-                    }
+                                // Provide status reminder for the current day's bookings
+                                if (currentDay == bookingDay) {
+                                    String facilityImage = snapshotItem.child("facilityImage").getValue().toString();
+                                    String facilityName = snapshotItem.child("facilityName").getValue().toString();
+                                    String bookingTime = snapshotItem.child("selectedTimeSlot").getValue().toString();
+                                    String description = String.format("Hey there, don't pocket this reminder: Your %s booking for today at %s is just around the corner!",
+                                            facilityName, bookingTime);
+
+                                    BookingStatus newBookingStatus = new BookingStatus(currentUser.getUid(), bookingId, "REMINDER!!!", description, "booking", System.currentTimeMillis(), facilityImage, facilityName);
+                                    removeStatusFromList(statusList, bookingId);
+                                    statusList.add(newBookingStatus);
+                                    statusAdaptor.notifyDataSetChanged();
+                                }
+
+                                // Delete old status reminder if booking time is past current time
+                                if (currentTimestamp > bookingTimestamp) {
+                                    //removeStatusFromList(statusList, bookingId);
+                                    //statusAdaptor.notifyDataSetChanged();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Log.w(STUDENT_HOME_TAG, "loadBooking:onCancelled", error.toException());
+                        }
+                    });
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w(STUDENT_HOME_TAG, "loadBooking:onCancelled", error.toException());
+            } else {
+                Log.w(STUDENT_HOME_TAG, "loadFacilities:onCancelled", task.getException());
             }
         });
 
@@ -214,7 +238,7 @@ public class StudentHomeFragment extends Fragment {
         });
         //endregion
 
-        // onClick listeners
+        // Button onClick listeners
         messageButtonIcon.setOnClickListener(v -> {
             // TODO: add navigation when messages are implemented
         });

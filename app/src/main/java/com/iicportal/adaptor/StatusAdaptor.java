@@ -66,14 +66,15 @@ public class StatusAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Glide.with(castedHolder.image.getContext()).load(bookingStatus.getFacilityImage()).into(castedHolder.image);
             castedHolder.facilityName.setText(bookingStatus.getFacilityName());
             castedHolder.title.setText(bookingStatus.getTitle());
+            castedHolder.bookingId.setText("Booking ID: " + bookingStatus.getBookingId());
             castedHolder.description.setText(bookingStatus.getDescription());
             castedHolder.time.setText(new SimpleDateFormat("hh:mm a").format(bookingStatus.getTimestamp()));
         } else if (holder instanceof OrderStatusViewHolder) {
             OrderStatusViewHolder castedHolder = (OrderStatusViewHolder) holder;
             OrderStatus orderStatus = (OrderStatus) item;
 
-            castedHolder.orderId.setText("Order ID: " + orderStatus.getOrderId());
             castedHolder.title.setText(orderStatus.getTitle());
+            castedHolder.orderId.setText("Order ID: " + orderStatus.getOrderId());
             castedHolder.orderStatus.setText(orderStatus.getOrderStatus());
             castedHolder.description.setText(orderStatus.getDescription());
             castedHolder.time.setText(new SimpleDateFormat("hh:mm a").format(orderStatus.getTimestamp()));
@@ -106,6 +107,7 @@ public class StatusAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         ImageView image;
         TextView facilityName;
         TextView title;
+        TextView bookingId;
         TextView description;
         TextView time;
 
@@ -114,6 +116,7 @@ public class StatusAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             image = itemView.findViewById(R.id.statusImage);
             facilityName = itemView.findViewById(R.id.facilityName);
             title = itemView.findViewById(R.id.statusTitleText);
+            bookingId = itemView.findViewById(R.id.bookingId);
             description = itemView.findViewById(R.id.statusDescription);
             time = itemView.findViewById(R.id.time);
         }
