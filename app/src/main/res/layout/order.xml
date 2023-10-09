@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/orderHistoryItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,7 +14,6 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:contentPadding="10dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp">
 
@@ -23,52 +23,83 @@
 
             <RelativeLayout
                 android:id="@+id/header"
-                android:layout_marginVertical="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="10dp">
 
                 <TextView
-                    android:id="@+id/orderID"
+                    android:id="@+id/date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_centerVertical="true"
-                    android:text="Order ID: 123456789"
+                    android:text="01/01/2021"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold"/>
 
-                <TextView
-                    android:id="@+id/status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:text="COMPLETED"
-                    android:textColor="@color/light_green_800"
-                    android:textSize="14sp"/>
-
-                <View
-                    android:id="@+id/divider"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_below="@id/orderID"
-                    android:background="@color/black"/>
-
             </RelativeLayout>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/header"
+                android:background="@color/grey_500"/>
 
             <RelativeLayout
                 android:id="@+id/body"
-                android:layout_below="@id/header"
+                android:layout_below="@id/divider"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="10dp">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
+                <LinearLayout
+                    android:id="@+id/foodList"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:weightSum="3"
+                    android:orientation="horizontal">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView"
+                        android:layout_weight="2"
+                        android:layout_width="0dp"
+                        android:paddingEnd="20dp"
+                        android:layout_height="wrap_content"
+                        tools:ignore="RtlSymmetry" />
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/total"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toStartOf="@+id/payment_method_icon"
+                            android:text="RM 10.00"
+                            android:textColor="@color/grey_700"
+                            android:textStyle="normal"
+                            android:textSize="14sp"/>
+
+                        <ImageView
+                            android:id="@+id/payment_method_icon"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="10dp"
+                            android:layout_alignParentEnd="true"
+                            android:src="@drawable/tngewallet"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
 
             </RelativeLayout>
 
@@ -76,57 +107,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/body"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp">
 
-                <RelativeLayout
-                    android:id="@+id/datetimeLayout"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/order_option_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/tngewallet"/>
+
+                <TextView
+                    android:id="@+id/order_option"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true">
+                    android:layout_toEndOf="@+id/order_option_icon"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:text="Dine In"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:textSize="12sp"/>
 
-                    <TextView
-                        android:id="@+id/datetimeTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Datetime: "
-                        android:textColor="@color/black"
-                        android:textSize="14sp"/>
-
-                    <TextView
-                        android:id="@+id/datetime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:text="01/01/2021"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"/>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/totalLayout"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/datetimeLayout">
-
-                    <TextView
-                        android:id="@+id/totalTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Total: "
-                        android:textColor="@color/black"
-                        android:textSize="14dp"/>
-
-                    <TextView
-                        android:id="@+id/total"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:text="RM 10.00"
-                        android:textColor="@color/black"
-                        android:textSize="14dp"/>
-
-                </RelativeLayout>
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="Completed"
+                    android:textColor="@color/light_green_800"
+                    android:textSize="14sp"/>
 
             </RelativeLayout>
 

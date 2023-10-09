@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,7 +37,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     CheckoutItemAdaptor itemAdaptor;
-    CardView itemsCard;
+    TextView orderedAtDate, orderedAtTime;
 
     TextView paymentMethod;
     TextView orderOption;
@@ -49,7 +48,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     ImageView backBtnIcon;
 
     TextView sentToKitchenDateTime, readyForPickupDateTime, completedDateTime, status;
-    RelativeLayout sentToKitchenBody, readyForPickupBody, completedBody;
+    RelativeLayout sentToKitchenBody, readyForPickupBody, completedBody, takeawayFeesBody;
 
     LinearProgressIndicator progressBar;
 
@@ -69,8 +68,6 @@ public class OrderDetailsActivity extends AppCompatActivity {
         orderRef = database.getReference("orders/").child(orderId);
         orderRef.keepSynced(true);
 
-        progressBar = findViewById(R.id.progressBar);
-
         recyclerView = findViewById(R.id.itemsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.suppressLayout(true);
@@ -83,24 +80,24 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
         itemAdaptor = new CheckoutItemAdaptor(options, context);
         recyclerView.setAdapter(itemAdaptor);
-        itemsCard = findViewById(R.id.itemsCard);
 
-        paymentMethod = findViewById(R.id.paymentMethod);
-        orderOption = findViewById(R.id.orderOption);
+        progressBar = findViewById(R.id.progressBar);
+        paymentMethod = findViewById(R.id.payment_method);
+        orderOption = findViewById(R.id.collect_by);
         orderID = findViewById(R.id.orderID);
-        orderTotal = findViewById(R.id.orderTotal);
-        takeawayFee = findViewById(R.id.takeawayFee);
+        orderTotal = findViewById(R.id.subtotal);
+        takeawayFee = findViewById(R.id.takeawayFees);
         total = findViewById(R.id.total);
-
+        takeawayFeesBody = findViewById(R.id.takeawayFeesBody);
         sentToKitchenDateTime = findViewById(R.id.sentToKitchenDateTime);
         readyForPickupDateTime = findViewById(R.id.readyForPickupDateTime);
         completedDateTime = findViewById(R.id.completedDateTime);
-
         sentToKitchenBody = findViewById(R.id.sentToKitchenBody);
         readyForPickupBody = findViewById(R.id.readyForPickupBody);
         completedBody = findViewById(R.id.completedBody);
-
         status = findViewById(R.id.status);
+        orderedAtDate = findViewById(R.id.orderedAtDate);
+        orderedAtTime = findViewById(R.id.orderedAtTime);
 
         progressBar.setIndicatorColor(context.getResources().getColor(R.color.light_green_800));
         progressBar.setTrackColor(context.getResources().getColor(R.color.light_green_200));
@@ -140,7 +137,15 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 }
 
                 orderID.setText(snapshot.getKey());
+                orderedAtDate.setText(new SimpleDateFormat("dd/MM/yyyy").format(Long.parseLong(snapshot.child("timestamp").getValue().toString())));
+                orderedAtTime.setText(new SimpleDateFormat("hh:mm a").format(Long.parseLong(snapshot.child("timestamp").getValue().toString())));
                 orderTotal.setText(String.format("RM %.2f", Double.parseDouble(snapshot.child("total").getValue().toString())));
+                if(Integer.parseInt(snapshot.child("takeawayFee").getValue().toString()) > 0) {
+                    takeawayFeesBody.setVisibility(TextView.VISIBLE);
+                    takeawayFee.setText(String.format("RM %.2f", Double.parseDouble(snapshot.child("takeawayFee").getValue().toString())));
+                } else {
+                    takeawayFeesBody.setVisibility(TextView.GONE);
+                }
                 takeawayFee.setText(String.format("RM %.2f", Double.parseDouble(snapshot.child("takeawayFee").getValue().toString())));
                 total.setText(String.format("RM %.2f", Double.parseDouble(snapshot.child("total").getValue().toString()) + Double.parseDouble(snapshot.child("takeawayFee").getValue().toString())));
 

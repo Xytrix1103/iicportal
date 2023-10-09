@@ -83,11 +83,6 @@ public class StatusAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             else if (orderStatus.getOrderStatus().equals("READY"))
                 castedHolder.orderStatus.setTextColor(Color.GREEN);
         }
-
-        if (position == 0) {
-            Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_left);
-            holder.itemView.startAnimation(animation);
-        }
     }
 
     @Override

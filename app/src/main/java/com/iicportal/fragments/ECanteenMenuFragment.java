@@ -1,10 +1,9 @@
-package com.iicportal.activity;
+package com.iicportal.fragments;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,22 +25,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
+import com.iicportal.activity.CartActivity;
+import com.iicportal.activity.OrderHistoryActivity;
 import com.iicportal.adaptor.CategoryAdaptor;
-import com.iicportal.adaptor.MenuItemAdaptor;
 import com.iicportal.models.Category;
-import com.iicportal.models.FoodItem;
 
-public class ECanteenMenuFragment extends Fragment {
+public class ECanteenMenuFragment extends Fragment implements CategoryAdaptor.OnCategoryClickListener {
 
     private Context context;
-    private RecyclerView menuRecyclerView;
     private RecyclerView categoryRecyclerView;
 
-    private MenuItemAdaptor menuItemAdaptor;
     private CategoryAdaptor categoryAdaptor;
 
     private FirebaseDatabase database;
-    private DatabaseReference menuRef;
     private DatabaseReference categoriesRef;
     private DatabaseReference cartRef;
 
@@ -52,6 +48,8 @@ public class ECanteenMenuFragment extends Fragment {
 
     private FrameLayout cartBtn;
     private ImageView cartIcon, historyBtnIcon;
+    FrameLayout menuFragmentContainer;
+    String category;
 
     public ECanteenMenuFragment() {
         super(R.layout.ecanteen_menu_fragment);
@@ -69,35 +67,14 @@ public class ECanteenMenuFragment extends Fragment {
 
         cartBtn = view.findViewById(R.id.cartBtn);
         cartIcon = view.findViewById(R.id.cartBtnIcon);
-
+        menuFragmentContainer = view.findViewById(R.id.menu_fragment_container);
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
         database = FirebaseDatabase.getInstance();
         categoriesRef = database.getReference("ecanteen/categories");
         categoriesRef.keepSynced(true);
-        menuRef = database.getReference("ecanteen/fooditems/");
-        menuRef.keepSynced(true);
-        cartRef = database.getReference("carts/").child(user.getUid());
-
-        sharedPreferences = context.getSharedPreferences("com.iicportal", Context.MODE_PRIVATE);
-
-        sharedPreferences.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
-            if (key.equals("category")) {
-                Log.d("ECanteenMenuActivity", "Category changed to " + sharedPreferences.getString("category", ""));
-                categoryAdaptor.notifyDataSetChanged();
-
-                menuItemAdaptor.stopListening();
-                FirebaseRecyclerOptions<FoodItem> options = new FirebaseRecyclerOptions.Builder<FoodItem>()
-                        .setQuery(menuRef.orderByChild("category").equalTo(sharedPreferences.getString("category", "")), FoodItem.class)
-                        .build();
-                menuItemAdaptor = new MenuItemAdaptor(options, context);
-                menuRecyclerView.setAdapter(menuItemAdaptor);
-                menuItemAdaptor.startListening();
-
-                menuItemAdaptor.notifyDataSetChanged();
-            }
-        });
+        cartRef = database.getReference("carts/" + user.getUid());
 
         FirebaseRecyclerOptions<Category> categoryOptions = new FirebaseRecyclerOptions.Builder<Category>()
                 .setQuery(categoriesRef, Category.class)
@@ -105,17 +82,8 @@ public class ECanteenMenuFragment extends Fragment {
 
         categoryRecyclerView = view.findViewById(R.id.categoryRecyclerView);
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        categoryAdaptor = new CategoryAdaptor(categoryOptions, context);
+        categoryAdaptor = new CategoryAdaptor(categoryOptions, context, this);
         categoryRecyclerView.setAdapter(categoryAdaptor);
-
-        FirebaseRecyclerOptions<FoodItem> options = new FirebaseRecyclerOptions.Builder<FoodItem>()
-                .setQuery(menuRef.orderByChild("category").equalTo(sharedPreferences.getString("category", "")), FoodItem.class)
-                .build();
-
-        menuRecyclerView = view.findViewById(R.id.menuRecyclerView);
-        menuRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        menuItemAdaptor = new MenuItemAdaptor(options, context);
-        menuRecyclerView.setAdapter(menuItemAdaptor);
 
         cartIcon.setOnClickListener(v -> {
             Intent intent = new Intent(context, CartActivity.class);
@@ -149,9 +117,7 @@ public class ECanteenMenuFragment extends Fragment {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
 
         historyBtnIcon = view.findViewById(R.id.historyBtnIcon);
@@ -164,29 +130,32 @@ public class ECanteenMenuFragment extends Fragment {
     }
 
     @Override
+    public void onCategoryClick(String category) {
+        this.category = category;
+        MenuFragment menuFragment = new MenuFragment(category);
+        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.menu_fragment_container, menuFragment).commit();
+    }
+
+    @Override
+    public String getCategory() {
+        return category;
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
-        if(categoryAdaptor.getItemCount() == 0) {
-            sharedPreferences.edit().remove("category").apply();
-        } else {
-            sharedPreferences.edit().putString("category", categoryAdaptor.getItem(0).getCategory()).apply();
-        }
-        menuItemAdaptor.startListening();
         categoryAdaptor.startListening();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        menuItemAdaptor.startListening();
         categoryAdaptor.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        sharedPreferences.edit().remove("category").apply();
-        menuItemAdaptor.stopListening();
         categoryAdaptor.stopListening();
     }
 }
