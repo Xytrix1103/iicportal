@@ -1,6 +1,7 @@
 package com.iicportal.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ public class AdminDashboardFragment extends Fragment {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d("AdminDashboardFragment", "onCreateView: ");
         View view = inflater.inflate(R.layout.admin_dashboard_fragment, container, false);
         ImageView menuBtn = view.findViewById(R.id.menuIcon);
         menuBtn.setOnClickListener(v -> openDrawerInterface.openDrawer());

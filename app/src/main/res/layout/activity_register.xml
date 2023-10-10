@@ -93,7 +93,6 @@
                     android:hint="@string/fullNameHint"
                     android:theme="@style/EditText.Default"
                     input:startIconDrawable="@drawable/baseline_person_24"
-                    input:errorEnabled="true"
                     input:errorTextAppearance="@style/TextAppearance.AppCompat.Small"
                     input:hintEnabled="false">
 

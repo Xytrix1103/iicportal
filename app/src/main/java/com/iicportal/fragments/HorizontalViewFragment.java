@@ -3,6 +3,7 @@ package com.iicportal.fragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -34,6 +35,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d("HorizontalViewFragment", "onCreateView: ");
         View view = inflater.inflate(R.layout.horizontal_view_fragment, container, false);
         mAuth = FirebaseAuth.getInstance();
         sharedPreferences = requireActivity().getSharedPreferences("com.iicportal", 0);

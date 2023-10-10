@@ -1,6 +1,7 @@
 package com.iicportal.adaptor;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.iicportal.R;
+import com.iicportal.activity.EditUserActivity;
 import com.iicportal.models.User;
 
 public class UserAdaptor extends FirebaseRecyclerAdapter<User, UserAdaptor.UserViewHolder> {
@@ -25,20 +27,19 @@ public class UserAdaptor extends FirebaseRecyclerAdapter<User, UserAdaptor.UserV
 
     public void onDataChanged() {
         super.onDataChanged();
-
         notifyDataSetChanged();
     }
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {
         public TextView email;
         public TextView role;
-        public TextView status;
-        public ImageView profilePic;
+        public ImageView edit;
 
         public UserViewHolder(View itemView) {
             super(itemView);
             email = itemView.findViewById(R.id.user_email);
             role = itemView.findViewById(R.id.user_role);
+            edit = itemView.findViewById(R.id.edit_user);
         }
     }
 
@@ -46,6 +47,9 @@ public class UserAdaptor extends FirebaseRecyclerAdapter<User, UserAdaptor.UserV
     protected void onBindViewHolder(@NonNull UserViewHolder holder, int position, @NonNull User model) {
         holder.email.setText(model.getEmail());
         holder.role.setText(model.getRole());
+        holder.edit.setOnClickListener(v -> {
+            context.startActivity(new Intent(context, EditUserActivity.class).putExtra("key", getRef(position).getKey()));
+        });
     }
 
     @NonNull

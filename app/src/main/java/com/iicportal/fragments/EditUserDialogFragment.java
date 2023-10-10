@@ -31,7 +31,7 @@ public class EditUserDialogFragment extends BottomSheetDialogFragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(requireContext()).inflate(com.iicportal.R.layout.edit_user_dialog, container, false);
+        View view = LayoutInflater.from(requireContext()).inflate(com.iicportal.R.layout.activity_edit_user, container, false);
 
         return view;
     }

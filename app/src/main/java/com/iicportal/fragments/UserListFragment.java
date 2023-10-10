@@ -27,7 +27,6 @@ public class UserListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.user_list_fragment, container, false);
         TextInputEditText search = view.findViewById(R.id.searchWidgetEditText);
-
         RecyclerView recyclerView = view.findViewById(R.id.userListRecyclerView);
         FirebaseRecyclerOptions<User> options = new FirebaseRecyclerOptions.Builder<User>()
                 .setQuery(FirebaseDatabase.getInstance().getReference().child("users"), User.class)
