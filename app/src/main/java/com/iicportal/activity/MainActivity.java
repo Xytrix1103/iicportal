@@ -3,6 +3,8 @@ package com.iicportal.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -24,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     FrameLayout container;
     Fragment verticalViewFragment;
 
+    Button contactButton;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,11 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         sharedPreferences = this.getSharedPreferences("com.iicportal", MODE_PRIVATE);
         verticalViewFragment = new VerticalViewFragment();
+
+        contactButton = findViewById(R.id.contactBtn);
+        contactButton.setOnClickListener(view -> {
+            startActivity(new Intent(this, ContactActivity.class));
+        });
 
         if (mAuth.getCurrentUser() == null) {
             startActivity(new Intent(this, LoginActivity.class));
