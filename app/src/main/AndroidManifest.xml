@@ -83,6 +83,9 @@
             android:exported="true">
         </activity>
 
+        <activity android:name=".activity.AddUserActivity"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>

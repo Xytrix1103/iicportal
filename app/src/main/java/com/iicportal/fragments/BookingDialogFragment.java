@@ -47,6 +47,10 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
     String key;
     Context context;
 
+    public BookingDialogFragment() {
+    }
+
+
     public BookingDialogFragment(BookingItem bookingItem, Context context, String key) {
         this.bookingItem = bookingItem;
         this.database = FirebaseDatabase.getInstance();

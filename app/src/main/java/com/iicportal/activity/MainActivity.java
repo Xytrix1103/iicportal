@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d("MainActivity", "onCreate: ");
         setContentView(R.layout.activity_main);
-
+        FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         sharedPreferences = this.getSharedPreferences("com.iicportal", MODE_PRIVATE);
@@ -44,12 +45,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finishAffinity();
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
         Log.d("MainActivity", "onStart: ");
@@ -57,8 +52,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
         } else {
+            user = mAuth.getCurrentUser();
+            Log.d("MainActivity", "onStart: " + user.getUid());
             usersRef.child(user.getUid()).get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
+                if (task.isSuccessful() && task.getResult().exists()) {
                     String role = task.getResult().child("role").getValue().toString();
                     sharedPreferences.edit().putString("role", role).apply();
                     if (role.equals("Admin") || role.equals("Vendor")) {
@@ -66,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
                     } else if (role.equals("Student") || role.equals("Staff")) {
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, verticalViewFragment).commit();
                     }
+                } else {
+                    mAuth.signOut();
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 }
             });
         }

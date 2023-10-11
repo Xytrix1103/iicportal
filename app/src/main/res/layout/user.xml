@@ -13,7 +13,7 @@
 			android:id="@+id/user_icon"
 			android:layout_width="30dp"
 			android:layout_height="30dp"
-			android:src="@drawable/baseline_person_24"
+			android:src="@drawable/baseline_person_outline_24"
 			android:layout_marginEnd="10dp"/>
 
 		<TextView
@@ -24,7 +24,7 @@
 			android:layout_toEndOf="@id/user_icon"
 			android:text="Email"
 			android:textColor="@color/black"
-			android:textSize="12sp"
+			android:textSize="14sp"
 			android:textStyle="bold"/>
 
 	</RelativeLayout>
@@ -37,14 +37,14 @@
 		android:layout_toStartOf="@+id/edit_user"
 		android:layout_centerVertical="true"
 		android:textColor="@color/black"
-		android:textSize="12sp"/>
+		android:textSize="14sp"/>
 
 	<ImageView
 		android:id="@+id/edit_user"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentEnd="true"
-		android:src="@drawable/baseline_edit_24"
+		android:src="@drawable/outline_edit_24"
 		android:scaleType="fitCenter"/>
 
 </RelativeLayout>

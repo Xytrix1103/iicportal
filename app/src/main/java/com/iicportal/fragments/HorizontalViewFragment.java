@@ -45,7 +45,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
         AdminDashboardFragment = new AdminDashboardFragment(this);
         ECanteenMenuFragment = new ECanteenMenuFragment();
         FacilityMenuFragment = new FacilityMenuFragment();
-        UserListFragment = new UserListFragment();
+        UserListFragment = new UserListFragment(this);
         String role = sharedPreferences.getString("role", "Admin");
         ViewGroup finalContainer = container;
 

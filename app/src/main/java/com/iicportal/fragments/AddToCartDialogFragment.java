@@ -29,6 +29,10 @@ public class AddToCartDialogFragment extends BottomSheetDialogFragment {
     FirebaseUser user;
     FirebaseAuth mAuth;
     String key;
+
+    public AddToCartDialogFragment() {
+    }
+
     
     public AddToCartDialogFragment(FoodItem foodItem, String key) {
         this.foodItem = foodItem;
