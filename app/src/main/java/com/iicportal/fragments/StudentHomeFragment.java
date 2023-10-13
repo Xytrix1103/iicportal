@@ -2,6 +2,8 @@ package com.iicportal.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,7 +30,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
 import com.iicportal.adaptor.StatusAdaptor;
 import com.iicportal.models.BookingStatus;
-import com.iicportal.models.Facilities;
 import com.iicportal.models.OrderStatus;
 import com.iicportal.models.Status;
 
@@ -45,6 +46,8 @@ public class StudentHomeFragment extends Fragment {
 
     private Context context;
 
+    private BottomNavigationView bottomNavigationView;
+    private CardView facilitiesButtonCard, ecanteenButtonCard;
     private ImageView messageButtonIcon, userImage;
     private TextView usernameText, statusEmptyText;
 
@@ -88,6 +91,9 @@ public class StudentHomeFragment extends Fragment {
         orderRef = database.getReference("orders/");
 
         // Set reference to views
+        bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
+        facilitiesButtonCard = view.findViewById(R.id.facilitiesCard);
+        ecanteenButtonCard = view.findViewById(R.id.ecanteenCard);
         messageButtonIcon = view.findViewById(R.id.messageBtnIcon);
         userImage = view.findViewById(R.id.userImage);
         usernameText = view.findViewById(R.id.usernameText);
@@ -109,7 +115,15 @@ public class StudentHomeFragment extends Fragment {
         //endregion
 
         //region Services
-        // TODO: Implement Facilities and E-Canteen expandable recycler views
+        ecanteenButtonCard.setOnClickListener(v -> {
+            bottomNavigationView.getMenu().getItem(1).setChecked(true);
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.vertical_fragment_container, new ECanteenMenuFragment()).commit();
+        });
+
+        facilitiesButtonCard.setOnClickListener(v -> {
+            bottomNavigationView.getMenu().getItem(2).setChecked(true);
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.vertical_fragment_container, new FacilityMenuFragment()).commit();
+        });
         //endregion
 
         //region Status/Reminders
@@ -127,41 +141,68 @@ public class StudentHomeFragment extends Fragment {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             Calendar calendar = Calendar.getInstance();
 
-                            for (DataSnapshot snapshotItem : snapshot.getChildren()) {
-                                String bookingId = snapshotItem.getKey();
+                            for (DataSnapshot bookingSnapshot : snapshot.getChildren()) {
+                                String bookingId = bookingSnapshot.getKey();
+                                String selectedDate = bookingSnapshot.child("selectedDate").getValue().toString();
+                                String selectedTimeSlot = bookingSnapshot.child("selectedTimeSlot").getValue().toString();
                                 Long currentTimestamp = System.currentTimeMillis();
+                                Long bookingDateTimestamp, startTimestamp, endTimestamp;
 
-                                Date selectedDate = null;
+                                // Get current date and booking date
                                 try {
-                                    selectedDate = new SimpleDateFormat("dd/MM/yyyy").parse(snapshotItem.child("selectedDate").getValue().toString());
+                                    bookingDateTimestamp = new SimpleDateFormat("dd/MM/yyyy").parse(selectedDate).getTime();
                                 } catch (ParseException e) {
                                     throw new RuntimeException(e);
                                 }
-                                Long bookingTimestamp = selectedDate.getTime();
-
                                 calendar.setTimeInMillis(currentTimestamp);
-                                int currentDay = calendar.get(Calendar.DATE);
-                                calendar.setTimeInMillis(bookingTimestamp);
-                                int bookingDay = calendar.get(Calendar.DATE);
+                                int currentDate = calendar.get(Calendar.DATE);
+                                calendar.setTimeInMillis(bookingDateTimestamp);
+                                int bookingDate = calendar.get(Calendar.DATE);
+
+                                // Get booking start time and end time
+                                SimpleDateFormat timeFormat = new SimpleDateFormat("h:mma");
+                                String[] timeParts = selectedTimeSlot.split(" - ");
+                                try {
+                                    Date now = new Date();
+                                    Date startTime = timeFormat.parse(timeParts[0].trim());
+                                    startTime.setYear(now.getYear());
+                                    startTime.setMonth(now.getMonth());
+                                    startTime.setDate(now.getDate());
+                                    startTimestamp = startTime.getTime();
+
+                                    Date endTime = timeFormat.parse(timeParts[1].trim());
+                                    endTime.setYear(now.getYear());
+                                    endTime.setMonth(now.getMonth());
+                                    endTime.setDate(now.getDate());
+                                    endTimestamp = endTime.getTime();
+                                } catch (ParseException e) {
+                                    throw new RuntimeException(e);
+                                }
 
                                 // Provide status reminder for the current day's bookings
-                                if (currentDay == bookingDay) {
-                                    String facilityImage = snapshotItem.child("facilityImage").getValue().toString();
-                                    String facilityName = snapshotItem.child("facilityName").getValue().toString();
-                                    String bookingTime = snapshotItem.child("selectedTimeSlot").getValue().toString();
-                                    String description = String.format("Hey there, don't pocket this reminder: Your %s booking for today at %s is just around the corner!",
-                                            facilityName, bookingTime);
+                                if (currentDate == bookingDate && currentTimestamp < endTimestamp) {
+                                    String title = "REMINDER!!!";
+                                    String description = "";
+                                    String type = "booking";
+                                    String facilityImage = bookingSnapshot.child("facilityImage").getValue().toString();
+                                    String facilityName = bookingSnapshot.child("facilityName").getValue().toString();
+                                    String state = "";
 
-                                    BookingStatus newBookingStatus = new BookingStatus(currentUser.getUid(), bookingId, "REMINDER!!!", description, "booking", System.currentTimeMillis(), facilityImage, facilityName);
+                                    if (currentTimestamp < startTimestamp) {
+                                        description = String.format("Hey there, don't pocket this reminder: Your %s booking for today at %s is just around the corner!", facilityName, selectedTimeSlot);
+                                        state = "before";
+                                    } else {
+                                        description = String.format("Hey there, just reminding you that your %s booking for today at %s has started.", facilityName, selectedTimeSlot);
+                                        state = "ongoing";
+                                    }
+
+                                    BookingStatus newBookingStatus = new BookingStatus(
+                                            currentUser.getUid(), title, description, type, currentTimestamp,
+                                            bookingId, facilityImage, facilityName, state, startTimestamp, endTimestamp
+                                    );
                                     removeStatusFromList(statusList, bookingId);
                                     statusList.add(newBookingStatus);
                                     statusAdaptor.notifyDataSetChanged();
-                                }
-
-                                // Delete old status reminder if booking time is past current time
-                                if (currentTimestamp > bookingTimestamp) {
-                                    //removeStatusFromList(statusList, bookingId);
-                                    //statusAdaptor.notifyDataSetChanged();
                                 }
                             }
                         }
@@ -188,8 +229,10 @@ public class StudentHomeFragment extends Fragment {
 
                     // Only provide status reminder if order status is "PREPARING" or "READY"
                     if (statusValue.matches("PREPARING|READY")) {
+                        String title = "ORDER STATUS:";
                         String description = "";
-                        Long timestamp = System.currentTimeMillis();
+                        String type = "order";
+                        Long timestamp = null;
 
                         if (statusValue.equals("PREPARING")) {
                             description = "Just a quick note to inform you that your order is currently being prepared and will be ready soon.";
@@ -200,7 +243,10 @@ public class StudentHomeFragment extends Fragment {
                             //timestamp = Long.parseLong(snapshotItem.child("readyTimestamp").getValue().toString());
                         }
 
-                        OrderStatus newOrderStatus = new OrderStatus(currentUser.getUid(), orderId, "ORDER STATUS:", description, "order", timestamp, statusValue);
+                        OrderStatus newOrderStatus = new OrderStatus(
+                                currentUser.getUid(), title, description, type, timestamp,
+                                orderId, statusValue
+                        );
                         removeStatusFromList(statusList, orderId);
                         statusList.add(newOrderStatus);
                         statusAdaptor.notifyDataSetChanged();
@@ -222,7 +268,6 @@ public class StudentHomeFragment extends Fragment {
         // Populate RecyclerView
         statusAdaptor = new StatusAdaptor(statusList, context);
         statusRecyclerView.setAdapter(statusAdaptor);
-
         statusAdaptor.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
@@ -236,6 +281,44 @@ public class StudentHomeFragment extends Fragment {
                     statusEmptyText.setVisibility(View.GONE);
             }
         });
+
+        // Create Handler to periodically update booking statuses
+        Handler bookingStatusHandler = new Handler(Looper.getMainLooper());
+        bookingStatusHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Iterator<Status> iterator = statusList.iterator();
+                Long currentTimestamp = System.currentTimeMillis();
+
+                boolean isUpdated = false;
+                while (iterator.hasNext()) {
+                    Status item = iterator.next();
+
+                    if (item.getType().equals("booking")) {
+                        BookingStatus bookingStatus = (BookingStatus) item;
+
+                        // Update description if current time is within booking time range
+                        if ((currentTimestamp > bookingStatus.getStartTimestamp() && currentTimestamp < bookingStatus.getEndTimestamp()) && bookingStatus.getState().equals("before")) {
+                            bookingStatus.setDescription(String.format("Hey there, your %s booking for today at %s has started. Just reminding you in case you forgot!",
+                                    bookingStatus.getFacilityName(), new SimpleDateFormat("h:mma").format(bookingStatus.getStartTimestamp()) + "-" + new SimpleDateFormat("h:mma").format(bookingStatus.getEndTimestamp())));
+                            bookingStatus.setState("ongoing");
+
+                            isUpdated = true;
+                        }
+                        // Remove status if current time is past booking end time
+                        else if (currentTimestamp > bookingStatus.getEndTimestamp()) {
+                            iterator.remove();
+                            isUpdated = true;
+                        }
+                    }
+                }
+
+                if (isUpdated)
+                    statusAdaptor.notifyDataSetChanged();
+
+                bookingStatusHandler.postDelayed(this, 5000);
+            }
+        }, 0);
         //endregion
 
         // Button onClick listeners

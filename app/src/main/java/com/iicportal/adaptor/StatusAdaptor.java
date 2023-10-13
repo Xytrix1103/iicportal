@@ -68,7 +68,7 @@ public class StatusAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             castedHolder.title.setText(bookingStatus.getTitle());
             castedHolder.bookingId.setText("Booking ID: " + bookingStatus.getBookingId());
             castedHolder.description.setText(bookingStatus.getDescription());
-            castedHolder.time.setText(new SimpleDateFormat("hh:mm a").format(bookingStatus.getTimestamp()));
+            castedHolder.time.setText(new SimpleDateFormat("h:mm a").format(bookingStatus.getTimestamp()));
         } else if (holder instanceof OrderStatusViewHolder) {
             OrderStatusViewHolder castedHolder = (OrderStatusViewHolder) holder;
             OrderStatus orderStatus = (OrderStatus) item;
@@ -77,13 +77,16 @@ public class StatusAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             castedHolder.orderId.setText("Order ID: " + orderStatus.getOrderId());
             castedHolder.orderStatus.setText(orderStatus.getOrderStatus());
             castedHolder.description.setText(orderStatus.getDescription());
-            castedHolder.time.setText(new SimpleDateFormat("hh:mm a").format(orderStatus.getTimestamp()));
+            castedHolder.time.setText(new SimpleDateFormat("h:mm a").format(orderStatus.getTimestamp()));
 
             if (orderStatus.getOrderStatus().equals("PREPARING"))
                 castedHolder.orderStatus.setTextColor(Color.rgb(255, 165, 0));
             else if (orderStatus.getOrderStatus().equals("READY"))
                 castedHolder.orderStatus.setTextColor(Color.GREEN);
         }
+
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.anim_fade_in);
+        holder.itemView.startAnimation(animation);
     }
 
     @Override

@@ -7,7 +7,7 @@ public class OrderStatus extends Status {
     public OrderStatus() {
     }
 
-    public OrderStatus(String uid, String orderId, String title, String description, String type, Long timestamp, String orderStatus) {
+    public OrderStatus(String uid, String title, String description, String type, Long timestamp, String orderId, String orderStatus) {
         super(uid, title, description, type, timestamp);
         this.orderId = orderId;
         this.orderStatus = orderStatus;
