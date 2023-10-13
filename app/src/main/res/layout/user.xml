@@ -24,7 +24,7 @@
 			android:layout_toEndOf="@id/user_icon"
 			android:text="Email"
 			android:textColor="@color/black"
-			android:textSize="14sp"
+			android:textSize="13sp"
 			android:textStyle="bold"/>
 
 	</RelativeLayout>

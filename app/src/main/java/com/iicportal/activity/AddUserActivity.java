@@ -3,10 +3,12 @@ package com.iicportal.activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -38,6 +40,7 @@ public class AddUserActivity extends AppCompatActivity {
     Spinner roleEdit;
     TextView cancelBtn;
     Button saveBtn;
+    ImageView backBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,7 @@ public class AddUserActivity extends AppCompatActivity {
         this.mAuth = FirebaseAuth.getInstance();
         this.user = mAuth.getCurrentUser();
         this.usersRef = database.getReference("users/");
+        usersRef.keepSynced(true);
 
         fullNameEdit = findViewById(R.id.fullName);
         phoneNumberEdit = findViewById(R.id.phone);
@@ -55,6 +59,18 @@ public class AddUserActivity extends AppCompatActivity {
         roleEdit = findViewById(R.id.role);
         cancelBtn = findViewById(R.id.cancelBtn);
         saveBtn = findViewById(R.id.saveBtn);
+        backBtn = findViewById(R.id.backBtnIcon);
+
+        backBtn.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Cancel");
+            builder.setMessage("Are you sure you want to cancel? Changes will be discarded");
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+                finish();
+            });
+            builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+            builder.show();
+        });
 
         saveBtn.setOnClickListener(v -> {
             Log.i("AddUserActivity", "Save button clicked");
@@ -65,7 +81,6 @@ public class AddUserActivity extends AppCompatActivity {
             String role = roleEdit.getSelectedItem().toString();
             Log.i("Values", fullName + " " + phone + " " + email + " " + password + " " + role);
 
-            //make sure all changes are registered by the edit text
             fullNameEdit.clearFocus();
             phoneNumberEdit.clearFocus();
             emailEdit.clearFocus();
@@ -81,9 +96,24 @@ public class AddUserActivity extends AppCompatActivity {
                         Log.i("AddUserActivity", "onDataChange");
                         if (dataSnapshot.getChildrenCount() == 0) {
                             Log.i("AddUserActivity", "User does not exist");
-                            createFirebaseUser(fullName, phone, email, password, role);
-                            Toast.makeText(AddUserActivity.this, "User added successfully", Toast.LENGTH_SHORT).show();
-                            finish();
+
+                            FirebaseApp adminApp = FirebaseApp.getInstance("admin");
+                            FirebaseAuth adminAuth = FirebaseAuth.getInstance(adminApp);
+
+                            adminAuth.createUserWithEmailAndPassword(email, password)
+                                    .addOnCompleteListener(AddUserActivity.this, task -> {
+                                        if (task.isSuccessful()) {
+                                            Log.i("AddUserActivity", "User created successfully");
+                                            String uid = task.getResult().getUser().getUid();
+                                            User user = new User(uid, fullName, phone, email, role);
+                                            usersRef.child(uid).setValue(user);
+                                            Toast.makeText(AddUserActivity.this, "User added successfully", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        } else {
+                                            Log.i("AddUserActivity", "User creation failed");
+                                            Toast.makeText(AddUserActivity.this, "User creation failed", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                         } else {
                             Toast.makeText(AddUserActivity.this, "User already exists", Toast.LENGTH_SHORT).show();
                         }
@@ -99,6 +129,17 @@ public class AddUserActivity extends AppCompatActivity {
                 Toast.makeText(AddUserActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             }
         });
+
+        cancelBtn.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Cancel");
+            builder.setMessage("Are you sure you want to cancel? Changes will be discarded");
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+                finish();
+            });
+            builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+            builder.show();
+        });
     }
 
     private boolean validateFields(String fullName, String phoneNumber, String email, String password) {
@@ -111,10 +152,8 @@ public class AddUserActivity extends AppCompatActivity {
                 isValidPassword(password);
     }
 
-    private boolean createFirebaseUser(String fullName, String phoneNumber, String email, String password, String role) {
-        usersRef.push().setValue(new User(fullName, phoneNumber, email, role, password));
+    private void createFirebaseUser(String fullName, String phoneNumber, String email, String password, String role) {
 
-        return true;
     }
 
     private boolean validateField(String field, TextInputEditText editText, String errorMessage) {

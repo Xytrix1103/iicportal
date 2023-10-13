@@ -19,6 +19,8 @@ import com.iicportal.fragments.HorizontalViewFragment;
 import com.iicportal.fragments.VerticalViewFragment;
 
 public class MainActivity extends AppCompatActivity {
+    static FirebaseApp app;
+    static FirebaseApp adminApp;
     private FirebaseAuth mAuth;
     FirebaseUser user;
     FirebaseDatabase database;
@@ -34,7 +36,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d("MainActivity", "onCreate: ");
         setContentView(R.layout.activity_main);
-        FirebaseApp.initializeApp(this);
+        app = FirebaseApp.initializeApp(this);
+        if (FirebaseApp.getApps(this).size() == 1) {
+            adminApp = FirebaseApp.initializeApp(this, FirebaseApp.getInstance().getOptions(), "admin");
+        } else {
+            adminApp = FirebaseApp.getInstance("admin");
+        }
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         sharedPreferences = this.getSharedPreferences("com.iicportal", MODE_PRIVATE);

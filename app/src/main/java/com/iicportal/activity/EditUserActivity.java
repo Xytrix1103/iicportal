@@ -1,7 +1,6 @@
 package com.iicportal.activity;
 
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -11,6 +10,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +28,7 @@ public class EditUserActivity extends AppCompatActivity {
     Spinner role;
     ImageView nameEdit, emailEdit, passwordEdit, phoneEdit, roleEdit;
     TextView cancelBtn;
+    ImageView backBtn;
     Button saveBtn;
     boolean[] editable = {false, false, false, false, false};
     String[] initial = {"", "", "", ""};
@@ -55,6 +56,18 @@ public class EditUserActivity extends AppCompatActivity {
         roleEdit = findViewById(R.id.roleEditBtn);
         cancelBtn = findViewById(R.id.cancelBtn);
         saveBtn = findViewById(R.id.saveBtn);
+        backBtn = findViewById(R.id.backBtnIcon);
+
+        backBtn.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(EditUserActivity.this);
+            builder.setTitle("Cancel");
+            builder.setMessage("Are you sure you want to cancel? Changes will be discarded");
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+                finish();
+            });
+            builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+            builder.show();
+        });
 
         //disable all fields
         name.setEnabled(false);
@@ -71,7 +84,8 @@ public class EditUserActivity extends AppCompatActivity {
                 initial[0] = task.getResult().child("fullName").getValue().toString();
                 email.setText(task.getResult().child("email").getValue().toString());
                 initial[1] = task.getResult().child("email").getValue().toString();
-//                password.setText(task.getResult().child("password").getValue().toString());
+                password.setText(task.getResult().child("password").getValue().toString());
+                initial[2] = task.getResult().child("password").getValue().toString();
                 phone.setText(task.getResult().child("phoneNumber").getValue().toString());
                 initial[3] = task.getResult().child("phoneNumber").getValue().toString();
                 int index = 0;
@@ -141,9 +155,34 @@ public class EditUserActivity extends AppCompatActivity {
             }
         });
 
+        passwordEdit.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(EditUserActivity.this);
+            if (!editable[2]) {
+                builder.setTitle("Edit Password");
+                builder.setMessage("Are you sure you want to edit password? Changes will be discarded");
+                builder.setPositiveButton("Yes", (dialog, which) -> {
+                    password.setEnabled(true);
+                    editable[2] = true;
+                    passwordEdit.setImageResource(R.drawable.outline_cancel_24);
+                });
+                builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+            } else {
+                builder.setTitle("Cancel");
+                builder.setMessage("Are you sure you want to cancel editing password? Changes will be discarded");
+                builder.setPositiveButton("Yes", (dialog, which) -> {
+                    password.setText(initial[2]);
+                    password.setEnabled(false);
+                    editable[2] = false;
+                    passwordEdit.setImageResource(R.drawable.baseline_edit_24);
+                });
+                builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+            }
+            builder.show();
+        });
+
         phoneEdit.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(EditUserActivity.this);
             if (!editable[3]) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(EditUserActivity.this);
                 builder.setTitle("Edit Phone Number");
                 builder.setMessage("Are you sure you want to edit phone number?");
                 builder.setPositiveButton("Yes", (dialog, which) -> {
@@ -152,9 +191,7 @@ public class EditUserActivity extends AppCompatActivity {
                     phoneEdit.setImageResource(R.drawable.outline_cancel_24);
                 });
                 builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
-                builder.show();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(EditUserActivity.this);
                 builder.setTitle("Cancel");
                 builder.setMessage("Are you sure you want to cancel editing phone number? Changes will be discarded");
                 builder.setPositiveButton("Yes", (dialog, which) -> {
@@ -164,13 +201,13 @@ public class EditUserActivity extends AppCompatActivity {
                     phoneEdit.setImageResource(R.drawable.baseline_edit_24);
                 });
                 builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
-                builder.show();
             }
+            builder.show();
         });
 
         roleEdit.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(EditUserActivity.this);
             if (!editable[4]) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(EditUserActivity.this);
                 builder.setTitle("Edit Role");
                 builder.setMessage("Are you sure you want to edit role?");
                 builder.setPositiveButton("Yes", (dialog, which) -> {
@@ -179,9 +216,7 @@ public class EditUserActivity extends AppCompatActivity {
                     roleEdit.setImageResource(R.drawable.outline_cancel_24);
                 });
                 builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
-                builder.show();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(EditUserActivity.this);
                 builder.setTitle("Cancel");
                 builder.setMessage("Are you sure you want to cancel editing role? Changes will be discarded");
                 builder.setPositiveButton("Yes", (dialog, which) -> {
@@ -191,8 +226,8 @@ public class EditUserActivity extends AppCompatActivity {
                     roleEdit.setImageResource(R.drawable.baseline_edit_24);
                 });
                 builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
-                builder.show();
             }
+            builder.show();
         });
 
         cancelBtn.setOnClickListener(v -> {
@@ -207,10 +242,13 @@ public class EditUserActivity extends AppCompatActivity {
         });
 
         saveBtn.setOnClickListener(v -> {
-            name.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
-            email.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
-            phone.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
-            if (editable[0] || editable[1] || editable[3] || editable[4]) {
+            //make sure value change is saved in textinputedittext without pressing enter
+            name.clearFocus();
+            email.clearFocus();
+            password.clearFocus();
+            phone.clearFocus();
+
+            if (editable[0] || editable[1] || editable[2] || editable[3] || editable[4]) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(EditUserActivity.this);
                 builder.setTitle("Save");
 
@@ -221,6 +259,9 @@ public class EditUserActivity extends AppCompatActivity {
                 if (editable[1]) {
                     message += "\nEmail: " + email.getText().toString();
                 }
+                if (editable[2]) {
+                    message += "\nPassword: " + password.getText().toString();
+                }
                 if (editable[3]) {
                     message += "\nPhone Number: " + phone.getText().toString();
                 }
@@ -230,10 +271,52 @@ public class EditUserActivity extends AppCompatActivity {
 
                 builder.setMessage(message);
                 builder.setPositiveButton("Yes", (dialog, which) -> {
-                    usersRef.child(key).child("fullName").setValue(name.getText().toString());
-                    usersRef.child(key).child("email").setValue(email.getText().toString());
-                    usersRef.child(key).child("phoneNumber").setValue(phone.getText().toString());
-                    usersRef.child(key).child("role").setValue(role.getSelectedItem().toString());
+                    if (editable[0]) {
+                        usersRef.child(key).child("fullName").setValue(name.getText().toString());
+                    }
+                    if (editable[1]) {
+                        usersRef.child(key).child("email").setValue(email.getText().toString());
+
+                        FirebaseApp adminApp = FirebaseApp.getInstance("admin");
+                        FirebaseAuth adminAuth = FirebaseAuth.getInstance(adminApp);
+
+                        adminAuth.signInWithEmailAndPassword(initial[1], initial[2])
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        if (task.getResult().getUser() != null) {
+                                            FirebaseUser newUser = adminAuth.getCurrentUser();
+                                            usersRef.child(newUser.getUid()).child("email").setValue(email.getText().toString());
+                                            adminAuth.getCurrentUser().updateEmail(email.getText().toString());
+                                            adminAuth.signOut();
+                                        }
+                                    }
+                                });
+                    }
+                    if (editable[2]) {
+                        usersRef.child(key).child("password").setValue(password.getText().toString());
+                        FirebaseApp adminApp = FirebaseApp.getInstance("admin");
+                        FirebaseAuth adminAuth = FirebaseAuth.getInstance(adminApp);
+
+                        adminAuth.signInWithEmailAndPassword(initial[1], initial[2])
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        if (task.getResult().getUser() != null) {
+                                            FirebaseUser newUser = adminAuth.getCurrentUser();
+                                            usersRef.child(newUser.getUid()).child("password").setValue(password.getText().toString());
+                                            adminAuth.getCurrentUser().updatePassword(password.getText().toString());
+                                            adminAuth.signOut();
+                                        }
+                                    }
+                                });
+                    }
+                    if (editable[3]) {
+                        usersRef.child(key).child("phoneNumber").setValue(phone.getText().toString());
+                    }
+
+                    if (editable[4]) {
+                        usersRef.child(key).child("role").setValue(role.getSelectedItem().toString());
+                    }
+
                     finish();
                 });
                 builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
