@@ -47,12 +47,20 @@ public class ECanteenMenuFragment extends Fragment implements CategoryAdaptor.On
     private SharedPreferences sharedPreferences;
 
     private FrameLayout cartBtn;
-    private ImageView cartIcon, historyBtnIcon;
+    private ImageView cartIcon, historyBtnIcon, menuBtn;
     FrameLayout menuFragmentContainer;
     String category;
 
+    AdminDashboardFragment.OpenDrawerInterface openDrawerInterface;
+
     public ECanteenMenuFragment() {
         super(R.layout.ecanteen_menu_fragment);
+        openDrawerInterface = null;
+    }
+
+    public ECanteenMenuFragment(AdminDashboardFragment.OpenDrawerInterface openDrawerInterface) {
+        super(R.layout.ecanteen_menu_fragment);
+        this.openDrawerInterface = openDrawerInterface;
     }
 
     @Override
@@ -70,6 +78,19 @@ public class ECanteenMenuFragment extends Fragment implements CategoryAdaptor.On
         menuFragmentContainer = view.findViewById(R.id.menu_fragment_container);
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+        menuBtn = view.findViewById(R.id.menuIcon);
+
+        sharedPreferences = requireActivity().getSharedPreferences("com.iicportal", Context.MODE_PRIVATE);
+        if (sharedPreferences.getString("role", "").equals("Admin") || sharedPreferences.getString("role", "").equals("Vendor")) {
+            menuBtn.setVisibility(View.VISIBLE);
+            menuBtn.setOnClickListener(v -> {
+                if (openDrawerInterface != null) {
+                    openDrawerInterface.openDrawer();
+                }
+            });
+        } else {
+            menuBtn.setVisibility(View.GONE);
+        }
 
         database = FirebaseDatabase.getInstance();
         categoriesRef = database.getReference("ecanteen/categories");
@@ -150,6 +171,7 @@ public class ECanteenMenuFragment extends Fragment implements CategoryAdaptor.On
     @Override
     public void onResume() {
         super.onResume();
+
         categoryAdaptor.startListening();
     }
 
