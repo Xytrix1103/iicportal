@@ -1,5 +1,6 @@
 package com.iicportal.activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -133,6 +134,15 @@ public class CheckoutActivity extends AppCompatActivity {
                             cartRef.child(user.getUid()).child(checkoutItemAdaptor.getKey(i)).removeValue();
                         }
                     }
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Order Successful");
+                    builder.setMessage("Your order has been placed successfully. Please wait for your order to be prepared.");
+                    builder.setPositiveButton("OK", (dialog, which) -> {
+                        finish();
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
                 }
             });
         });
