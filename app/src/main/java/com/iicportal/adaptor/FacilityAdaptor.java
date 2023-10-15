@@ -147,12 +147,14 @@ public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, Facili
         TextView facilityName;
         ImageView facilityImage;
         TextView booknowBtn;
+        ImageView historyBtnIcon;
 
         public FacilityViewHolder(@NonNull View itemView) {
             super(itemView);
             facilityName = itemView.findViewById(R.id.facility_name);
             facilityImage = itemView.findViewById(R.id.facility_image);
             booknowBtn = itemView.findViewById(R.id.booknowBtn);
+            historyBtnIcon = itemView.findViewById(R.id.historyBtnIcon);
         }
     }
 }

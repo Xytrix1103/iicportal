@@ -1,12 +1,14 @@
 package com.iicportal.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
+import com.iicportal.activity.BookingHistoryActivity;
 import com.iicportal.adaptor.FacilityAdaptor;
 import com.iicportal.models.BookingItem;
 
@@ -34,6 +37,7 @@ public class FacilityMenuFragment extends Fragment {
     FirebaseUser user;
 
     SharedPreferences sharedPreferences;
+    private ImageView historyBtnIcon;
 
     public FacilityMenuFragment() {
         super(R.layout.facilities_menu_fragment);
@@ -76,6 +80,12 @@ public class FacilityMenuFragment extends Fragment {
         facilitiesRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         facilityAdaptor = new FacilityAdaptor(facilityOptions, context, getChildFragmentManager());
         facilitiesRecyclerView.setAdapter(facilityAdaptor);
+
+        historyBtnIcon = view.findViewById(R.id.historyBtnIcon);
+        historyBtnIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(context, BookingHistoryActivity.class);
+            startActivity(intent);
+        });
 
         return view;
     }

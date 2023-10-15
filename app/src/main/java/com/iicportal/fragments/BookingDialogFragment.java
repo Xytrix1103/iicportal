@@ -76,7 +76,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
         String currentDate = dateFormat.format(Calendar.getInstance().getTime());
         date.setText(currentDate);
 
-        price.setText(String.valueOf(bookingItem.getPrice()));
+        price.setText(String.format("RM %.2f", bookingItem.getPrice()));
 
         ArrayList<String> timeSlotsList = new ArrayList<>();
         String[] timeSlotsArray = context.getResources().getStringArray(R.array.timeslot);
