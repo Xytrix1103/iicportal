@@ -5,6 +5,14 @@
 	android:orientation="vertical"
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
+	<ImageView
+		android:layout_width="20dp"
+		android:layout_height="20dp"
+		android:id="@+id/addItemBtn"
+		android:src="@drawable/outline_add_circle_outline_24"
+		android:layout_gravity="center_horizontal"
+		android:contentDescription="@string/add_menu_item"/>
+
 	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/menuRecyclerView"
 		android:layout_width="match_parent"

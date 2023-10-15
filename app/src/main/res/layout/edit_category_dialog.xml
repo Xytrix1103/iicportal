@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:input="http://schemas.android.com/apk/res-auto"
+	xmlns:button="http://schemas.android.com/tools"
+	android:padding="20dp"
+	android:gravity="center_vertical">
+
+	<RelativeLayout
+		android:id="@+id/categoryWrapper"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:id="@+id/categoryHint"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/category"
+			android:textColor="@color/black"
+			android:textSize="16sp"
+			android:textStyle="bold" />
+
+		<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/categoryLayout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/categoryHint"
+			android:layout_gravity="center_vertical"
+			android:hint="@string/categoryHint"
+			android:theme="@style/EditText.Default"
+			input:errorTextAppearance="@style/TextAppearance.AppCompat.Small"
+			input:hintEnabled="false">
+
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/category"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@color/transparent"
+				android:inputType="text"
+				android:paddingVertical="15dp"
+				android:textSize="16sp"
+				android:textColor="@color/black"/>
+
+		</com.google.android.material.textfield.TextInputLayout>
+
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:id="@+id/buttonWrapper"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/categoryWrapper"
+		android:layout_marginTop="30dp"
+		android:layout_marginBottom="10dp"
+		android:gravity="center_vertical">
+
+		<ImageView
+			android:id="@+id/deleteBtn"
+			android:layout_width="40dp"
+			android:layout_height="40dp"
+			android:layout_centerVertical="true"
+			android:src="@drawable/baseline_delete_outline_24"
+			android:contentDescription="@string/delete_category"
+			android:scaleType="fitCenter"/>
+
+		<TextView
+			android:id="@+id/cancelBtn"
+			android:theme="@style/Button.Transparent"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_toStartOf="@+id/saveBtn"
+			android:textColor="@color/colorPrimary"
+			android:gravity="center"
+			android:text="@string/cancel"
+			button:cornerRadius="20dp"
+			button:elevation="20dp"/>
+
+		<Button
+			android:id="@+id/saveBtn"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:layout_marginStart="10dp"
+			android:layout_marginEnd="10dp"
+			android:text="@string/save"
+			android:theme="@style/Button.Primary"
+			button:cornerRadius="40dp"
+			button:elevation="20dp" />
+
+	</RelativeLayout>
+
+</RelativeLayout>
