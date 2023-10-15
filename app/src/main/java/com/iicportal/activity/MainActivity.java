@@ -77,4 +77,10 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
+
+    //override on save instance state to prevent app from crashing when screen is rotated
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }

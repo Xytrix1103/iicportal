@@ -28,6 +28,9 @@
 			android:layout_gravity="start"
 			android:fitsSystemWindows="true"
 			android:background="@color/colorPrimary"
+			card_view:itemBackground="@drawable/drawer_item_bg"
+			card_view:itemIconTint="@drawable/drawer_item_text_color"
+			card_view:itemTextColor="@drawable/drawer_item_text_color"
 			app:headerLayout="@layout/nav_header"
 			app:menu="@menu/nav_menu" />
 

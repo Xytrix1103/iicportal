@@ -1,0 +1,45 @@
+package com.iicportal.fragments;
+
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.iicportal.R;
+import com.iicportal.models.FoodItem;
+
+public class EditFoodItemDialogFragment extends BottomSheetDialogFragment {
+    FoodItem foodItem, newFoodItem;
+    FirebaseDatabase database;
+    DatabaseReference menuRef;
+    String key;
+
+    public EditFoodItemDialogFragment() {
+
+    }
+
+    public EditFoodItemDialogFragment(String key) {
+        this.key = key;
+        this.database = FirebaseDatabase.getInstance();
+        this.menuRef = database.getReference("ecanteen/fooditems/");
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_edit_food_item, container, false);
+
+
+
+        return view;
+    }
+
+    private void updateImage(Uri uri, ImageView image) {
+        Glide.with(requireContext()).load(uri).into(image);
+    }
+}
