@@ -37,8 +37,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("HorizontalViewFragment", "onCreateView: ");
-        View view = inflater.inflate(R.layout.horizontal_view_fragment, container, false);
-        return view;
+        return inflater.inflate(R.layout.horizontal_view_fragment, container, false);
     }
 
     @Override
