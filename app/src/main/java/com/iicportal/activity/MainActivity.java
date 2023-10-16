@@ -6,14 +6,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
 import com.iicportal.fragments.HorizontalViewFragment;
 import com.iicportal.fragments.VerticalViewFragment;
@@ -55,6 +58,45 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Log.d("MainActivity", "onStart: ");
+        if (mAuth.getCurrentUser() == null) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+        } else {
+            user = mAuth.getCurrentUser();
+            usersRef.child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull com.google.firebase.database.DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        String role = snapshot.child("role").getValue().toString();
+                        sharedPreferences.edit().putString("role", role).apply();
+                        if (role.equals("Admin") || role.equals("Vendor")) {
+                            Log.d("ViewFragment", "HorizontalViewFragment");
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, horizontalViewFragment).commit();
+                        } else if (role.equals("Student") || role.equals("Staff")) {
+                            Log.d("ViewFragment", "VerticalViewFragment");
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, verticalViewFragment).commit();
+                        }
+                    } else {
+                        Log.d("not found", "onDataChange: ");
+                        mAuth.signOut();
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    mAuth.signOut();
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("MainActivity", "onResume: ");
+
         if (mAuth.getCurrentUser() == null) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
