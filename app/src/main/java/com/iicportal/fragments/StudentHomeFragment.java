@@ -139,43 +139,36 @@ public class StudentHomeFragment extends Fragment {
                     bookingQuery.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Calendar calendar = Calendar.getInstance();
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                            SimpleDateFormat timeFormat = new SimpleDateFormat("h:mma");
 
                             for (DataSnapshot bookingSnapshot : snapshot.getChildren()) {
                                 String bookingId = bookingSnapshot.getKey();
                                 String selectedDate = bookingSnapshot.child("selectedDate").getValue().toString();
                                 String selectedTimeSlot = bookingSnapshot.child("selectedTimeSlot").getValue().toString();
-                                Long currentTimestamp = System.currentTimeMillis();
-                                Long bookingDateTimestamp, startTimestamp, endTimestamp;
-                                int currentDate, bookingDate, bookingMonth, bookingYear;
 
-                                // Get current date and booking date
-                                try {
-                                    bookingDateTimestamp = new SimpleDateFormat("dd/MM/yyyy").parse(selectedDate).getTime();
-                                } catch (ParseException e) {
-                                    throw new RuntimeException(e);
-                                }
-                                calendar.setTimeInMillis(currentTimestamp);
-                                currentDate = calendar.get(Calendar.DATE);
-                                calendar.setTimeInMillis(bookingDateTimestamp);
-                                bookingDate = calendar.get(Calendar.DATE);
-                                bookingMonth = calendar.get(Calendar.MONTH) + 1;
-                                bookingYear = calendar.get(Calendar.YEAR);
-
-                                // Get booking start time and end time
-                                SimpleDateFormat timeFormat = new SimpleDateFormat("h:mma");
+                                // Get current date, booking date, start time, and end time
                                 String[] timeParts = selectedTimeSlot.split(" - ");
+                                Long currentTimestamp = System.currentTimeMillis();
+                                Long startTimestamp, endTimestamp;
+                                int currentDate, bookingDate, bookingMonth, bookingYear;
                                 try {
+                                    currentDate = Calendar.getInstance().get(Calendar.DATE);
+
+                                    bookingDate = dateFormat.parse(selectedDate).getDate();
+                                    bookingMonth = dateFormat.parse(selectedDate).getMonth() + 1;
+                                    bookingYear = dateFormat.parse(selectedDate).getYear();
+
                                     Date startTime = timeFormat.parse(timeParts[0].trim());
                                     startTime.setDate(bookingDate);
                                     startTime.setMonth(bookingMonth - 1);
-                                    startTime.setYear(bookingYear - 1900);
+                                    startTime.setYear(bookingYear);
                                     startTimestamp = startTime.getTime();
 
                                     Date endTime = timeFormat.parse(timeParts[1].trim());
                                     endTime.setDate(bookingDate);
                                     endTime.setMonth(bookingMonth - 1);
-                                    endTime.setYear(bookingYear - 1900);
+                                    endTime.setYear(bookingYear);
                                     endTimestamp = endTime.getTime();
                                 } catch (ParseException e) {
                                     throw new RuntimeException(e);
