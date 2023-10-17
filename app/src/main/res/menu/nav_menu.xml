@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item
+		android:id="@+id/nav_dashboard"
+		android:icon="@drawable/round_dashboard_24"
+		android:title="Dashboard" />
+	<item
+		android:id="@+id/nav_user_list"
+		android:icon="@drawable/baseline_people_outline_24"
+		android:title="User List" />
+	<item
+		android:id="@+id/nav_ecanteen"
+		android:icon="@drawable/baseline_restaurant_24"
+		android:title="E-Canteen" />
+	<item
+		android:id="@+id/nav_facility"
+		android:icon="@drawable/outline_videogame_asset_24"
+		android:title="Facility" />
+	<item
+		android:id="@+id/nav_messages"
+		android:icon="@drawable/baseline_chat_bubble_outline_24"
+		android:title="Messages" />
+</menu>

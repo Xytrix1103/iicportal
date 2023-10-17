@@ -1,6 +1,8 @@
 package com.iicportal.adaptor;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
+import com.iicportal.activity.EditFoodItemActivity;
 import com.iicportal.fragments.AddToCartDialogFragment;
 import com.iicportal.models.FoodItem;
 
@@ -31,8 +34,9 @@ public class MenuItemAdaptor extends FirebaseRecyclerAdapter<FoodItem, MenuItemA
     FirebaseAuth mAuth;
     FirebaseUser user;
     FragmentManager childFragmentManager;
+    boolean isEdit;
 
-    public MenuItemAdaptor(FirebaseRecyclerOptions<FoodItem> options, Context context, FragmentManager childFragmentManager) {
+    public MenuItemAdaptor(FirebaseRecyclerOptions<FoodItem> options, Context context, FragmentManager childFragmentManager, boolean isEdit) {
         super(options);
         this.context = context;
         this.database = FirebaseDatabase.getInstance();
@@ -41,6 +45,7 @@ public class MenuItemAdaptor extends FirebaseRecyclerAdapter<FoodItem, MenuItemA
         this.mAuth = FirebaseAuth.getInstance();
         this.user = mAuth.getCurrentUser();
         this.childFragmentManager = childFragmentManager;
+        this.isEdit = isEdit;
     }
 
     @Override
@@ -50,10 +55,27 @@ public class MenuItemAdaptor extends FirebaseRecyclerAdapter<FoodItem, MenuItemA
         holder.price.setText(String.format("RM %.2f", model.getPrice()));
         Glide.with(holder.image.getContext()).load(model.getImage()).into(holder.image);
 
-        holder.itemView.setOnClickListener(v -> {
-            AddToCartDialogFragment addToCartDialogFragment = new AddToCartDialogFragment(model, getRef(position).getKey());
-            addToCartDialogFragment.show(childFragmentManager, "AddToCartDialogFragment");
-        });
+        //get role from shared preferences
+        //if role is admin, show edit button
+        SharedPreferences sharedPreferences = context.getSharedPreferences("com.iicportal", 0);
+        String role = sharedPreferences.getString("role", "Student");
+
+        if(isEdit) {
+            if (role.equals("Admin") || role.equals("Vendor")) {
+                holder.editBtn.setVisibility(View.VISIBLE);
+                holder.editBtn.setOnClickListener(v -> {
+                    context.startActivity(new Intent(context, EditFoodItemActivity.class).putExtra("key", getRef(position).getKey()));
+                });
+            } else {
+                holder.editBtn.setVisibility(View.GONE);
+            }
+        } else {
+            holder.itemView.setOnClickListener(v -> {
+                AddToCartDialogFragment addToCartDialogFragment = new AddToCartDialogFragment(model, getRef(position).getKey());
+                addToCartDialogFragment.show(childFragmentManager, "AddToCartDialogFragment");
+            });
+            holder.editBtn.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -74,6 +96,7 @@ public class MenuItemAdaptor extends FirebaseRecyclerAdapter<FoodItem, MenuItemA
         TextView name;
         TextView description;
         TextView price;
+        ImageView editBtn;
 
         public MenuItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -81,6 +104,7 @@ public class MenuItemAdaptor extends FirebaseRecyclerAdapter<FoodItem, MenuItemA
             name = itemView.findViewById(R.id.name);
             description = itemView.findViewById(R.id.description);
             price = itemView.findViewById(R.id.price);
+            editBtn = itemView.findViewById(R.id.editMenuItemBtn);
         }
     }
 }

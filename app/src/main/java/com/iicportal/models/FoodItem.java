@@ -6,8 +6,6 @@ public class FoodItem {
     Double price;
     private String image;
 
-    private int quantity = 1;
-
     private String category;
 
     public FoodItem() {
@@ -19,7 +17,6 @@ public class FoodItem {
         this.price = price;
         this.image = image;
         this.category = category;
-        this.quantity = 1;
     }
 
     public FoodItem(String name, String description, Double price, String image, String category, int quantity) {
@@ -28,7 +25,6 @@ public class FoodItem {
         this.price = price;
         this.image = image;
         this.category = category;
-        this.quantity = 1;
     }
 
     public String getName() {
@@ -51,10 +47,6 @@ public class FoodItem {
         return category;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -75,9 +67,6 @@ public class FoodItem {
         this.category = category;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
 
     @Override
     public String toString() {
@@ -86,7 +75,6 @@ public class FoodItem {
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 ", image='" + image + '\'' +
-                ", quantity=" + quantity +
                 ", category='" + category + '\'' +
                 '}';
     }
@@ -98,17 +86,5 @@ public class FoodItem {
             return foodItem.getName().equals(this.getName()) && foodItem.getDescription().equals(this.getDescription()) && foodItem.getPrice().equals(this.getPrice()) && foodItem.getImage().equals(this.getImage()) && foodItem.getCategory().equals(this.getCategory());
         }
         return false;
-    }
-
-    public void resetQuantity() {
-        this.quantity = 1;
-    }
-
-    public void incrementQuantity() {
-        this.quantity++;
-    }
-
-    public void decrementQuantity() {
-        this.quantity--;
     }
 }
