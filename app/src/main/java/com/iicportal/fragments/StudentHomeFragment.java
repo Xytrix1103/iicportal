@@ -147,6 +147,7 @@ public class StudentHomeFragment extends Fragment {
                                 String selectedTimeSlot = bookingSnapshot.child("selectedTimeSlot").getValue().toString();
                                 Long currentTimestamp = System.currentTimeMillis();
                                 Long bookingDateTimestamp, startTimestamp, endTimestamp;
+                                int currentDate, bookingDate, bookingMonth, bookingYear;
 
                                 // Get current date and booking date
                                 try {
@@ -155,25 +156,26 @@ public class StudentHomeFragment extends Fragment {
                                     throw new RuntimeException(e);
                                 }
                                 calendar.setTimeInMillis(currentTimestamp);
-                                int currentDate = calendar.get(Calendar.DATE);
+                                currentDate = calendar.get(Calendar.DATE);
                                 calendar.setTimeInMillis(bookingDateTimestamp);
-                                int bookingDate = calendar.get(Calendar.DATE);
+                                bookingDate = calendar.get(Calendar.DATE);
+                                bookingMonth = calendar.get(Calendar.MONTH) + 1;
+                                bookingYear = calendar.get(Calendar.YEAR);
 
                                 // Get booking start time and end time
                                 SimpleDateFormat timeFormat = new SimpleDateFormat("h:mma");
                                 String[] timeParts = selectedTimeSlot.split(" - ");
                                 try {
-                                    Date now = new Date();
                                     Date startTime = timeFormat.parse(timeParts[0].trim());
-                                    startTime.setYear(now.getYear());
-                                    startTime.setMonth(now.getMonth());
-                                    startTime.setDate(now.getDate());
+                                    startTime.setDate(bookingDate);
+                                    startTime.setMonth(bookingMonth - 1);
+                                    startTime.setYear(bookingYear - 1900);
                                     startTimestamp = startTime.getTime();
 
                                     Date endTime = timeFormat.parse(timeParts[1].trim());
-                                    endTime.setYear(now.getYear());
-                                    endTime.setMonth(now.getMonth());
-                                    endTime.setDate(now.getDate());
+                                    endTime.setDate(bookingDate);
+                                    endTime.setMonth(bookingMonth - 1);
+                                    endTime.setYear(bookingYear - 1900);
                                     endTimestamp = endTime.getTime();
                                 } catch (ParseException e) {
                                     throw new RuntimeException(e);
@@ -282,7 +284,7 @@ public class StudentHomeFragment extends Fragment {
             }
         });
 
-        // Create Handler to periodically update booking statuses
+        // Handler for periodically updating booking statuses
         Handler bookingStatusHandler = new Handler(Looper.getMainLooper());
         bookingStatusHandler.postDelayed(new Runnable() {
             @Override
@@ -298,9 +300,10 @@ public class StudentHomeFragment extends Fragment {
                         BookingStatus bookingStatus = (BookingStatus) item;
 
                         // Update description if current time is within booking time range
-                        if ((currentTimestamp > bookingStatus.getStartTimestamp() && currentTimestamp < bookingStatus.getEndTimestamp()) && bookingStatus.getState().equals("before")) {
+                        if ((currentTimestamp >= bookingStatus.getStartTimestamp() && currentTimestamp < bookingStatus.getEndTimestamp()) && bookingStatus.getState().equals("before")) {
                             bookingStatus.setDescription(String.format("Hey there, your %s booking for today at %s has started. Just reminding you in case you forgot!",
                                     bookingStatus.getFacilityName(), new SimpleDateFormat("h:mma").format(bookingStatus.getStartTimestamp()) + "-" + new SimpleDateFormat("h:mma").format(bookingStatus.getEndTimestamp())));
+                            bookingStatus.setTimestamp(System.currentTimeMillis());
                             bookingStatus.setState("ongoing");
 
                             isUpdated = true;
@@ -323,7 +326,7 @@ public class StudentHomeFragment extends Fragment {
 
         // Button onClick listeners
         messageButtonIcon.setOnClickListener(v -> {
-            // TODO: add navigation when messages are implemented
+            // TODO: add navigation when chat feature is implemented
         });
 
         return view;
