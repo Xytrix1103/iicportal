@@ -76,14 +76,14 @@ public class EditECanteenMenuFragment extends Fragment implements CategoryAdapto
 
         String role = requireActivity().getSharedPreferences("com.iicportal", 0).getString("role", "Student");
 
-        if (!role.equals("Admin") && !role.equals("Vendor")) {
-            stopEditBtn.setVisibility(View.GONE);
-        } else {
+        if (role.equals("Admin")) {
             stopEditBtn.setVisibility(View.VISIBLE);
             stopEditBtn.setOnClickListener(v -> {
                 ECanteenMenuFragment eCanteenMenuFragment = new ECanteenMenuFragment(openDrawerInterface, fragmentManager);
                 fragmentManager.beginTransaction().replace(R.id.ecanteen_fragment_container, eCanteenMenuFragment).commit();
             });
+        } else {
+            stopEditBtn.setVisibility(View.GONE);
         }
 
         menuBtn.setOnClickListener(v -> {
