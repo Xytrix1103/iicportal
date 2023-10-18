@@ -22,17 +22,17 @@ public class VerticalViewFragment extends Fragment {
     FrameLayout container;
     Fragment studentHomeFragment;
     Fragment staffHomeFragment;
-    Fragment ecanteenMenuFragment;
+    Fragment ecanteenFragment;
     Fragment facilitiesMenuFragment;
     Fragment profileFragment;
     BottomNavigationView bottomNavigationView;
 
     public VerticalViewFragment() {
-        super(R.layout.vertical_user_view);
+        super(R.layout.vertical_view_fragment);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.vertical_user_view, container, false);
+        View view = inflater.inflate(R.layout.vertical_view_fragment, container, false);
         mAuth = FirebaseAuth.getInstance();
         sharedPreferences = requireActivity().getSharedPreferences("com.iicportal", 0);
         bottomNavigationView = view.findViewById(R.id.bottom_navigation);
@@ -41,7 +41,7 @@ public class VerticalViewFragment extends Fragment {
         Menu menu = bottomNavigationView.getMenu();
         studentHomeFragment = new StudentHomeFragment();
         staffHomeFragment = new StaffHomeFragment();
-        ecanteenMenuFragment = new ECanteenMenuFragment();
+        ecanteenFragment = new ECanteenFragment();
         facilitiesMenuFragment = new FacilityMenuFragment();
         profileFragment = new ProfileFragment();
 
@@ -77,7 +77,7 @@ public class VerticalViewFragment extends Fragment {
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.vertical_fragment_container, staffHomeFragment).commit();
                     return true;
                 case 1:
-                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.vertical_fragment_container, ecanteenMenuFragment).commit();
+                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.vertical_fragment_container, ecanteenFragment).commit();
                     return true;
                 case 2:
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.vertical_fragment_container, profileFragment).commit();
@@ -104,7 +104,7 @@ public class VerticalViewFragment extends Fragment {
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.vertical_fragment_container, studentHomeFragment).commit();
                     return true;
                 case 1:
-                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.vertical_fragment_container, ecanteenMenuFragment).commit();
+                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.vertical_fragment_container, ecanteenFragment).commit();
                     return true;
                 case 2:
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.vertical_fragment_container, facilitiesMenuFragment).commit();

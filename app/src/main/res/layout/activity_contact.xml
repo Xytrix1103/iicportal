@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:input="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.ContactActivity">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:id="@+id/backBtnIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/baseline_arrow_back_24"/>
+
+        <TextView
+            android:id="@+id/contactHeaderText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/backBtnIcon"
+            android:text="@string/contact_us"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp">
+
+        <TextView
+            android:id="@+id/contactDescriptionText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="30dp"
+            android:text="@string/contact_description"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:id="@+id/nameLayout"
+            android:layout_width="367dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contactDescriptionText"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/firstNameLayout"
+                style="@style/EditText.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_weight="1"
+                android:hint="@string/first_name_hint_label"
+                input:errorEnabled="true"
+                input:errorTextAppearance="@style/TextAppearance.AppCompat.Small"
+                input:expandedHintEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/firstName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/first_name_hint"
+                    android:inputType="text"
+                    android:paddingVertical="15dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/lastNameLayout"
+                style="@style/EditText.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_weight="1"
+                android:hint="@string/last_name_hint_label"
+                input:errorEnabled="true"
+                input:errorTextAppearance="@style/TextAppearance.AppCompat.Small"
+                input:expandedHintEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/lastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/last_name_hint"
+                    android:inputType="text"
+                    android:paddingVertical="15dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailLayout"
+            style="@style/EditText.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/nameLayout"
+            android:layout_marginHorizontal="10dp"
+            android:hint="@string/email_hint_label"
+            input:endIconDrawable="@drawable/baseline_email_24"
+            input:endIconMode="custom"
+            input:errorEnabled="true"
+            input:errorTextAppearance="@style/TextAppearance.AppCompat.Small"
+            input:expandedHintEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email_hint"
+                android:inputType="text"
+                android:paddingVertical="15dp"
+                android:paddingEnd="40dp"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/phoneLayout"
+            style="@style/EditText.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/emailLayout"
+            android:layout_marginHorizontal="10dp"
+            android:hint="@string/phone_hint_label"
+            input:endIconDrawable="@drawable/baseline_phone_24"
+            input:endIconMode="custom"
+            input:errorEnabled="true"
+            input:errorTextAppearance="@style/TextAppearance.AppCompat.Small"
+            input:expandedHintEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/phone_hint"
+                android:inputType="text"
+                android:paddingVertical="15dp"
+                android:paddingEnd="40dp"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/messageLayout"
+            style="@style/EditText.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/phoneLayout"
+            android:layout_marginHorizontal="10dp"
+            android:hint="@string/message_hint_label"
+            input:errorEnabled="true"
+            input:errorTextAppearance="@style/TextAppearance.AppCompat.Small"
+            input:expandedHintEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:hint="@string/message_hint"
+                android:inputType="textMultiLine"
+                android:lines="6"
+                android:paddingVertical="15dp"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/submitBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/messageLayout"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:letterSpacing="0"
+            android:paddingHorizontal="50dp"
+            android:paddingVertical="10dp"
+            android:text="@string/submit"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

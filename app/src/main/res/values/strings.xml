@@ -49,6 +49,19 @@
     <string name="completed">Completed</string>
     <string name="status">Status</string>
     <string name="orderStatusTitle">Order Status</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="contact_description">Reach out to us with any questions or feedback! We\'re all ears and ready to assist.\n\nDrop us a line using the form below, and we\'ll get back to you promptly.</string>
+    <string name="first_name_hint_label"><b>First name <font color="#FF0000">*</font></b></string>
+    <string name="first_name_hint">First name</string>
+    <string name="last_name_hint_label"><b>Last name <font color="#FF0000">*</font></b></string>
+    <string name="last_name_hint">Last name</string>
+    <string name="email_hint_label"><b>E-mail <font color="#FF0000">*</font></b></string>
+    <string name="email_hint">youremail@gmail.com</string>
+    <string name="phone_hint_label"><b>Phone</b></string>
+    <string name="phone_hint">e.g. 0120000000</string>
+    <string name="message_hint_label"><b>Message <font color="#FF0000">*</font></b></string>
+    <string name="message_hint">Your message</string>
+
     // Newly added stuff
     <string name="facility">Facilities</string>
     <string name="facility_name">Facility Name</string>
@@ -62,8 +75,31 @@
 	<string name="prices_title">Prices (RM)</string>
     <string name="subtotal_title">Subtotal</string>
 	<string name="takeaway_fees_title">Takeaway Fees</string>
+	<string name="dashboard">Dashboard</string>
+	<string name="users">Users</string>
+	<string name="search">Search</string>
+	<string name="userRoleHint">User Role</string>
+    <string name="userRoleLabel">Role</string>
+    <string name="edit_user">Edit User</string>
+	<string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+	<string name="add_user">Add User</string>
+    <string name="edit_ecanteen">E-Canteen (Edit Mode)</string>
+    <string name="stop_edit_ecanteen">Exit E-Canteen edit mode</string>
+    <string name="add_category">Add category</string>
+    <string name="edit_category">Edit category</string>
+    <string name="categoryHint">Please enter a new category name</string>
+    <string name="delete_category">Delete category</string>
+    <string name="new_category">New Category</string>
+    <string name="newCategoryHint">Please enter new category name</string>
+    <string name="food_item">Food Item</string>
+    <string name="change_image">Change Image</string>
+    <string name="remove_image">Remove Image</string>
+    <string name="edit_image">Edit Image</string>
+    <string name="add_menu_item">Add Menu Item</string>
+    <string name="add_image">Add Image</string>
 
-	<string-array name="timeslot">
+    <string-array name="timeslot">
         <item>9:00AM - 10:00AM</item>
         <item>10:00AM - 11:00AM</item>
         <item>11:00AM - 12:00PM</item>
