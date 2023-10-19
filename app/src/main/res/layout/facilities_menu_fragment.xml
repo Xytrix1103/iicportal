@@ -16,10 +16,19 @@
 		android:layout_marginTop="10dp">
 
 		<ImageView
-			android:id="@+id/headerIcon"
-			android:layout_width="50dp"
-			android:layout_height="50dp"
+			android:id="@+id/menuIcon"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
+			android:layout_marginEnd="10dp"
+			android:src="@drawable/baseline_menu_24"/>
+
+		<ImageView
+			android:id="@+id/headerIcon"
+			android:layout_width="40dp"
+			android:layout_height="40dp"
+			android:layout_centerVertical="true"
+			android:layout_toEndOf="@id/menuIcon"
 			android:src="@drawable/facility"
 			android:layout_marginEnd="10dp"/>
 

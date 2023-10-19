@@ -29,6 +29,10 @@ public class AddToCartDialogFragment extends BottomSheetDialogFragment {
     FirebaseUser user;
     FirebaseAuth mAuth;
     String key;
+
+    public AddToCartDialogFragment() {
+    }
+
     
     public AddToCartDialogFragment(FoodItem foodItem, String key) {
         this.foodItem = foodItem;
@@ -51,22 +55,23 @@ public class AddToCartDialogFragment extends BottomSheetDialogFragment {
         TextView plusBtn = view.findViewById(R.id.order_menu_item_dialog_plus_button);
         TextView minusBtn = view.findViewById(R.id.order_menu_item_dialog_minus_button);
         Button addToCartBtn = view.findViewById(R.id.order_menu_item_dialog_add_button);
+        CartItem cartItem = new CartItem(foodItem);
 
-        title.setText(foodItem.getName());
-        description.setText(foodItem.getDescription());
-        price.setText(String.format("RM %.2f", foodItem.getPrice()));
-        Glide.with(image.getContext()).load(foodItem.getImage()).into(image);
-        quantity.setText(String.valueOf(foodItem.getQuantity()));
+        title.setText(cartItem.getName());
+        description.setText(cartItem.getDescription());
+        price.setText(String.format("RM %.2f", cartItem.getPrice()));
+        Glide.with(image.getContext()).load(cartItem.getImage()).into(image);
+        quantity.setText(String.valueOf(cartItem.getQuantity()));
 
         plusBtn.setOnClickListener(v1 -> {
-            foodItem.setQuantity(foodItem.getQuantity() + 1);
-            quantity.setText(String.valueOf(foodItem.getQuantity()));
+            cartItem.setQuantity(cartItem.getQuantity() + 1);
+            quantity.setText(String.valueOf(cartItem.getQuantity()));
         });
 
         minusBtn.setOnClickListener(v1 -> {
-            if (foodItem.getQuantity() > 1) {
-                foodItem.setQuantity(foodItem.getQuantity() - 1);
-                quantity.setText(String.valueOf(foodItem.getQuantity()));
+            if (cartItem.getQuantity() > 1) {
+                cartItem.setQuantity(cartItem.getQuantity() - 1);
+                quantity.setText(String.valueOf(cartItem.getQuantity()));
             }
         });
 
@@ -76,7 +81,7 @@ public class AddToCartDialogFragment extends BottomSheetDialogFragment {
                     if (task.getResult().getValue() != null) {
                         cartRef.child(user.getUid()).child(key).child("quantity").setValue(Integer.parseInt(quantity.getText().toString()) + Integer.parseInt(task.getResult().getValue().toString()));
                     } else {
-                        CartItem cartItem = new CartItem(foodItem.getName(), foodItem.getDescription(), foodItem.getPrice(), foodItem.getImage(), foodItem.getCategory(), foodItem.getQuantity(), false);
+                        cartItem.setSelected(false);
                         cartRef.child(user.getUid()).child(key).setValue(cartItem);
                     }
 
@@ -88,7 +93,7 @@ public class AddToCartDialogFragment extends BottomSheetDialogFragment {
         });
 
         getDialog().setOnDismissListener(dialog -> {
-            foodItem.resetQuantity();
+            cartItem.resetQuantity();
         });
 
         return view;

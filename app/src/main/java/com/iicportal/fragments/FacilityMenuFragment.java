@@ -28,6 +28,7 @@ public class FacilityMenuFragment extends Fragment {
     Context context;
     RecyclerView facilitiesRecyclerView;
     FacilityAdaptor facilityAdaptor;
+    ImageView menuBtn;
 
     FirebaseDatabase database;
     DatabaseReference facilitiesRef;
@@ -38,8 +39,16 @@ public class FacilityMenuFragment extends Fragment {
     SharedPreferences sharedPreferences;
     private ImageView historyBtnIcon;
 
+    AdminDashboardFragment.OpenDrawerInterface openDrawerInterface;
+
     public FacilityMenuFragment() {
         super(R.layout.facilities_menu_fragment);
+        openDrawerInterface = null;
+    }
+
+    public FacilityMenuFragment(AdminDashboardFragment.OpenDrawerInterface openDrawerInterface) {
+        super(R.layout.facilities_menu_fragment);
+        this.openDrawerInterface = openDrawerInterface;
     }
 
     @Override
@@ -67,6 +76,20 @@ public class FacilityMenuFragment extends Fragment {
                 facilityAdaptor.notifyDataSetChanged();
             }
         });
+
+        menuBtn = view.findViewById(R.id.menuIcon);
+
+        sharedPreferences = requireActivity().getSharedPreferences("com.iicportal", Context.MODE_PRIVATE);
+        if (sharedPreferences.getString("role", "").equals("Admin") || sharedPreferences.getString("role", "").equals("Vendor")) {
+            menuBtn.setVisibility(View.VISIBLE);
+            menuBtn.setOnClickListener(v -> {
+                if (openDrawerInterface != null) {
+                    openDrawerInterface.openDrawer();
+                }
+            });
+        } else {
+            menuBtn.setVisibility(View.GONE);
+        }
 
         FirebaseRecyclerOptions<BookingItem> facilityOptions = new FirebaseRecyclerOptions.Builder<BookingItem>()
                 .setLifecycleOwner(this)

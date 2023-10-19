@@ -48,4 +48,5 @@ dependencies {
     implementation("com.google.firebase:firebase-database")
     implementation("com.github.bumptech.glide:glide:4.14.2")
     implementation("com.google.firebase:firebase-storage")
+    implementation("androidx.activity:activity:1.8.0")
 }

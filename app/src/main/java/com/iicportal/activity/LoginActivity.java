@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
+import com.iicportal.models.User;
 
 public class LoginActivity extends AppCompatActivity {
     TextInputEditText usernameEdit, passwordEdit;
@@ -71,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
             mAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(this, task -> {
                     Log.d("LoginActivity", "signInWithEmail:onComplete:" + task.isSuccessful());
-                    if (task.isSuccessful()) {
+                    if (task.isSuccessful() && task.getResult() != null) {
                         Log.d("LoginActivity", "signInWithEmail:success");
                         user = mAuth.getCurrentUser();
 
@@ -87,6 +88,40 @@ public class LoginActivity extends AppCompatActivity {
 
                         reload();
                     } else {
+                        usersRef.orderByChild("email").equalTo(username).get().addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()) {
+                                if (task1.getResult().exists()) {
+                                    String key = task1.getResult().getChildren().iterator().next().getKey();
+                                    if (task1.getResult().child(key).child("password").getValue().toString().equals(password) && task1.getResult().child(key).child("role").getValue().toString().equals("Vendor")) {
+                                        mAuth.createUserWithEmailAndPassword(username, password)
+                                                .addOnCompleteListener(this, task2 -> {
+                                                    if (task2.isSuccessful()) {
+                                                        Log.d("LoginActivity", "createUserWithEmail:success");
+                                                        user = mAuth.getCurrentUser();
+                                                        usersRef.child(user.getUid()).setValue(task1.getResult().child(key).getValue(User.class));
+                                                        usersRef.child(key).removeValue();
+                                                        reload();
+                                                    } else {
+                                                        Log.w("LoginActivity", "createUserWithEmail:failure", task2.getException());
+                                                        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                                                Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+
+                                    } else {
+                                        Log.d("LoginActivity", "Password is incorrect");
+                                        Toast.makeText(LoginActivity.this, "Password is incorrect", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    Log.d("LoginActivity", "User does not exist");
+                                    Toast.makeText(LoginActivity.this, "User does not exist", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Log.d("LoginActivity", "Error getting user: " + task.getException());
+                                Toast.makeText(LoginActivity.this, "Error getting user", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
                         Log.w("LoginActivity", "signInWithEmail:failure", task.getException());
                         Toast.makeText(LoginActivity.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();

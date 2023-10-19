@@ -16,12 +16,14 @@ public class CartItem {
     public CartItem() {
     }
 
-    public CartItem(String name, String description, Double price, String image, String category) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.image = image;
-        this.category = category;
+    public CartItem(FoodItem foodItem) {
+        this.name = foodItem.getName();
+        this.description = foodItem.getDescription();
+        this.price = foodItem.getPrice();
+        this.image = foodItem.getImage();
+        this.category = foodItem.getCategory();
+        this.quantity = 1;
+        this.selected = false;
     }
 
     public CartItem(String name, String description, Double price, String image, String category, int quantity, boolean selected) {
@@ -88,5 +90,9 @@ public class CartItem {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public void resetQuantity() {
+        this.quantity = 1;
     }
 }
