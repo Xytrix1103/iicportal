@@ -62,42 +62,10 @@ public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, Facili
         notifyDataSetChanged();
     }
 
-    //create a function where we can reset the bookings for all facility when it is 12am or not equal to the current date
-//    public void resetBookings() {
-//        // Get the current date
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-//        String currentDate = dateFormat.format(Calendar.getInstance().getTime());
-//
-//        DatabaseReference userBookingsRef = bookingRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-//
-//        userBookingsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot userBookingsSnapshot) {
-//                for (DataSnapshot bookingSnapshot : userBookingsSnapshot.getChildren()) {
-//                    String bookingDate = bookingSnapshot.child("selectedDate").getValue(String.class);
-//                    if (bookingDate != null && !bookingDate.equals(currentDate)) {
-//                        // Remove the booking entry from the user's history
-//                        bookingSnapshot.getRef().removeValue();
-//                    } else {
-//                        Log.d("BookingAdapter", "Booking date is equal to current date");
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Log.d("BookingAdapter", "Database error: " + databaseError.getMessage());
-//            }
-//        });
-//    }
-
-
     @Override
     protected void onBindViewHolder(@NonNull FacilityViewHolder holder, int position, @NonNull BookingItem model) {
         holder.facilityName.setText(model.getName());
         Glide.with(context).load(model.getImage()).into(holder.facilityImage);
-        //Call the resetBookings function
-        //resetBookings();
 
         holder.booknowBtn.setOnClickListener(v -> {
             Log.d("BookingAdapter", "Book button clicked");
