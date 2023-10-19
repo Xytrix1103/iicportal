@@ -16,20 +16,19 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
-import com.iicportal.adaptor.FacilityAdaptor;
+import com.iicportal.adaptor.BookingHistoryAdaptor;
 import com.iicportal.models.BookingItem;
 
 public class BookingHistoryActivity extends AppCompatActivity {
     Context context = this;
-
-    FirebaseAuth mAuth;
-    FirebaseUser user;
+    RecyclerView bookingRecyclerView;
+    BookingHistoryAdaptor BookingHistoryAdaptor;
 
     FirebaseDatabase database;
     DatabaseReference bookingRef;
 
-    RecyclerView bookingRecyclerView;
-    FacilityAdaptor facilityAdaptor;
+    FirebaseAuth mAuth;
+    FirebaseUser user;
 
     TextView noBookingText;
     ImageView backBtnIcon;
@@ -57,37 +56,38 @@ public class BookingHistoryActivity extends AppCompatActivity {
 
         FirebaseRecyclerOptions<BookingItem> options = new FirebaseRecyclerOptions.Builder<BookingItem>()
                 .setLifecycleOwner(this)
-                .setQuery(bookingRef.orderByChild("uid").equalTo(user.getUid()), BookingItem.class)
+                .setQuery(bookingRef.orderByChild("userId").equalTo(user.getUid()), BookingItem.class)
                 .build();
 
-        facilityAdaptor = new FacilityAdaptor(options, context, getSupportFragmentManager());
-        bookingRecyclerView.setAdapter(facilityAdaptor);
+        BookingHistoryAdaptor = new BookingHistoryAdaptor(options, context);
+        bookingRecyclerView.setAdapter(BookingHistoryAdaptor);
 
         noBookingText = findViewById(R.id.bookingHistoryEmptyText);
 
-        facilityAdaptor.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        BookingHistoryAdaptor.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
                 super.onChanged();
-                if (facilityAdaptor.getItemCount() == 0) {
+                if (BookingHistoryAdaptor.getItemCount() == 0) {
                     noBookingText.setVisibility(View.VISIBLE);
                 } else {
                     noBookingText.setVisibility(View.GONE);
                 }
             }
         });
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        facilityAdaptor.startListening();
+        BookingHistoryAdaptor.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        facilityAdaptor.stopListening();
+        BookingHistoryAdaptor.stopListening();
     }
 
 

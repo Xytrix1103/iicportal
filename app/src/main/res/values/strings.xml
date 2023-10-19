@@ -67,6 +67,8 @@
     <string name="facility_name">Facility Name</string>
     <string name="booking_time">Booking Time</string>
     <string name="booking_date">Booking Date</string>
+    <string name="bookingHistory">Booking History</string>
+    <string name="booking_history_empty">You have no previous bookings.</string>
 	<string name="order_details">Order Details</string>
 	<string name="ordered_at">Ordered At</string>
 	<string name="order_id_title">Order ID</string>

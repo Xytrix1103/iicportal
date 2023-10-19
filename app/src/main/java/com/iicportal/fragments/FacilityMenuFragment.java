@@ -30,7 +30,6 @@ public class FacilityMenuFragment extends Fragment {
     FacilityAdaptor facilityAdaptor;
 
     FirebaseDatabase database;
-    DatabaseReference timeslotRef;
     DatabaseReference facilitiesRef;
 
     FirebaseAuth mAuth;
@@ -57,8 +56,6 @@ public class FacilityMenuFragment extends Fragment {
         user = mAuth.getCurrentUser();
 
         database = FirebaseDatabase.getInstance();
-        timeslotRef = database.getReference("facilities/timeslot");
-        timeslotRef.keepSynced(true);
         facilitiesRef = database.getReference("facilities/facility/");
         facilitiesRef.keepSynced(true);
 

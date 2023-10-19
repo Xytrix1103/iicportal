@@ -34,9 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 public class BookingDialogFragment extends BottomSheetDialogFragment {
     BookingItem bookingItem;
@@ -90,14 +88,14 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
         String currentTime = timeFormat.format(Calendar.getInstance().getTime());
         String thresholdTime = "08:00AM";
 
-        for (int i = 0; i < timeSlotsList.size(); i++) {
-            String timeSlot = timeSlotsList.get(i);
-            if (isTimeSlotPassed(currentTime, timeSlot) || isBeforeThreshold(currentTime, thresholdTime)) {
-                // If the time slot has passed or it's before the threshold time, remove it from the list
-                timeSlotsList.remove(i);
-                i--; // Adjust the index to account for the removed item
-            }
-        }
+//        for (int i = 0; i < timeSlotsList.size(); i++) {
+//            String timeSlot = timeSlotsList.get(i);
+//            if (isTimeSlotPassed(currentTime, timeSlot) || isBeforeThreshold(currentTime, thresholdTime)) {
+//                // If the time slot has passed or it's before the threshold time, remove it from the list
+//                timeSlotsList.remove(i);
+//                i--; // Adjust the index to account for the removed item
+//            }
+//        }
 
         //populate the spinner with the time slots
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, timeSlotsList);
@@ -126,19 +124,20 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
                         // Generate a unique booking ID
                         String bookingId = bookingRef.push().getKey();
 
-                        BookingItem newBookingItem = new BookingItem(bookingItem.getName(), bookingItem.getImage(), bookingItem.getPrice(), selectedBooking, currentDate);
+                        BookingItem newBookingItem = new BookingItem(bookingItem.getName(), bookingItem.getImage(), bookingItem.getPrice(), selectedBooking, currentDate, "Paid", user.getUid());
 
                         // Create a map to store the booking data
-                        Map<String, Object> bookingData = new HashMap<>();
-                        bookingData.put("userId", user.getUid());
-                        bookingData.put("facilityName", bookingItem.getName());
-                        bookingData.put("facilityImage", bookingItem.getImage());
-                        bookingData.put("facilityPrice", bookingItem.getPrice());
-                        bookingData.put("selectedDate", currentDate);
-                        bookingData.put("selectedTimeSlot", selectedBooking);
+//                        Map<String, Object> bookingData = new HashMap<>();
+//                        bookingData.put("userId", user.getUid());
+//                        bookingData.put("facilityName", bookingItem.getName());
+//                        bookingData.put("facilityImage", bookingItem.getImage());
+//                        bookingData.put("facilityPrice", bookingItem.getPrice());
+//                        bookingData.put("selectedDate", currentDate);
+//                        bookingData.put("selectedTimeSlot", selectedBooking);
+//                        bookingData.put("status", "Paid");
 
                         // Save the booking data under the "bookings" node with the unique booking ID
-                        bookingRef.child(bookingItem.getName()).child(bookingId).setValue(bookingData);
+                        bookingRef.child(bookingId).setValue(newBookingItem);
                         dismiss();
                     }
                 }

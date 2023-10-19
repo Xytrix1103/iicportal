@@ -18,19 +18,11 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
 import com.iicportal.fragments.BookingDialogFragment;
 import com.iicportal.models.BookingItem;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
 
 public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, FacilityAdaptor.FacilityViewHolder> {
     Context context;
@@ -70,64 +62,42 @@ public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, Facili
         notifyDataSetChanged();
     }
 
-//    create a function where we can reset the bookings for all facility when it is 12am or not equal to the current date
-    public void resetBookings() {
-        // Get the current date
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        String currentDate = dateFormat.format(Calendar.getInstance().getTime());
+    //create a function where we can reset the bookings for all facility when it is 12am or not equal to the current date
+//    public void resetBookings() {
+//        // Get the current date
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+//        String currentDate = dateFormat.format(Calendar.getInstance().getTime());
+//
+//        DatabaseReference userBookingsRef = bookingRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+//
+//        userBookingsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot userBookingsSnapshot) {
+//                for (DataSnapshot bookingSnapshot : userBookingsSnapshot.getChildren()) {
+//                    String bookingDate = bookingSnapshot.child("selectedDate").getValue(String.class);
+//                    if (bookingDate != null && !bookingDate.equals(currentDate)) {
+//                        // Remove the booking entry from the user's history
+//                        bookingSnapshot.getRef().removeValue();
+//                    } else {
+//                        Log.d("BookingAdapter", "Booking date is equal to current date");
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                Log.d("BookingAdapter", "Database error: " + databaseError.getMessage());
+//            }
+//        });
+//    }
 
-        // Get a reference to the "facilities" node
-        DatabaseReference facilitiesRef = database.getReference("facilities/facility");
-
-        facilitiesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot facilitiesSnapshot) {
-                for (DataSnapshot facilitySnapshot : facilitiesSnapshot.getChildren()) {
-                    String facilityName = facilitySnapshot.child("name").getValue(String.class);
-                    if (facilityName != null) {
-                        // Get the bookings for the current facility
-                        Query query = bookingRef.child(facilityName);
-                        query.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                // Give me a log message
-                                Log.d("BookingAdapter", "Resetting bookings for " + facilityName);
-                                // Loop through the bookings
-                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                    // Get the booking date
-                                    String bookingDate = snapshot.child("selectedDate").getValue(String.class);
-                                    // Check if the booking date is not equal to the current date
-                                    if (!bookingDate.equals(currentDate)) {
-                                        // Delete the booking
-                                        snapshot.getRef().removeValue();
-                                    } else {
-                                        Log.d("BookingAdapter", "Booking date is equal to current date");
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                Log.d("BookingAdapter", "Database error: " + databaseError.getMessage());
-                            }
-                        });
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d("BookingAdapter", "Database error: " + databaseError.getMessage());
-            }
-        });
-    }
 
     @Override
     protected void onBindViewHolder(@NonNull FacilityViewHolder holder, int position, @NonNull BookingItem model) {
         holder.facilityName.setText(model.getName());
         Glide.with(context).load(model.getImage()).into(holder.facilityImage);
-
         //Call the resetBookings function
-        resetBookings();
+        //resetBookings();
 
         holder.booknowBtn.setOnClickListener(v -> {
             Log.d("BookingAdapter", "Book button clicked");
