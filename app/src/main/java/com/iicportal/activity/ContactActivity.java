@@ -1,14 +1,15 @@
 package com.iicportal.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
 import com.iicportal.models.Message;
@@ -22,6 +23,7 @@ public class ContactActivity extends AppCompatActivity {
     private ImageView backButtonIcon;
 
     private FirebaseAuth mAuth;
+    private FirebaseUser user;
     private FirebaseDatabase database;
 
     @Override
@@ -30,8 +32,8 @@ public class ContactActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contact);
 
         // Initialize firebase objects
-        mAuth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
+        mAuth = MainActivity.mAuth;
+        user = MainActivity.user;
 
         // Set reference to views
         firstNameEdit = findViewById(R.id.firstName);

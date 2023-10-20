@@ -85,6 +85,7 @@
 		android:layout_margin="10dp"
 		android:scrollbars="vertical"
 		android:scrollbarSize="10dp"
+		android:overScrollMode="never"
 		android:scrollbarStyle="outsideOverlay"/>
 
 </RelativeLayout>

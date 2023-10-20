@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.iicportal.activity.MainActivity;
 
 public class EditUserDialogFragment extends BottomSheetDialogFragment {
     FirebaseDatabase database;
@@ -22,9 +23,9 @@ public class EditUserDialogFragment extends BottomSheetDialogFragment {
     String key;
 
     public EditUserDialogFragment(String key) {
-        this.database = FirebaseDatabase.getInstance();
-        this.mAuth = FirebaseAuth.getInstance();
-        this.user = mAuth.getCurrentUser();
+        database = MainActivity.database;
+        mAuth = MainActivity.mAuth;
+        user = MainActivity.user;
         this.usersRef = database.getReference("users/");
         this.key = key;
     }

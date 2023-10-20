@@ -40,12 +40,11 @@ public class OrderHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_history);
 
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
+        mAuth = MainActivity.mAuth;
+        user = MainActivity.user;
 
-        database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
         ordersRef = database.getReference("orders/");
-        ordersRef.keepSynced(true);
 
         backBtnIcon = findViewById(R.id.backBtnIcon);
         backBtnIcon.setOnClickListener(v -> finish());

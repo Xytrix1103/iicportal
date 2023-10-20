@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.activity.BookingHistoryActivity;
 import com.iicportal.adaptor.FacilityAdaptor;
 import com.iicportal.models.BookingItem;
@@ -31,6 +32,7 @@ public class FacilityMenuFragment extends Fragment {
     ImageView menuBtn;
 
     FirebaseDatabase database;
+    DatabaseReference timeslotRef;
     DatabaseReference facilitiesRef;
 
     FirebaseAuth mAuth;
@@ -61,12 +63,12 @@ public class FacilityMenuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.facilities_menu_fragment, container, false);
 
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
+        mAuth = MainActivity.mAuth;
+        user = MainActivity.user;
 
-        database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
+        timeslotRef = database.getReference("facilities/timeslot");
         facilitiesRef = database.getReference("facilities/facility/");
-        facilitiesRef.keepSynced(true);
 
         sharedPreferences = context.getSharedPreferences("com.iicportal", Context.MODE_PRIVATE);
 

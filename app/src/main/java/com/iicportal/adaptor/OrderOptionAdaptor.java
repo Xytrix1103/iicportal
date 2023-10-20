@@ -36,7 +36,8 @@ public class OrderOptionAdaptor extends FirebaseRecyclerAdapter<OrderOption, Ord
         holder.radioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 selectedPosition = pos;
-                ((CheckoutActivity) context).setOrderOption(getRef(pos).getKey());
+                OrderOption orderOption = getItem(pos);
+                ((CheckoutActivity) context).setOrderOption(orderOption);
                 ((CheckoutActivity) context).updatePrices();
                 notifyDataSetChanged();
             }
@@ -53,7 +54,7 @@ public class OrderOptionAdaptor extends FirebaseRecyclerAdapter<OrderOption, Ord
         super.onDataChanged();
 
         if (super.getItemCount() > 0) {
-            ((CheckoutActivity) context).setOrderOption(getRef(0).getKey());
+            ((CheckoutActivity) context).setOrderOption(getItem(0));
         }
 
         notifyDataSetChanged();
