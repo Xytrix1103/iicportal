@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
 import com.iicportal.activity.AddFoodItemActivity;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.adaptor.MenuItemAdaptor;
 import com.iicportal.models.FoodItem;
 
@@ -54,9 +55,8 @@ public class MenuFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
         menuRef = database.getReference("ecanteen/fooditems/");
-        menuRef.keepSynced(true);
 
         FirebaseRecyclerOptions<FoodItem> options = new FirebaseRecyclerOptions.Builder<FoodItem>()
                 .setQuery(menuRef.orderByChild("category").equalTo(category), FoodItem.class)

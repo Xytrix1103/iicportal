@@ -41,9 +41,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
+import com.iicportal.activity.LoginActivity;
+import com.iicportal.activity.MainActivity;
 
 public class StaffHomeFragment extends Fragment {
-
     private Context context;
 
     private BottomNavigationView bottomNavigationView;
@@ -77,6 +78,7 @@ public class StaffHomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.staff_home_fragment, container, false);
 
+        mAuth = MainActivity.mAuth;
         statusList = new ArrayList<Status>();
 
         // Initialize firebase objects

@@ -41,7 +41,7 @@ public class AddFoodItemActivity extends AppCompatActivity {
         Context context = this;
         foodItem = new FoodItem();
 
-        database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
 

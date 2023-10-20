@@ -38,10 +38,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mAuth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
+        mAuth = MainActivity.mAuth;
+        database = MainActivity.database;
         usersRef = database.getReference("users");
-        usersRef.keepSynced(true);
 
         sharedPreferences = this.getSharedPreferences("com.iicportal", Context.MODE_PRIVATE);
 

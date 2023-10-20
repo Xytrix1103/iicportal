@@ -33,10 +33,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
 
-        mAuth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
+        mAuth = MainActivity.mAuth;
+        database = MainActivity.database;
         usersRef = database.getReference("users");
-        usersRef.keepSynced(true);
 
         backButton = findViewById(R.id.backBtn);
         submitButton = findViewById(R.id.submitBtn);

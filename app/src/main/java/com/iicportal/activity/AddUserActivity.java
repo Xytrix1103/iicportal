@@ -46,11 +46,10 @@ public class AddUserActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_user);
-        this.database = FirebaseDatabase.getInstance();
-        this.mAuth = FirebaseAuth.getInstance();
-        this.user = mAuth.getCurrentUser();
+        database = MainActivity.database;
+        mAuth = MainActivity.mAuth;
+        user = MainActivity.user;
         this.usersRef = database.getReference("users/");
-        usersRef.keepSynced(true);
 
         fullNameEdit = findViewById(R.id.fullName);
         phoneNumberEdit = findViewById(R.id.phone);
