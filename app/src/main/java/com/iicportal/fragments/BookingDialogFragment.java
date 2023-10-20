@@ -26,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.models.BookingItem;
 
 import java.text.ParseException;
@@ -53,10 +54,10 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
 
     public BookingDialogFragment(BookingItem bookingItem, Context context, String key) {
         this.bookingItem = bookingItem;
-        this.database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
         this.bookingRef = database.getReference("bookings/");
-        this.mAuth = FirebaseAuth.getInstance();
-        this.user = mAuth.getCurrentUser();
+        mAuth = MainActivity.mAuth;
+        user = MainActivity.user;
         this.key = key;
         this.context = context;
     }

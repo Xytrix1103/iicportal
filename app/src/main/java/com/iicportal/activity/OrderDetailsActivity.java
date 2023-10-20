@@ -23,6 +23,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
 import com.iicportal.adaptor.CheckoutItemAdaptor;
 import com.iicportal.models.CartItem;
+import com.iicportal.models.Order;
+import com.iicportal.models.OrderOption;
+import com.iicportal.models.PaymentMethod;
 
 import java.text.SimpleDateFormat;
 
@@ -61,12 +64,11 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
         String orderId = getIntent().getStringExtra("orderID");
 
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
+        mAuth = MainActivity.mAuth;
+        user = MainActivity.user;
 
-        database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
         orderRef = database.getReference("orders/").child(orderId);
-        orderRef.keepSynced(true);
 
         recyclerView = findViewById(R.id.itemsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -115,7 +117,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
                     sentToKitchenBody.setVisibility(TextView.GONE);
                 }
 
-                if (snapshot.child("readyTimestamp").exists()) {
+                if (snapshot.child("ready").exists() && Boolean.TRUE.equals(snapshot.child("ready").getValue(Boolean.class))) {
                     readyForPickupDateTime.setText(new SimpleDateFormat("dd/MM/yyyy hh:mm a").format(Long.parseLong(snapshot.child("readyTimestamp").getValue().toString())));
                     readyForPickupBody.setVisibility(TextView.VISIBLE);
                     status.setText("READY");
@@ -125,7 +127,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
                     readyForPickupBody.setVisibility(TextView.GONE);
                 }
 
-                if (snapshot.child("completedTimestamp").exists()) {
+                if (snapshot.child("completed").exists() && Boolean.TRUE.equals(snapshot.child("completed").getValue(Boolean.class))) {
                     completedDateTime.setText(new SimpleDateFormat("dd/MM/yyyy hh:mm a").format(Long.parseLong(snapshot.child("completedTimestamp").getValue().toString())));
                     completedBody.setVisibility(TextView.VISIBLE);
 
@@ -136,11 +138,11 @@ public class OrderDetailsActivity extends AppCompatActivity {
                     completedBody.setVisibility(TextView.GONE);
                 }
 
-                orderID.setText(snapshot.getKey());
+                orderID.setText(snapshot.getValue(Order.class).getOrderID());
                 orderedAtDate.setText(new SimpleDateFormat("dd/MM/yyyy").format(Long.parseLong(snapshot.child("timestamp").getValue().toString())));
                 orderedAtTime.setText(new SimpleDateFormat("hh:mm a").format(Long.parseLong(snapshot.child("timestamp").getValue().toString())));
                 orderTotal.setText(String.format("RM %.2f", Double.parseDouble(snapshot.child("total").getValue().toString())));
-                if(Integer.parseInt(snapshot.child("takeawayFee").getValue().toString()) > 0) {
+                if(Double.parseDouble(snapshot.child("takeawayFee").getValue().toString()) > 0) {
                     takeawayFeesBody.setVisibility(TextView.VISIBLE);
                     takeawayFee.setText(String.format("RM %.2f", Double.parseDouble(snapshot.child("takeawayFee").getValue().toString())));
                 } else {
@@ -149,13 +151,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 takeawayFee.setText(String.format("RM %.2f", Double.parseDouble(snapshot.child("takeawayFee").getValue().toString())));
                 total.setText(String.format("RM %.2f", Double.parseDouble(snapshot.child("total").getValue().toString()) + Double.parseDouble(snapshot.child("takeawayFee").getValue().toString())));
 
-                database.getReference("ecanteen/paymentmethods").child(snapshot.child("paymentMethod").getValue().toString()).child("method").get().addOnSuccessListener(dataSnapshot -> {
-                    paymentMethod.setText(dataSnapshot.getValue().toString());
-                });
-
-                database.getReference("ecanteen/orderoptions").child(snapshot.child("orderOption").getValue().toString()).child("option").get().addOnSuccessListener(dataSnapshot -> {
-                    orderOption.setText(dataSnapshot.getValue().toString());
-                });
+                paymentMethod.setText(snapshot.child("paymentMethod").getValue(PaymentMethod.class).getMethod());
+                orderOption.setText(snapshot.child("orderOption").getValue(OrderOption.class).getOption());
             }
 
             @Override

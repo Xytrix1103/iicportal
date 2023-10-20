@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,15 +21,13 @@ import com.iicportal.fragments.HorizontalViewFragment;
 import com.iicportal.fragments.VerticalViewFragment;
 
 public class MainActivity extends AppCompatActivity {
-    static FirebaseApp app;
-    static FirebaseApp adminApp;
-    private FirebaseAuth mAuth;
-    FirebaseUser user;
-    FirebaseDatabase database;
+    public static FirebaseApp app;
+    public static FirebaseApp adminApp;
+    public static FirebaseAuth mAuth;
+    public static FirebaseUser user;
+    public static FirebaseDatabase database;
     DatabaseReference usersRef;
     SharedPreferences sharedPreferences;
-
-    FrameLayout container;
     Fragment verticalViewFragment;
     Fragment horizontalViewFragment;
 
@@ -45,13 +42,15 @@ public class MainActivity extends AppCompatActivity {
         } else {
             adminApp = FirebaseApp.getInstance("admin");
         }
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance(app);
         user = mAuth.getCurrentUser();
+        database = FirebaseDatabase.getInstance();
+        database.setPersistenceEnabled(true);
+        database.getReference().keepSynced(true);
+        usersRef = database.getReference("users");
         sharedPreferences = this.getSharedPreferences("com.iicportal", MODE_PRIVATE);
         verticalViewFragment = new VerticalViewFragment();
         horizontalViewFragment = new HorizontalViewFragment();
-        database = FirebaseDatabase.getInstance();
-        usersRef = database.getReference("users");
     }
 
     @Override
@@ -103,16 +102,25 @@ public class MainActivity extends AppCompatActivity {
         } else {
             user = mAuth.getCurrentUser();
             Log.d("MainActivity", "onStart: " + user.getUid());
-            usersRef.child(user.getUid()).get().addOnCompleteListener(task -> {
-                if (task.isSuccessful() && task.getResult().exists()) {
-                    String role = task.getResult().child("role").getValue().toString();
-                    sharedPreferences.edit().putString("role", role).apply();
-                    if (role.equals("Admin") || role.equals("Vendor")) {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, horizontalViewFragment).commit();
-                    } else if (role.equals("Student") || role.equals("Staff")) {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, verticalViewFragment).commit();
+            usersRef.child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull com.google.firebase.database.DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        String role = snapshot.child("role").getValue().toString();
+                        sharedPreferences.edit().putString("role", role).apply();
+                        if (role.equals("Admin") || role.equals("Vendor")) {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, horizontalViewFragment).commit();
+                        } else if (role.equals("Student") || role.equals("Staff")) {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, verticalViewFragment).commit();
+                        }
+                    } else {
+                        mAuth.signOut();
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     }
-                } else {
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
                     mAuth.signOut();
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 }
@@ -122,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
     //override on save instance state to prevent app from crashing when screen is rotated
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
     }
 }

@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
 import com.iicportal.activity.EditFoodItemActivity;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.fragments.AddToCartDialogFragment;
 import com.iicportal.models.FoodItem;
 
@@ -39,11 +40,10 @@ public class MenuItemAdaptor extends FirebaseRecyclerAdapter<FoodItem, MenuItemA
     public MenuItemAdaptor(FirebaseRecyclerOptions<FoodItem> options, Context context, FragmentManager childFragmentManager, boolean isEdit) {
         super(options);
         this.context = context;
-        this.database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
         this.cartRef = database.getReference("carts/");
-        this.cartRef.keepSynced(true);
-        this.mAuth = FirebaseAuth.getInstance();
-        this.user = mAuth.getCurrentUser();
+        mAuth = MainActivity.mAuth;
+        user = MainActivity.user;
         this.childFragmentManager = childFragmentManager;
         this.isEdit = isEdit;
     }

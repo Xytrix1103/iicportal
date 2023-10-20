@@ -17,21 +17,25 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
 import com.iicportal.activity.AddUserActivity;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.adaptor.UserAdaptor;
 import com.iicportal.models.User;
 
 public class UserListFragment extends Fragment {
     UserAdaptor userAdaptor;
     AdminDashboardFragment.OpenDrawerInterface openDrawerInterface;
+    FirebaseDatabase database;
 
     public UserListFragment() {
         super(R.layout.user_list_fragment);
         this.openDrawerInterface = null;
+        database = MainActivity.database;
     }
 
     public UserListFragment(AdminDashboardFragment.OpenDrawerInterface openDrawerInterface) {
         super(R.layout.user_list_fragment);
         this.openDrawerInterface = openDrawerInterface;
+        database = MainActivity.database;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,7 +45,7 @@ public class UserListFragment extends Fragment {
         ImageView addUserBtn = view.findViewById(R.id.addUser);
         RecyclerView recyclerView = view.findViewById(R.id.userListRecyclerView);
         FirebaseRecyclerOptions<User> options = new FirebaseRecyclerOptions.Builder<User>()
-                .setQuery(FirebaseDatabase.getInstance().getReference().child("users"), User.class)
+                .setQuery(database.getReference().child("users"), User.class)
                 .setLifecycleOwner(this)
                 .build();
         userAdaptor = new UserAdaptor(options, requireContext());
@@ -57,9 +61,10 @@ public class UserListFragment extends Fragment {
                 userAdaptor.stopListening();
 
                 FirebaseRecyclerOptions<User> searchOptions = new FirebaseRecyclerOptions.Builder<User>()
-                        .setQuery(FirebaseDatabase.getInstance().getReference().child("users").orderByChild("fullName").startAt(query).endAt(query + "\uf8ff"), User.class)
+                        .setQuery(database.getReference().child("users").orderByChild("fullName").startAt(query).endAt(query + "\uf8ff"), User.class)
                         .setLifecycleOwner(this)
                         .build();
+
                 userAdaptor.updateOptions(searchOptions);
 
                 userAdaptor.startListening();

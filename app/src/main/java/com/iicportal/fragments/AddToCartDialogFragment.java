@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.models.CartItem;
 import com.iicportal.models.FoodItem;
 
@@ -36,10 +37,10 @@ public class AddToCartDialogFragment extends BottomSheetDialogFragment {
     
     public AddToCartDialogFragment(FoodItem foodItem, String key) {
         this.foodItem = foodItem;
-        this.database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
         this.cartRef = database.getReference("carts/");
-        this.mAuth = FirebaseAuth.getInstance();
-        this.user = mAuth.getCurrentUser();
+        mAuth = MainActivity.mAuth;
+        user = MainActivity.user;
         this.key = key;
     }
 

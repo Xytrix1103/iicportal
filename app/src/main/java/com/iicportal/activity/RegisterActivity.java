@@ -48,10 +48,9 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceBundle);
         setContentView(R.layout.activity_register);
 
-        mAuth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
+        mAuth = MainActivity.mAuth;
+        database = MainActivity.database;
         usersRef = database.getReference("users");
-        usersRef.keepSynced(true);
 
         fullNameEdit = findViewById(R.id.fullName);
         phoneNumberEdit = findViewById(R.id.phoneNumber);
