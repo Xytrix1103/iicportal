@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.models.CartItem;
 
 public class CartItemAdaptor extends FirebaseRecyclerAdapter<CartItem, CartItemAdaptor.CartItemViewHolder> {
@@ -36,11 +37,10 @@ public class CartItemAdaptor extends FirebaseRecyclerAdapter<CartItem, CartItemA
     public CartItemAdaptor(@NonNull FirebaseRecyclerOptions<CartItem> options, Context context) {
         super(options);
         this.context = context;
-        this.database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
         this.cartRef = database.getReference("carts/");
-        this.cartRef.keepSynced(true);
-        this.mAuth = FirebaseAuth.getInstance();
-        this.user = mAuth.getCurrentUser();
+        mAuth = MainActivity.mAuth;
+        user = MainActivity.user;
     }
 
     @Override

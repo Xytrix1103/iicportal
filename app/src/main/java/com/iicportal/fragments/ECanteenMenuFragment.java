@@ -29,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
 import com.iicportal.activity.CartActivity;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.activity.OrderHistoryActivity;
 import com.iicportal.adaptor.CategoryAdaptor;
 import com.iicportal.models.Category;
@@ -82,8 +83,8 @@ public class ECanteenMenuFragment extends Fragment implements CategoryAdaptor.On
         cartBtn = view.findViewById(R.id.cartBtn);
         cartIcon = view.findViewById(R.id.cartBtnIcon);
         menuFragmentContainer = view.findViewById(R.id.menu_fragment_container);
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
+        mAuth = MainActivity.mAuth;
+        user = MainActivity.user;
         menuBtn = view.findViewById(R.id.menuIcon);
         editBtn = view.findViewById(R.id.editBtn);
 
@@ -112,9 +113,8 @@ public class ECanteenMenuFragment extends Fragment implements CategoryAdaptor.On
             menuBtn.setVisibility(View.GONE);
         }
 
-        database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
         categoriesRef = database.getReference("ecanteen/categories");
-        categoriesRef.keepSynced(true);
         cartRef = database.getReference("carts/" + user.getUid());
 
         FirebaseRecyclerOptions<Category> categoryOptions = new FirebaseRecyclerOptions.Builder<Category>()

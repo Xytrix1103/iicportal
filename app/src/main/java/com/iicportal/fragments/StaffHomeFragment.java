@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.iicportal.R;
 import com.iicportal.activity.LoginActivity;
+import com.iicportal.activity.MainActivity;
 
 public class StaffHomeFragment extends Fragment {
     private Context context;
@@ -27,7 +28,7 @@ public class StaffHomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.staff_home_fragment, container, false);
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = MainActivity.mAuth;
         logoutButton = view.findViewById(R.id.logoutBtn);
 
         logoutButton.setOnClickListener(v -> {

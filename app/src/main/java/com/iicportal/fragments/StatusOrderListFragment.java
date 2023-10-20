@@ -8,18 +8,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.adaptor.StatusOrderListAdaptor;
 import com.iicportal.models.Order;
-
-import java.util.HashMap;
 
 public class StatusOrderListFragment extends Fragment {
     FirebaseDatabase database;
@@ -29,28 +29,67 @@ public class StatusOrderListFragment extends Fragment {
     FirebaseUser user;
     StatusOrderListAdaptor statusOrderListAdaptor;
     int status;
-    HashMap<String, Order> orders;
+
+    Query query = null;
 
     public StatusOrderListFragment() {
         super(R.layout.status_order_list_fragment);
-        database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
         ordersRef = database.getReference("orders/");
-        ordersRef.keepSynced(true);
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
+        mAuth = MainActivity.mAuth;
+        user = MainActivity.user;
         status = 0;
-        orders = new HashMap<>();
+        query = ordersRef.orderByChild("uid").equalTo(user.getUid()).getRef().orderByChild("completedTimestamp").equalTo(null).getRef().orderByChild("readyTimestamp").equalTo(null);
     }
 
-    public StatusOrderListFragment(int status) {
-        super(R.layout.status_order_list_fragment);
-        database = FirebaseDatabase.getInstance();
-        ordersRef = database.getReference("orders/");
-        ordersRef.keepSynced(true);
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
+    public void setStatus(int status) {
         this.status = status;
-        orders = new HashMap<>();
+        Log.d("Status", "Status: " + status);
+
+        switch(status) {
+            case 0:
+                Log.d("Query", "query = ordersRef.orderByChild(\"uid\").equalTo(user.getUid()).getRef().orderByChild(\"completedTimestamp\").equalTo(null).getRef().orderByChild(\"readyTimestamp\").equalTo(null).getRef();");
+                query = ordersRef.orderByChild("uid").equalTo(user.getUid()).getRef().orderByChild("completed").equalTo(false).getRef().orderByChild("ready").equalTo(false);
+                break;
+            case 1:
+                Log.d("Query", "query = ordersRef.orderByChild(\"uid\").equalTo(user.getUid()).getRef().orderByChild(\"completedTimestamp\").equalTo(null).getRef().orderByChild(\"readyTimestamp\").startAt(0.0);");
+                query = ordersRef.orderByChild("uid").equalTo(user.getUid()).getRef().orderByChild("ready").equalTo(true).getRef().orderByChild("completed").equalTo(false);
+                break;
+            case 2:
+                Log.d("Query", "query = ordersRef.orderByChild(\"uid\").equalTo(user.getUid()).getRef().orderByChild(\"completedTimestamp\").startAt(0.0);");
+                query = ordersRef.orderByChild("uid").equalTo(user.getUid()).getRef().orderByChild("completed").equalTo(true);
+                break;
+            default:
+                Log.d("Status", "Default");
+                break;
+        }
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Log.d("Status", "timestamps: " + dataSnapshot.getValue(Order.class).getReadyTimestamp() + " completed: " + dataSnapshot.getValue(Order.class).getCompletedTimestamp());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull com.google.firebase.database.DatabaseError error) {
+
+            }
+        });
+
+        statusOrderListAdaptor.stopListening();
+
+        FirebaseRecyclerOptions<Order> options = new FirebaseRecyclerOptions.Builder<Order>()
+                .setQuery(query, Order.class)
+                .setLifecycleOwner(this)
+                .build();
+
+        statusOrderListAdaptor.updateOptions(options);
+
+        statusOrderListAdaptor.startListening();
     }
 
     @Override
@@ -64,46 +103,35 @@ public class StatusOrderListFragment extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.orderRecyclerView);
 
-        Log.d("StatusOrderListFragment", "position: " + status);
-        ordersRef.keepSynced(true);
-
-        statusOrderListAdaptor = new StatusOrderListAdaptor(orders, getContext());
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setReverseLayout(true);
         mLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(mLayoutManager);
+
+        FirebaseRecyclerOptions<Order> options = new FirebaseRecyclerOptions.Builder<Order>()
+                .setQuery(query, Order.class)
+                .setLifecycleOwner(this)
+                .build();
+
+        statusOrderListAdaptor = new StatusOrderListAdaptor(options, getContext());
         recyclerView.setAdapter(statusOrderListAdaptor);
+    }
 
-        ordersRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                orders.clear();
+    @Override
+    public void onStart() {
+        super.onStart();
 
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    orders.put(dataSnapshot.getKey(), dataSnapshot.getValue(Order.class));
-                }
+        if(statusOrderListAdaptor != null) {
+            statusOrderListAdaptor.startListening();
+        }
+    }
 
-                switch (status) {
-                    case 0:
-                        orders.entrySet().removeIf(entry -> entry.getValue().getReadyTimestamp() != null || entry.getValue().getCompletedTimestamp() != null);
-                        break;
-                    case 1:
-                        orders.entrySet().removeIf(entry -> entry.getValue().getReadyTimestamp() == null || entry.getValue().getCompletedTimestamp() != null);
-                        break;
-                    case 2:
-                        orders.entrySet().removeIf(entry -> entry.getValue().getCompletedTimestamp() == null);
-                        break;
-                    default:
-                        break;
-                }
+    @Override
+    public void onStop() {
+        super.onStop();
 
-                statusOrderListAdaptor.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        if(statusOrderListAdaptor != null) {
+            statusOrderListAdaptor.stopListening();
+        }
     }
 }

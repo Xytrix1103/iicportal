@@ -52,14 +52,15 @@
 			android:layout_height="wrap_content"
 			android:id="@+id/tabLayout"
 			android:background="@color/white"
+			app:tabMode="auto"
 			app:tabIndicatorColor="@color/colorPrimary"
 			app:tabSelectedTextColor="@color/colorPrimary"
 			app:tabTextColor="@color/black"/>
 
-		<androidx.viewpager2.widget.ViewPager2
+		<FrameLayout
 			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:id="@+id/viewPager2"
+			android:layout_height="wrap_content"
+			android:id="@+id/orderListFragmentContainer"
 			android:layout_below="@id/tabLayout"/>
 
 	</RelativeLayout>

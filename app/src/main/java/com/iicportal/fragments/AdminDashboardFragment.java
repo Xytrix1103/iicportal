@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.iicportal.R;
 import com.iicportal.activity.LoginActivity;
+import com.iicportal.activity.MainActivity;
 
 public class AdminDashboardFragment extends Fragment {
     OpenDrawerInterface openDrawerInterface;
@@ -24,15 +25,15 @@ public class AdminDashboardFragment extends Fragment {
     public AdminDashboardFragment() {
         super(R.layout.admin_dashboard_fragment);
         this.openDrawerInterface = null;
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
+        mAuth = MainActivity.mAuth;
+        user = MainActivity.user;
     }
 
     public AdminDashboardFragment(OpenDrawerInterface openDrawerInterface) {
         super(R.layout.admin_dashboard_fragment);
         this.openDrawerInterface = openDrawerInterface;
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
+        mAuth = MainActivity.mAuth;
+        user = MainActivity.user;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

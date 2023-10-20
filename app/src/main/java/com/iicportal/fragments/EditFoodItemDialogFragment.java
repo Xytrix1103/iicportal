@@ -12,6 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.models.FoodItem;
 
 public class EditFoodItemDialogFragment extends BottomSheetDialogFragment {
@@ -26,7 +27,7 @@ public class EditFoodItemDialogFragment extends BottomSheetDialogFragment {
 
     public EditFoodItemDialogFragment(String key) {
         this.key = key;
-        this.database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
         this.menuRef = database.getReference("ecanteen/fooditems/");
     }
 

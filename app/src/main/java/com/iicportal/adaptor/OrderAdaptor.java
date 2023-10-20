@@ -18,6 +18,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.activity.OrderDetailsActivity;
 import com.iicportal.models.Order;
 
@@ -34,7 +35,7 @@ public class OrderAdaptor extends FirebaseRecyclerAdapter<Order, OrderAdaptor.Or
     public OrderAdaptor(FirebaseRecyclerOptions<Order> options, Context context) {
         super(options);
         this.context = context;
-        database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
         paymentMethodsRef = database.getReference("ecanteen/paymentmethods/");
         orderOptionsRef = database.getReference("ecanteen/orderoptions/");
     }
@@ -45,18 +46,9 @@ public class OrderAdaptor extends FirebaseRecyclerAdapter<Order, OrderAdaptor.Or
         holder.orderItems.setLayoutManager(new LinearLayoutManager(context));
         orderItemAdaptor = new OrderItemAdaptor(context, model.getItems());
         holder.orderItems.setAdapter(orderItemAdaptor);
-        paymentMethodsRef.child(model.getPaymentMethod()).get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                Glide.with(context).load(task.getResult().child("icon").getValue()).into(holder.paymentMethodIcon);
-            }
-        });
-
-        orderOptionsRef.child(model.getOrderOption()).get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                holder.orderOption.setText(task.getResult().child("option").getValue().toString());
-                Glide.with(context).load(task.getResult().child("icon").getValue()).into(holder.orderOptionIcon);
-            }
-        });
+        Glide.with(context).load(model.getPaymentMethod().getIcon()).into(holder.paymentMethodIcon);
+        holder.orderOption.setText(model.getOrderOption().getOption());
+        Glide.with(context).load(model.getOrderOption().getIcon()).into(holder.orderOptionIcon);
 
         int totalQuantity = 0;
         for (int i = 0; i < model.getItems().size(); i++) {
@@ -67,6 +59,10 @@ public class OrderAdaptor extends FirebaseRecyclerAdapter<Order, OrderAdaptor.Or
         Date date = new Date(model.getTimestamp());
         holder.date.setText(datetimeFormat.format(date));
 
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
+        holder.time.setText(timeFormat.format(date));
+
+        holder.orderID.setText(model.getOrderID());
         holder.status.setText(model.getStatus());
 
         Log.d("OrderAdaptor", "onBindViewHolder: " + model.getTimestamp() + " " + model.getReadyTimestamp() + " " + model.getCompletedTimestamp());
@@ -104,8 +100,9 @@ public class OrderAdaptor extends FirebaseRecyclerAdapter<Order, OrderAdaptor.Or
     }
 
     public static class OrderViewHolder extends RecyclerView.ViewHolder {
+        TextView orderID;
         TextView status;
-        TextView date;
+        TextView date, time;
         TextView total;
         ImageView paymentMethodIcon;
         TextView orderOption;
@@ -114,8 +111,10 @@ public class OrderAdaptor extends FirebaseRecyclerAdapter<Order, OrderAdaptor.Or
 
         public OrderViewHolder(View itemView) {
             super(itemView);
+            orderID = itemView.findViewById(R.id.orderID);
             status = itemView.findViewById(R.id.status);
             date = itemView.findViewById(R.id.date);
+            time = itemView.findViewById(R.id.time);
             total = itemView.findViewById(R.id.total);
             paymentMethodIcon = itemView.findViewById(R.id.payment_method_icon);
             orderOption = itemView.findViewById(R.id.order_option);

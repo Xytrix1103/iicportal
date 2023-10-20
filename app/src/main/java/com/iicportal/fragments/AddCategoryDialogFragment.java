@@ -13,11 +13,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
+import com.iicportal.activity.MainActivity;
 
 public class AddCategoryDialogFragment extends BottomSheetDialogFragment {
     String category;
+    FirebaseDatabase database;
 
     public AddCategoryDialogFragment() {
+        database = MainActivity.database;
     }
 
     @Override
@@ -48,7 +51,7 @@ public class AddCategoryDialogFragment extends BottomSheetDialogFragment {
                 categoryEditText.setError("Category cannot be empty");
                 categoryEditText.requestFocus();
             } else {
-                FirebaseDatabase.getInstance().getReference("ecanteen/categories/" + category).child("category").setValue(category);
+                database.getReference("ecanteen/categories/" + category).child("category").setValue(category);
             }
             dismiss();
         });

@@ -4,20 +4,23 @@ import java.util.List;
 
 public class Order {
     String uid;
+    String orderID;
     Long timestamp, readyTimestamp, completedTimestamp;
-    String paymentMethod;
-    String orderOption;
+    PaymentMethod paymentMethod;
+    OrderOption orderOption;
     double orderTotal;
     double takeawayFee;
     double total;
     String status;
+    boolean ready, completed;
 
     List<CartItem> items;
 
     public Order() {
     }
 
-    public Order(String uid, Long timestamp, Long readyTimestamp, Long completedTimestamp, String paymentMethod, String orderOption, double orderTotal, double takeawayFee, double total, String status, List<CartItem> items) {
+    public Order(String orderID, String uid, Long timestamp, Long readyTimestamp, Long completedTimestamp, PaymentMethod paymentMethod, OrderOption orderOption, double orderTotal, double takeawayFee, double total, String status, List<CartItem> items) {
+        this.orderID = orderID;
         this.uid = uid;
         this.timestamp = timestamp;
         this.readyTimestamp = readyTimestamp;
@@ -29,6 +32,12 @@ public class Order {
         this.total = total;
         this.items = items;
         this.status = status;
+        this.ready = readyTimestamp != null;
+        this.completed = completedTimestamp != null;
+    }
+
+    public String getOrderID() {
+        return orderID;
     }
 
     public String getUid() {
@@ -39,11 +48,11 @@ public class Order {
         return timestamp;
     }
 
-    public String getPaymentMethod() {
+    public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
 
-    public String getOrderOption() {
+    public OrderOption getOrderOption() {
         return orderOption;
     }
 
@@ -63,6 +72,18 @@ public class Order {
         return items;
     }
 
+    public boolean isReady() {
+        return ready;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setOrderID(String orderID) {
+        this.orderID = orderID;
+    }
+
     public void setUid(String uid) {
         this.uid = uid;
     }
@@ -71,11 +92,11 @@ public class Order {
         this.timestamp = timestamp;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
-    public void setOrderOption(String orderOption) {
+    public void setOrderOption(OrderOption orderOption) {
         this.orderOption = orderOption;
     }
 
@@ -117,5 +138,13 @@ public class Order {
 
     public void setCompletedTimestamp(Long completedTimestamp) {
         this.completedTimestamp = completedTimestamp;
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }

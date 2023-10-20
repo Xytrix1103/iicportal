@@ -19,6 +19,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.adaptor.CategoryAdaptor;
 import com.iicportal.models.Category;
 
@@ -62,7 +63,7 @@ public class EditECanteenMenuFragment extends Fragment implements CategoryAdapto
         ImageView addBtn = view.findViewById(R.id.addCategoryBtn);
         menuFragmentContainer = view.findViewById(R.id.menu_fragment_container);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseDatabase database = MainActivity.database;
         DatabaseReference categoriesRef = database.getReference("ecanteen/categories");
 
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(context));

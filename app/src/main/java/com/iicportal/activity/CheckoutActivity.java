@@ -45,7 +45,8 @@ public class CheckoutActivity extends AppCompatActivity {
     PaymentMethodAdaptor paymentMethodAdapter;
     OrderOptionAdaptor orderOptionAdaptor;
 
-    String paymentMethod, orderOption;
+    PaymentMethod paymentMethod;
+    OrderOption orderOption;
 
     double orderTotal, takeawayFee, total;
 
@@ -62,10 +63,10 @@ public class CheckoutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
 
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
+        mAuth = MainActivity.mAuth;
+        user = MainActivity.user;
 
-        database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
         cartRef = database.getReference("carts/");
         paymentRef = database.getReference("ecanteen/paymentmethods/");
         orderOptionsRef = database.getReference("ecanteen/orderoptions/");
@@ -125,24 +126,43 @@ public class CheckoutActivity extends AppCompatActivity {
         checkoutBtn = findViewById(R.id.checkoutBtn);
 
         checkoutBtn.setOnClickListener(v -> {
-            Order order = new Order(user.getUid(), System.currentTimeMillis(), null, null, paymentMethod, orderOption, orderTotal, takeawayFee, total, "PREPARING", checkoutItemAdaptor.getItems());
+            Order order = new Order("", user.getUid(), System.currentTimeMillis(), null, null, paymentMethod, orderOption, orderTotal, takeawayFee, total, "PREPARING", checkoutItemAdaptor.getItems());
 
-            database.getReference("orders/").push().setValue(order).addOnCompleteListener(task -> {
+            database.getReference("orders/").limitToLast(1).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    for (int i = 0; i < checkoutItemAdaptor.getItemCount(); i++) {
-                        if (checkoutItemAdaptor.getItem(i).getSelected()) {
-                            cartRef.child(user.getUid()).child(checkoutItemAdaptor.getKey(i)).removeValue();
-                        }
+                    String lastOrderID;
+                    if (task.getResult() != null && task.getResult().getChildren().iterator().hasNext()) {
+                        lastOrderID = task.getResult().getChildren().iterator().next().getValue(Order.class).getOrderID();
+                        lastOrderID = lastOrderID.replaceAll("[^\\d.]", "");
+                    } else {
+                        lastOrderID = "0";
                     }
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle("Order Successful");
-                    builder.setMessage("Your order has been placed successfully. Please wait for your order to be prepared.");
-                    builder.setPositiveButton("OK", (dialog, which) -> {
-                        finish();
+                    int orderID = Integer.parseInt(lastOrderID) + 1;
+                    String orderIDString = String.valueOf(orderID);
+                    while (orderIDString.length() < 5) {
+                        orderIDString = "0" + orderIDString;
+                    }
+                    order.setOrderID("ORDER" + orderIDString);
+                    
+                    database.getReference("orders/").push().setValue(order).addOnCompleteListener(task2 -> {
+                        if (task2.isSuccessful()) {
+                            for (int i = 0; i < checkoutItemAdaptor.getItemCount(); i++) {
+                                if (checkoutItemAdaptor.getItem(i).getSelected()) {
+                                    cartRef.child(user.getUid()).child(checkoutItemAdaptor.getKey(i)).removeValue();
+                                }
+                            }
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            builder.setTitle("Order Successful");
+                            builder.setMessage("Your order has been placed successfully. Please wait for your order to be prepared.");
+                            builder.setPositiveButton("OK", (dialog, which) -> {
+                                finish();
+                            });
+                            AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
+                        }
                     });
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
                 }
             });
         });
@@ -182,7 +202,7 @@ public class CheckoutActivity extends AppCompatActivity {
         if(orderOption == null) {
             takeawayFee = 0;
         } else {
-            takeawayFee = orderOption.equals("takeaway") ? quantity * 0.5 : 0;
+            takeawayFee = orderOption.getOption().equals("Takeaway") ? quantity * 0.5 : 0;
         }
 
         total = orderTotal + takeawayFee;
@@ -192,19 +212,11 @@ public class CheckoutActivity extends AppCompatActivity {
         totalTextView.setText(String.format("RM %.2f", total));
     }
 
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public String getOrderOption() {
-        return orderOption;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
-    public void setOrderOption(String orderOption) {
+    public void setOrderOption(OrderOption orderOption) {
         this.orderOption = orderOption;
     }
 

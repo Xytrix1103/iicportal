@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
 import com.iicportal.activity.CheckoutActivity;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.models.PaymentMethod;
 
 public class PaymentMethodAdaptor extends FirebaseRecyclerAdapter<PaymentMethod, PaymentMethodAdaptor.PaymentMethodViewHolder> {
@@ -38,13 +39,11 @@ public class PaymentMethodAdaptor extends FirebaseRecyclerAdapter<PaymentMethod,
     public PaymentMethodAdaptor(@NonNull FirebaseRecyclerOptions<PaymentMethod> options, Context context) {
         super(options);
         this.context = context;
-        this.database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
         this.paymentRef = database.getReference("ecanteen/paymentmethods/");
         this.cartRef = database.getReference("carts/");
-        this.paymentRef.keepSynced(true);
-        this.cartRef.keepSynced(true);
-        this.mAuth = FirebaseAuth.getInstance();
-        this.user = mAuth.getCurrentUser();
+        mAuth = MainActivity.mAuth;
+        user = MainActivity.user;
     }
 
     @Override
@@ -57,7 +56,7 @@ public class PaymentMethodAdaptor extends FirebaseRecyclerAdapter<PaymentMethod,
         holder.radioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 selectedPosition = pos;
-                ((CheckoutActivity) context).setPaymentMethod(getRef(pos).getKey());
+                ((CheckoutActivity) context).setPaymentMethod(getItem(pos));
                 ((CheckoutActivity) context).updatePrices();
                 notifyDataSetChanged();
             }
@@ -69,7 +68,7 @@ public class PaymentMethodAdaptor extends FirebaseRecyclerAdapter<PaymentMethod,
         Log.d("PaymentMethodAdaptor", "Payment methods count: " + super.getItemCount());
 
         if (super.getItemCount() > 0) {
-            ((CheckoutActivity) context).setPaymentMethod(getRef(0).getKey());
+            ((CheckoutActivity) context).setPaymentMethod(getItem(0));
         }
 
         notifyDataSetChanged();

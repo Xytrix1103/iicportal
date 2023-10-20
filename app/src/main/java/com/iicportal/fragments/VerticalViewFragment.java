@@ -15,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.iicportal.R;
 import com.iicportal.activity.LoginActivity;
+import com.iicportal.activity.MainActivity;
 
 public class VerticalViewFragment extends Fragment {
     private FirebaseAuth mAuth;
@@ -33,7 +34,7 @@ public class VerticalViewFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.vertical_view_fragment, container, false);
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = MainActivity.mAuth;
         sharedPreferences = requireActivity().getSharedPreferences("com.iicportal", 0);
         bottomNavigationView = view.findViewById(R.id.bottom_navigation);
         container = view.findViewById(R.id.vertical_fragment_container);

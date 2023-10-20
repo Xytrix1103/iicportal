@@ -4,18 +4,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 import com.iicportal.R;
-import com.iicportal.adaptor.OrderListStateAdapter;
 
 public class OrderListFragment extends Fragment {
+    StatusOrderListFragment fragment = new StatusOrderListFragment();
+
     AdminDashboardFragment.OpenDrawerInterface openDrawerInterface;
     public OrderListFragment() {
         super(R.layout.order_list_fragment);
@@ -35,27 +35,29 @@ public class OrderListFragment extends Fragment {
     public void onViewCreated(android.view.View view, android.os.Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ViewPager2 viewPager = view.findViewById(R.id.viewPager2);
+        FrameLayout frameLayout = view.findViewById(R.id.orderListFragmentContainer);
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
         ImageView menuBtn = view.findViewById(R.id.menuIcon);
-        OrderListStateAdapter orderListStateAdapter = new OrderListStateAdapter(this, 3);
-        viewPager.setAdapter(orderListStateAdapter);
 
-        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            switch (position) {
-                case 0:
-                    tab.setText("Preparing");
-                    break;
-                case 1:
-                    tab.setText("Ready");
-                    break;
-                case 2:
-                    tab.setText("Completed");
-                    break;
-                default:
-                    break;
+        getChildFragmentManager().beginTransaction().replace(frameLayout.getId(), fragment).commit();
+
+        tabLayout.addTab(tabLayout.newTab().setText("Preparing"));
+        tabLayout.addTab(tabLayout.newTab().setText("Ready"));
+        tabLayout.addTab(tabLayout.newTab().setText("Completed"));
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            public void onTabSelected(TabLayout.Tab tab) {
+                fragment.setStatus(tab.getPosition());
             }
-        }).attach();
+
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+
+        tabLayout.getTabAt(0).select();
 
         menuBtn.setOnClickListener(v -> {
             if (openDrawerInterface != null) {
