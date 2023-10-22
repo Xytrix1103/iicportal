@@ -246,7 +246,7 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    card:contentPadding="10dp"
+                    card:contentPadding="20dp"
                     card:cardCornerRadius="10dp"
                     card:cardElevation="5dp">
 
@@ -258,7 +258,7 @@
                             android:id="@+id/status"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginVertical="5dp"
+                            android:layout_marginBottom="10dp"
                             android:text="@string/status"
                             android:textAllCaps="true"
                             android:layout_centerHorizontal="true"
@@ -401,6 +401,18 @@
                             </RelativeLayout>
 
                         </RelativeLayout>
+
+                        <Button
+                            android:id="@+id/button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:layout_below="@id/completedBody"
+                            android:layout_centerHorizontal="true"
+                            android:theme="@style/Button.Primary"
+                            android:text="READY"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"/>
 
                     </RelativeLayout>
 
