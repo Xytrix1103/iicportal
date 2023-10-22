@@ -129,6 +129,10 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activity.AdminOrderDetailsActivity"
+            android:exported="true">
+        </activity>
+
     </application>
 
 </manifest>
