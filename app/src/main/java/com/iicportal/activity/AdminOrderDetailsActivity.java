@@ -30,7 +30,7 @@ import com.iicportal.models.PaymentMethod;
 
 import java.text.SimpleDateFormat;
 
-public class OrderDetailsActivity extends AppCompatActivity {
+public class AdminOrderDetailsActivity extends AppCompatActivity {
     Context context = this;
 
     FirebaseDatabase database;
@@ -103,7 +103,6 @@ public class OrderDetailsActivity extends AppCompatActivity {
         orderedAtDate = findViewById(R.id.orderedAtDate);
         orderedAtTime = findViewById(R.id.orderedAtTime);
         button = findViewById(R.id.button);
-        button.setVisibility(Button.GONE);
 
         progressBar.setIndicatorColor(context.getResources().getColor(R.color.light_green_800));
         progressBar.setTrackColor(context.getResources().getColor(R.color.light_green_200));
@@ -157,6 +156,27 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
                 paymentMethod.setText(snapshot.child("paymentMethod").getValue(PaymentMethod.class).getMethod());
                 orderOption.setText(snapshot.child("orderOption").getValue(OrderOption.class).getOption());
+
+                if (snapshot.child("completed").exists() && Boolean.TRUE.equals(snapshot.child("completed").getValue(Boolean.class))) {
+                    button.setVisibility(Button.GONE);
+                } else {
+                    button.setVisibility(Button.VISIBLE);
+                    if (snapshot.child("ready").exists() && Boolean.TRUE.equals(snapshot.child("ready").getValue(Boolean.class))) {
+                        button.setText("Completed");
+                        button.setOnClickListener(v -> {
+                            orderRef.child("completedTimestamp").setValue(System.currentTimeMillis());
+                            orderRef.child("completed").setValue(true);
+                            orderRef.child("status").setValue("COMPLETED");
+                        });
+                    } else {
+                        button.setText("Ready");
+                        button.setOnClickListener(v -> {
+                            orderRef.child("readyTimestamp").setValue(System.currentTimeMillis());
+                            orderRef.child("ready").setValue(true);
+                            orderRef.child("status").setValue("READY");
+                        });
+                    }
+                }
             }
 
             @Override
