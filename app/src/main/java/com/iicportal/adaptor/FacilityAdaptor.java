@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.fragments.BookingDialogFragment;
 import com.iicportal.models.BookingItem;
 
@@ -46,13 +47,11 @@ public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, Facili
     public FacilityAdaptor(@NonNull FirebaseRecyclerOptions<BookingItem> options, Context context, FragmentManager childFragmentManager) {
         super(options);
         this.context = context;
-        this.database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
         this.bookingRef = database.getReference("bookings");
-        this.bookingRef.keepSynced(true);
         this.facilitiesRef = database.getReference("facilities/facility/");
-        this.facilitiesRef.keepSynced(true);
-        this.mAuth = FirebaseAuth.getInstance();
-        this.user = mAuth.getCurrentUser();
+        mAuth = MainActivity.mAuth;
+        user = MainActivity.user;
         this.sharedPreferences = context.getSharedPreferences("com.iicportal", Context.MODE_PRIVATE);
         this.childFragmentManager = childFragmentManager;
     }

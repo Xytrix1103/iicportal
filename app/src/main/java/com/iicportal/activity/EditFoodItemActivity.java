@@ -45,9 +45,8 @@ public class EditFoodItemActivity extends AppCompatActivity {
         key = getIntent().getStringExtra("key");
         foodItem = new FoodItem();
 
-        database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
         DatabaseReference itemRef = database.getReference("ecanteen/fooditems/").child(key);
-        itemRef.keepSynced(true);
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
 

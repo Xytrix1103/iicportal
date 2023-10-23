@@ -47,13 +47,11 @@ public class CartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cart);
 
         context = this;
+        mAuth = MainActivity.mAuth;
+        user = MainActivity.user;
 
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
-
-        database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
         cartRef = database.getReference("carts/");
-        cartRef.keepSynced(true);
         cartEmptyText = findViewById(R.id.cartEmptyText);
         cartTotalPrice = findViewById(R.id.cartTotalPrice);
 

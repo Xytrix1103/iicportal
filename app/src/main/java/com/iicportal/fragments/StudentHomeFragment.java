@@ -41,6 +41,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
+import com.iicportal.activity.LoginActivity;
+import com.iicportal.activity.MainActivity;
 
 public class StudentHomeFragment extends Fragment {
 
@@ -78,6 +80,7 @@ public class StudentHomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.student_home_fragment, container, false);
 
+        mAuth = MainActivity.mAuth;
         facilityNameList = new ArrayList<String>();
         statusList = new ArrayList<Status>();
 

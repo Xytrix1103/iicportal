@@ -46,6 +46,8 @@ public class ECanteenFragment extends Fragment {
 
             if (!role.equals("Admin") && !role.equals("Vendor")) {
                 isEdit = false;
+            } else if (role.equals("Vendor")) {
+                isEdit = true;
             }
         }
 

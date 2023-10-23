@@ -4,13 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.iicportal.R;
 import com.iicportal.models.CartItem;
 
@@ -34,14 +32,8 @@ public class OrderItemAdaptor extends RecyclerView.Adapter<OrderItemAdaptor.Orde
 
     @Override
     public void onBindViewHolder(@NonNull OrderItemViewHolder holder, int position) {
-        holder.name.setText(cartItems.get(position).getName());
-        holder.price.setText(String.format("RM %.2f", cartItems.get(position).getPrice() * cartItems.get(position).getQuantity()));
-        holder.quantity.setText("x" + cartItems.get(position).getQuantity());
-        Glide.with(context).load(cartItems.get(position).getImage()).into(holder.image);
-    }
-
-    public void onDataChanged() {
-        notifyDataSetChanged();
+        CartItem item = cartItems.get(position);
+        holder.item.setText(item.getQuantity() + "x " + item.getName());
     }
 
     @Override
@@ -50,15 +42,13 @@ public class OrderItemAdaptor extends RecyclerView.Adapter<OrderItemAdaptor.Orde
     }
 
     public class OrderItemViewHolder extends RecyclerView.ViewHolder {
-        TextView name, price, quantity;
-        ImageView image;
+//        TextView name, price, quantity;
+//        ImageView image;
+        TextView item;
 
         public OrderItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.name);
-            price = itemView.findViewById(R.id.price);
-            quantity = itemView.findViewById(R.id.quantity);
-            image = itemView.findViewById(R.id.image);
+            item = itemView.findViewById(R.id.item);
         }
     }
 }

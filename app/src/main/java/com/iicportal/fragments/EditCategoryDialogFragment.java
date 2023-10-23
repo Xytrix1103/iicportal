@@ -14,15 +14,21 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
+import com.iicportal.activity.MainActivity;
 
 public class EditCategoryDialogFragment extends BottomSheetDialogFragment {
     //can be used to edit the Category text, delete category (and all its items)
     String category, newCategory;
+    FirebaseDatabase database;
+
     public EditCategoryDialogFragment() {
+        this.category = "";
+        database = MainActivity.database;
     }
 
     public EditCategoryDialogFragment(String category) {
         this.category = category;
+        database = MainActivity.database;
     }
 
     @Override
@@ -56,9 +62,9 @@ public class EditCategoryDialogFragment extends BottomSheetDialogFragment {
                 categoryEditText.requestFocus();
             } else {
                 //remove old category and add new category
-                FirebaseDatabase.getInstance().getReference("ecanteen/categories/" + category).removeValue();
-                FirebaseDatabase.getInstance().getReference("ecanteen/categories/" + newCategory).child("category").setValue(newCategory);
-                FirebaseDatabase.getInstance().getReference("ecanteen/fooditems").orderByChild("category").equalTo(category).get().addOnSuccessListener(dataSnapshot -> {
+                database.getReference("ecanteen/categories/" + category).removeValue();
+                database.getReference("ecanteen/categories/" + newCategory).child("category").setValue(newCategory);
+                database.getReference("ecanteen/fooditems").orderByChild("category").equalTo(category).get().addOnSuccessListener(dataSnapshot -> {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         ds.child("category").getRef().setValue(newCategory);
                     }
@@ -72,8 +78,8 @@ public class EditCategoryDialogFragment extends BottomSheetDialogFragment {
             builder.setTitle("Delete");
             builder.setMessage("Are you sure you want to delete this category?");
             builder.setPositiveButton("Yes", (dialog, which) -> {
-                FirebaseDatabase.getInstance().getReference("ecanteen/categories/" + category).removeValue();
-                FirebaseDatabase.getInstance().getReference("ecanteen/fooditems").orderByChild("category").equalTo(category).getRef().removeValue();
+                database.getReference("ecanteen/categories/" + category).removeValue();
+                database.getReference("ecanteen/fooditems").orderByChild("category").equalTo(category).getRef().removeValue();
                 dialog.dismiss();
                 dismiss();
             });
