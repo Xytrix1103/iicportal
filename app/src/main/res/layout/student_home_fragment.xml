@@ -220,8 +220,7 @@
 					android:layout_below="@id/statusText"
 					android:layout_marginVertical="10dp"
 					android:text="@string/status_empty"
-					android:textSize="15sp"
-					android:visibility="gone" />
+					android:textSize="15sp" />
 
 				<androidx.recyclerview.widget.RecyclerView
 					android:id="@+id/statusRecyclerView"

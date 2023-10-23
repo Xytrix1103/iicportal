@@ -295,7 +295,7 @@ public class StudentHomeFragment extends Fragment {
                         // Update description if current time is within booking time range
                         if ((currentTimestamp >= bookingStatus.getStartTimestamp() && currentTimestamp < bookingStatus.getEndTimestamp()) && bookingStatus.getState().equals("before")) {
                             bookingStatus.setDescription(String.format("Hey there, your %s booking for today at %s has started. Just reminding you in case you forgot!",
-                                    bookingStatus.getFacilityName(), new SimpleDateFormat("h:mma").format(bookingStatus.getStartTimestamp()) + "-" + new SimpleDateFormat("h:mma").format(bookingStatus.getEndTimestamp())));
+                                    bookingStatus.getFacilityName(), new SimpleDateFormat("h:mma").format(bookingStatus.getStartTimestamp()) + " - " + new SimpleDateFormat("h:mma").format(bookingStatus.getEndTimestamp())));
                             bookingStatus.setTimestamp(System.currentTimeMillis());
                             bookingStatus.setState("ongoing");
 
