@@ -61,7 +61,7 @@ public class ContactActivity extends AppCompatActivity {
                     validateField(isValidEmail(email), emailEdit, "Invalid email format") &&
                     validateField(isValidPhoneNumber(phone), phoneEdit, "Invalid phone number format")) {
                 // Push new contact message
-                Message newMessage = new Message(mAuth.getCurrentUser().getUid(), firstName, lastName, email, phone, message, System.currentTimeMillis());
+                Message newMessage = new Message(mAuth.getCurrentUser().getUid(), firstName, lastName, firstName + " " + lastName, email, phone, message, System.currentTimeMillis());
 
                 database.getReference("messages/").push().setValue(newMessage).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

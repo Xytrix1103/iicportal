@@ -39,18 +39,40 @@
 
 	</androidx.cardview.widget.CardView>
 
-	<Button
-		android:id="@+id/logoutBtn"
-		android:theme="@style/Button.Primary"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@+id/loginCard"
-		android:padding="10dp"
-		android:text="Logout"
-		android:layout_centerHorizontal="true"
-		android:layout_marginBottom="20dp"
-		android:layout_marginTop="20dp"
-		app:cornerRadius="40dp"
-		app:elevation="20dp" />
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@id/loginCard">
+
+		<Button
+			android:id="@+id/contactBtn"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginVertical="10dp"
+			android:layout_centerHorizontal="true"
+			android:text="Contact Us" />
+
+		<Button
+			android:id="@+id/livechatBtn"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginVertical="10dp"
+			android:layout_below="@id/contactBtn"
+			android:layout_centerHorizontal="true"
+			android:text="Live Chat" />
+
+		<Button
+			android:id="@+id/logoutBtn"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/livechatBtn"
+			android:layout_centerHorizontal="true"
+			android:layout_marginVertical="10dp"
+			android:padding="10dp"
+			android:text="Logout"
+			android:theme="@style/Button.Primary"
+			app:cornerRadius="40dp"
+			app:elevation="20dp" />
+	</RelativeLayout>
 
 </RelativeLayout>

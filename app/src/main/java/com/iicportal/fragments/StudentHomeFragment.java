@@ -11,15 +11,20 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.iicportal.R;
+import com.iicportal.activity.ContactActivity;
+import com.iicportal.activity.LiveChatActivity;
 import com.iicportal.activity.LoginActivity;
 import com.iicportal.activity.MainActivity;
 
 public class StudentHomeFragment extends Fragment {
     private Context context;
     private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
     Button logoutButton;
-    Button menuButton;
+    Button livechatButton;
+    Button contactButton;
 
     public StudentHomeFragment() {
         super(R.layout.student_home_fragment);
@@ -36,7 +41,21 @@ public class StudentHomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.student_home_fragment, container, false);
 
         mAuth = MainActivity.mAuth;
+        currentUser = mAuth.getCurrentUser();
+
+        contactButton = view.findViewById(R.id.contactBtn);
+        livechatButton = view.findViewById(R.id.livechatBtn);
         logoutButton = view.findViewById(R.id.logoutBtn);
+
+        contactButton.setOnClickListener(v -> {
+            startActivity(new Intent(context, ContactActivity.class));
+        });
+
+        livechatButton.setOnClickListener(v -> {
+            Intent intent = new Intent(context, LiveChatActivity.class);
+            intent.putExtra("INITIATOR_UID", currentUser.getUid());
+            startActivity(intent);
+        });
 
         logoutButton.setOnClickListener(v -> {
             mAuth.signOut();

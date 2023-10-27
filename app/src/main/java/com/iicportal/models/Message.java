@@ -4,6 +4,7 @@ public class Message {
     private String uid;
     private String firstName;
     private String lastName;
+    private String fullName;
     private String email;
     private String phone;
     private String message;
@@ -12,10 +13,11 @@ public class Message {
     public Message() {
     }
 
-    public Message(String uid, String firstName, String lastName, String email, String phone, String message, Long timestamp) {
+    public Message(String uid, String firstName, String lastName, String fullName, String email, String phone, String message, Long timestamp) {
         this.uid = uid;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.fullName = fullName;
         this.email = email;
         this.phone = phone;
         this.message = message;
@@ -32,6 +34,10 @@ public class Message {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public String getFullName() {
+        return fullName;
     }
 
     public String getEmail() {
@@ -60,6 +66,10 @@ public class Message {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public void setEmail(String email) {
