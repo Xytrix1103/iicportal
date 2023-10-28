@@ -71,10 +71,14 @@ public class MessageAdaptor extends FirebaseRecyclerAdapter<Message, MessageAdap
                 holder.message.setText(model.getMessage());
 
                 // Check if message is unread
-                if (model.getStatus().equals("unread")) {
+                if (!model.isRead()) {
                     holder.username.setTypeface(null, Typeface.BOLD);
                     holder.date.setTypeface(null, Typeface.BOLD);
                     holder.message.setTypeface(null, Typeface.BOLD);
+                } else {
+                    holder.username.setTypeface(null, Typeface.NORMAL);
+                    holder.date.setTypeface(null, Typeface.NORMAL);
+                    holder.message.setTypeface(null, Typeface.NORMAL);
                 }
 
                 holder.messageBody.setOnClickListener(view -> {
@@ -82,12 +86,9 @@ public class MessageAdaptor extends FirebaseRecyclerAdapter<Message, MessageAdap
                     messageDetailsDialogFragment.show(childFragmentManager, "MessageDetailsDialogFragment");
 
                     // Change status to read
-                    if (model.getStatus().equals("unread")) {
-                        messagesRef.child(this.getRef(position).getKey()).child("status").setValue("read");
-
-                        holder.username.setTypeface(null, Typeface.NORMAL);
-                        holder.date.setTypeface(null, Typeface.NORMAL);
-                        holder.message.setTypeface(null, Typeface.NORMAL);
+                    if (!model.isRead()) {
+                        messagesRef.child(this.getRef(position).getKey()).child("read").setValue(true);
+                        this.notifyDataSetChanged();
                     }
                 });
             } else {

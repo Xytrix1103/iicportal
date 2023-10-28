@@ -61,7 +61,11 @@ public class MessageListFragment extends Fragment {
         menuButton = view.findViewById(R.id.menuIcon);
         searchEditText = view.findViewById(R.id.searchWidgetEditText);
         messageListRecyclerView = view.findViewById(R.id.messageListRecyclerView);
-        messageListRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        messageListRecyclerView.setLayoutManager(linearLayoutManager);
 
         // onClick listeners
         menuButton.setOnClickListener(v -> {

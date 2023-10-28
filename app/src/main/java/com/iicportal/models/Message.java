@@ -8,13 +8,13 @@ public class Message {
     private String email;
     private String phone;
     private String message;
-    private String status;
+    private boolean read;
     private Long timestamp;
 
     public Message() {
     }
 
-    public Message(String uid, String firstName, String lastName, String fullName, String email, String phone, String message, String status, Long timestamp) {
+    public Message(String uid, String firstName, String lastName, String fullName, String email, String phone, String message, boolean read, Long timestamp) {
         this.uid = uid;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -22,7 +22,7 @@ public class Message {
         this.email = email;
         this.phone = phone;
         this.message = message;
-        this.status = status;
+        this.read = read;
         this.timestamp = timestamp;
     }
 
@@ -54,8 +54,8 @@ public class Message {
         return message;
     }
 
-    public String getStatus() {
-        return status;
+    public boolean isRead() {
+        return read;
     }
 
     public Long getTimestamp() {
@@ -90,8 +90,8 @@ public class Message {
         this.message = message;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRead(boolean read) {
+        this.read = read;
     }
 
     public void setTimestamp(Long timestamp) {
