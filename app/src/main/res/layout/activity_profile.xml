@@ -16,18 +16,9 @@
         android:layout_marginTop="10dp">
 
         <ImageView
-            android:id="@+id/menuIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            android:src="@drawable/baseline_menu_24"/>
-
-        <ImageView
             android:id="@+id/headerIcon"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_toEndOf="@id/menuIcon"
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
             android:src="@drawable/profile"/>
@@ -78,16 +69,17 @@
             android:id="@+id/nameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name"
+            android:text="@string/fullNameLabel"
             android:textColor="@color/black"
             android:textSize="25sp"
             android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/studentIDText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Student ID: "/>
+        <ImageView
+            android:id="@+id/barcodeImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/barcode" />
 
         <Button
             android:id="@+id/profileUpdateBtn"
@@ -99,6 +91,14 @@
             app:cornerRadius="40dp"
             app:elevation="20dp" />
 
+        <Button
+            android:id="@+id/orderHistoryBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Order History"
+            android:layout_marginBottom="20dp"
+            app:cornerRadius="40dp"
+            app:elevation="20dp" />
         <Button
             android:id="@+id/bookingHistoryBtn"
             android:layout_width="wrap_content"
