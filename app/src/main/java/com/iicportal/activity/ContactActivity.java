@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
 import com.iicportal.models.Message;
@@ -25,6 +26,7 @@ public class ContactActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseDatabase database;
+    private DatabaseReference messagesRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,8 @@ public class ContactActivity extends AppCompatActivity {
         // Initialize firebase objects
         mAuth = MainActivity.mAuth;
         user = MainActivity.user;
+        database = FirebaseDatabase.getInstance();
+        messagesRef = database.getReference("messages/");
 
         // Set reference to views
         firstNameEdit = findViewById(R.id.firstName);
@@ -61,9 +65,9 @@ public class ContactActivity extends AppCompatActivity {
                     validateField(isValidEmail(email), emailEdit, "Invalid email format") &&
                     validateField(isValidPhoneNumber(phone), phoneEdit, "Invalid phone number format")) {
                 // Push new contact message
-                Message newMessage = new Message(mAuth.getCurrentUser().getUid(), firstName, lastName, firstName + " " + lastName, email, phone, message, System.currentTimeMillis());
+                Message newMessage = new Message(mAuth.getCurrentUser().getUid(), firstName, lastName, firstName + " " + lastName, email, phone, message, "unread", System.currentTimeMillis());
 
-                database.getReference("messages/").push().setValue(newMessage).addOnCompleteListener(task -> {
+                messagesRef.push().setValue(newMessage).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         firstNameEdit.getText().clear();
                         lastNameEdit.getText().clear();
