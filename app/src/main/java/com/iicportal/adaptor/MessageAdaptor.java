@@ -1,6 +1,7 @@
 package com.iicportal.adaptor;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +35,7 @@ public class MessageAdaptor extends FirebaseRecyclerAdapter<Message, MessageAdap
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private FirebaseDatabase database;
-    private DatabaseReference usersRef;
+    private DatabaseReference usersRef, messagesRef;
 
     FragmentManager childFragmentManager;
 
@@ -47,6 +48,7 @@ public class MessageAdaptor extends FirebaseRecyclerAdapter<Message, MessageAdap
         this.currentUser = mAuth.getCurrentUser();
         this.database = MainActivity.database;
         this.usersRef = database.getReference("users/");
+        this.messagesRef = database.getReference("messages/");
         this.childFragmentManager = childFragmentManager;
     }
 
@@ -68,9 +70,25 @@ public class MessageAdaptor extends FirebaseRecyclerAdapter<Message, MessageAdap
                 holder.date.setText(new SimpleDateFormat("dd MMM yyyy").format(model.getTimestamp()));
                 holder.message.setText(model.getMessage());
 
+                // Check if message is unread
+                if (model.getStatus().equals("unread")) {
+                    holder.username.setTypeface(null, Typeface.BOLD);
+                    holder.date.setTypeface(null, Typeface.BOLD);
+                    holder.message.setTypeface(null, Typeface.BOLD);
+                }
+
                 holder.messageBody.setOnClickListener(view -> {
                     MessageDetailsDialogFragment messageDetailsDialogFragment = new MessageDetailsDialogFragment(model);
                     messageDetailsDialogFragment.show(childFragmentManager, "MessageDetailsDialogFragment");
+
+                    // Change status to read
+                    if (model.getStatus().equals("unread")) {
+                        messagesRef.child(this.getRef(position).getKey()).child("status").setValue("read");
+
+                        holder.username.setTypeface(null, Typeface.NORMAL);
+                        holder.date.setTypeface(null, Typeface.NORMAL);
+                        holder.message.setTypeface(null, Typeface.NORMAL);
+                    }
                 });
             } else {
                 Log.e(MESSAGE_ADAPTOR_TAG, "Error getting user data", task.getException());

@@ -8,12 +8,13 @@ public class Message {
     private String email;
     private String phone;
     private String message;
+    private String status;
     private Long timestamp;
 
     public Message() {
     }
 
-    public Message(String uid, String firstName, String lastName, String fullName, String email, String phone, String message, Long timestamp) {
+    public Message(String uid, String firstName, String lastName, String fullName, String email, String phone, String message, String status, Long timestamp) {
         this.uid = uid;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -21,6 +22,7 @@ public class Message {
         this.email = email;
         this.phone = phone;
         this.message = message;
+        this.status = status;
         this.timestamp = timestamp;
     }
 
@@ -50,6 +52,10 @@ public class Message {
 
     public String getMessage() {
         return message;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public Long getTimestamp() {
@@ -82,6 +88,10 @@ public class Message {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public void setTimestamp(Long timestamp) {
