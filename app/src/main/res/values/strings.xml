@@ -101,6 +101,14 @@
     <string name="add_menu_item">Add Menu Item</string>
     <string name="add_image">Add Image</string>
 	<string name="orders">Orders</string>
+    <string name="add_facility">Add Facility</string>
+    <string name="edit_facility">Facility (Edit Mode)</string>
+    <string name="delete_facility">Delete Facility</string>
+    <string name="facilityHint">Please enter a new facility name</string>
+    <string name="new_facility">New Facility</string>
+    <string name="newFacilityHint">Please enter new facility name</string>
+    <string name="stop_edit_facility">Exit Facility edit mode</string>
+
 
 	<string-array name="timeslot">
         <item>9:00AM - 10:00AM</item>

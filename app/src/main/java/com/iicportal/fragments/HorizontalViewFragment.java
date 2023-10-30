@@ -30,7 +30,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
     NavigationView navigationView;
     Fragment AdminDashboardFragment;
     Fragment ECanteenFragment;
-    Fragment FacilityMenuFragment;
+    Fragment FacilityFragment;
     Fragment UserListFragment;
     Fragment OrderListFragment;
     DrawerLayout drawerLayout;
@@ -55,7 +55,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
         container = view.findViewById(R.id.horizontal_fragment_container);
         AdminDashboardFragment = new AdminDashboardFragment(this);
         ECanteenFragment = new ECanteenFragment(this);
-        FacilityMenuFragment = new FacilityMenuFragment(this);
+        FacilityFragment = new FacilityFragment(this);
         UserListFragment = new UserListFragment(this);
         OrderListFragment = new OrderListFragment(this);
         String role = sharedPreferences.getString("role", "");
@@ -104,7 +104,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, ECanteenFragment).commit();
                     break;
                 case 2:
-                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, FacilityMenuFragment).commit();
+                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, FacilityFragment).commit();
                     break;
                 case 3:
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, UserListFragment).commit();

@@ -46,9 +46,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
     String key;
     Context context;
 
-    public BookingDialogFragment() {
-    }
-
+    public BookingDialogFragment() {}
 
     public BookingDialogFragment(BookingItem bookingItem, Context context, String key) {
         this.bookingItem = bookingItem;
@@ -114,9 +112,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
             String selectedBooking = bookingSpinner.getSelectedItem().toString();
 
             // Query the database to check if the selected time slot is available for this facility
-            Query query = bookingRef.child(bookingItem.getName())
-                    .orderByChild("selectedTimeSlot")
-                    .equalTo(selectedBooking);
+            Query query = bookingRef.child(bookingItem.getName()).orderByChild("time").equalTo(selectedBooking);
 
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -124,8 +120,8 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
                     if (dataSnapshot.exists()) {
                         // The selected time slot is already taken, show an error message
                         Toast.makeText(context.getApplicationContext(), "Time slot is already booked for this facility", Toast.LENGTH_SHORT).show();
-
                     } else {
+                        // The time slot is available, and you can proceed to create a new booking
                         // Generate a unique booking ID
                         String bookingId = bookingRef.push().getKey();
 
@@ -176,4 +172,5 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
             return false; // Handle parsing error as needed
         }
     }
+
 }
