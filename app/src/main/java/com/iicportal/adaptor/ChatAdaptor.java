@@ -2,6 +2,7 @@ package com.iicportal.adaptor;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,7 +36,7 @@ public class ChatAdaptor extends FirebaseRecyclerAdapter<Chat, ChatAdaptor.ChatV
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private FirebaseDatabase database;
-    private DatabaseReference usersRef;
+    private DatabaseReference usersRef, chatsRef;
 
     private static final String CHAT_ADAPTOR_TAG = "ChatAdaptor";
 
@@ -46,6 +47,7 @@ public class ChatAdaptor extends FirebaseRecyclerAdapter<Chat, ChatAdaptor.ChatV
         this.currentUser = mAuth.getCurrentUser();
         this.database = MainActivity.database;
         this.usersRef = database.getReference("users/");
+        this.chatsRef = database.getReference("support/chats/");
     }
 
     @NonNull
@@ -74,12 +76,28 @@ public class ChatAdaptor extends FirebaseRecyclerAdapter<Chat, ChatAdaptor.ChatV
                }
 
                // TODO: Glide.with(context).load()
-               holder.title.setText(model.getTitle());
-               holder.latestMessage.setText(model.getLatestMessage());
+               holder.title.setText(model.getInitiatorName());
+               if (model.getLatestMessageSenderUid().equals(currentUser.getUid()))
+                   holder.latestMessage.setText(String.format("You: %s", model.getLatestMessage()));
+               else
+                   holder.latestMessage.setText(model.getLatestMessage());
                holder.latestMessageTime.setText(latestMessageTime);
+
+               // Check if chat is unread
+               if (!model.isReadByAdmin()) {
+                   holder.title.setTypeface(null, Typeface.BOLD);
+                   holder.latestMessage.setTypeface(null, Typeface.BOLD);
+                   holder.latestMessageTime.setTypeface(null, Typeface.BOLD);
+               } else {
+                   holder.title.setTypeface(null, Typeface.NORMAL);
+                   holder.latestMessage.setTypeface(null, Typeface.NORMAL);
+                   holder.latestMessageTime.setTypeface(null, Typeface.NORMAL);
+               }
 
                // Go to LiveChatActivity when chat item is clicked
                holder.chatBody.setOnClickListener(view -> {
+                   chatsRef.child(getRef(position).getKey()).child("readByAdmin").setValue(true);
+
                    Intent intent = new Intent(context, LiveChatActivity.class);
                    intent.putExtra("INITIATOR_UID", model.getInitiatorUid());
                    context.startActivity(intent);

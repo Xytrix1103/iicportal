@@ -3,20 +3,22 @@ package com.iicportal.models;
 public class Chat {
     private String initiatorUid;
     private String initiatorName;
-    private String title;
     private String latestMessage;
     private Long latestMessageTimestamp;
+    private String latestMessageSenderUid;
+    private boolean readByAdmin;
 
     public Chat() {
 
     }
 
-    public Chat(String initiatorUid, String initiatorName, String title, String latestMessage, Long latestMessageTimestamp) {
+    public Chat(String initiatorUid, String initiatorName, String latestMessage, Long latestMessageTimestamp, String latestMessageSenderUid, boolean readByAdmin) {
         this.initiatorUid = initiatorUid;
         this.initiatorName = initiatorName;
-        this.title = title;
         this.latestMessage = latestMessage;
         this.latestMessageTimestamp = latestMessageTimestamp;
+        this.latestMessageSenderUid = latestMessageSenderUid;
+        this.readByAdmin = readByAdmin;
     }
 
     public String getInitiatorUid() {
@@ -27,16 +29,20 @@ public class Chat {
         return initiatorName;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
     public String getLatestMessage() {
         return latestMessage;
     }
 
     public Long getLatestMessageTimestamp() {
         return latestMessageTimestamp;
+    }
+
+    public String getLatestMessageSenderUid() {
+        return latestMessageSenderUid;
+    }
+
+    public boolean isReadByAdmin() {
+        return readByAdmin;
     }
 
     public void setInitiatorUid(String initiatorUid) {
@@ -47,15 +53,19 @@ public class Chat {
         this.initiatorName = initiatorName;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public void setLatestMessage(String latestMessage) {
         this.latestMessage = latestMessage;
     }
 
     public void setLatestMessageTimestamp(Long latestMessageTimestamp) {
         this.latestMessageTimestamp = latestMessageTimestamp;
+    }
+
+    public void setLatestMessageSenderUid(String latestMessageSenderUid) {
+        this.latestMessageSenderUid = latestMessageSenderUid;
+    }
+
+    public void setReadByAdmin(boolean readByAdmin) {
+        this.readByAdmin = readByAdmin;
     }
 }
