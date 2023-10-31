@@ -1,6 +1,7 @@
 package com.iicportal.adaptor;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
+import com.iicportal.activity.EditFacilityActivity;
 import com.iicportal.activity.MainActivity;
 import com.iicportal.fragments.BookingDialogFragment;
 import com.iicportal.models.BookingItem;
@@ -33,10 +35,11 @@ public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, Facili
     FirebaseAuth mAuth;
     FirebaseUser user;
     SharedPreferences sharedPreferences;
-    FragmentManager childFragmentManager;
+    FragmentManager childfragmentManager;
+    boolean isEdit;
 
 
-    public FacilityAdaptor(@NonNull FirebaseRecyclerOptions<BookingItem> options, Context context, FragmentManager childFragmentManager) {
+    public FacilityAdaptor(@NonNull FirebaseRecyclerOptions<BookingItem> options, Context context, FragmentManager childfragmentManager, boolean isEdit) {
         super(options);
         this.context = context;
         database = MainActivity.database;
@@ -45,32 +48,41 @@ public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, Facili
         mAuth = MainActivity.mAuth;
         user = MainActivity.user;
         this.sharedPreferences = context.getSharedPreferences("com.iicportal", Context.MODE_PRIVATE);
-        this.childFragmentManager = childFragmentManager;
+        this.childfragmentManager = childfragmentManager;
+        this.isEdit = isEdit;
     }
 
     public void onDataChanged() {
         super.onDataChanged();
-        if (super.getItemCount() > 0) {
-            // Assuming getItem(0) returns a Facility object
-            String facilityName = super.getItem(0).getName();
-
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("facility", facilityName);
-            editor.apply();
-        }
         notifyDataSetChanged();
     }
 
     @Override
     protected void onBindViewHolder(@NonNull FacilityViewHolder holder, int position, @NonNull BookingItem model) {
         holder.facilityName.setText(model.getName());
-        Glide.with(context).load(model.getImage()).into(holder.facilityImage);
+        Glide.with(holder.facilityImage.getContext()).load(model.getImage()).into(holder.facilityImage);
 
-        holder.booknowBtn.setOnClickListener(v -> {
-            Log.d("BookingAdapter", "Book button clicked");
-            BookingDialogFragment bookingDialogFragment = new BookingDialogFragment(model, context, getRef(position).getKey());
-            bookingDialogFragment.show(childFragmentManager, "BookingDialogFragment");
-        });
+        SharedPreferences sharedPreferences = context.getSharedPreferences("com.iicportal", 0);
+        String role = sharedPreferences.getString("role", "Student");
+
+        if (isEdit) {
+            if (!role.equals("Admin") || !role.equals("Vendor")) {
+                holder.editFacility.setVisibility(View.VISIBLE);
+                holder.booknowBtn.setVisibility(View.GONE);
+                holder.editFacility.setOnClickListener(v -> {
+                    context.startActivity(new Intent(context, EditFacilityActivity.class).putExtra("key", getRef(position).getKey()));
+                });
+            } else {
+                holder.editFacility.setVisibility(View.GONE);
+            }
+        } else {
+            holder.booknowBtn.setOnClickListener(v -> {
+                Log.d("BookingAdapter", "Book button clicked");
+                BookingDialogFragment bookingDialogFragment = new BookingDialogFragment(model, context, getRef(position).getKey());
+                bookingDialogFragment.show(childfragmentManager, "BookingDialogFragment");
+            });
+            holder.editFacility.setVisibility(View.GONE);
+        }
     }
 
     @NonNull
@@ -85,6 +97,7 @@ public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, Facili
         ImageView facilityImage;
         TextView booknowBtn;
         ImageView historyBtnIcon;
+        TextView editFacility;
 
         public FacilityViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -92,6 +105,7 @@ public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, Facili
             facilityImage = itemView.findViewById(R.id.facility_image);
             booknowBtn = itemView.findViewById(R.id.booknowBtn);
             historyBtnIcon = itemView.findViewById(R.id.historyBtnIcon);
+            editFacility = itemView.findViewById(R.id.editFacilityBtn);
         }
     }
 }

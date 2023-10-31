@@ -30,17 +30,6 @@
         android:textSize="16sp"/>
 
     <TextView
-        android:id="@+id/booknowBtn"
-        android:theme="@style/Button.Transparent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:textColor="@color/colorPrimary"
-        android:text="Book Now"
-        android:textSize="10sp"
-        android:layout_marginEnd="10dp" />
-
-    <TextView
         android:id="@+id/editFacilityBtn"
         android:theme="@style/Button.Transparent"
         android:layout_width="wrap_content"
@@ -50,7 +39,6 @@
         android:text="Edit Facility"
         android:textSize="10sp"
         android:layout_marginEnd="10dp" />
-
 
 
 

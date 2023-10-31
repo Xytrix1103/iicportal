@@ -4,13 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,8 +20,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
-import com.iicportal.activity.MainActivity;
 import com.iicportal.activity.BookingHistoryActivity;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.adaptor.FacilityAdaptor;
 import com.iicportal.models.BookingItem;
 
@@ -39,30 +39,31 @@ public class FacilityMenuFragment extends Fragment {
     FirebaseUser user;
 
     SharedPreferences sharedPreferences;
-    private ImageView historyBtnIcon;
+    private ImageView historyBtnIcon, editBtn;
+    String facility;
 
     AdminDashboardFragment.OpenDrawerInterface openDrawerInterface;
+    FragmentManager childFragmentManager;
 
     public FacilityMenuFragment() {
         super(R.layout.facilities_menu_fragment);
         openDrawerInterface = null;
+        childFragmentManager = null;
     }
 
-    public FacilityMenuFragment(AdminDashboardFragment.OpenDrawerInterface openDrawerInterface) {
+    public FacilityMenuFragment(AdminDashboardFragment.OpenDrawerInterface openDrawerInterface,FragmentManager childfragmentManager) {
         super(R.layout.facilities_menu_fragment);
         this.openDrawerInterface = openDrawerInterface;
+        this.childFragmentManager = childfragmentManager;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        context = requireContext();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.facilities_menu_fragment, container, false);
 
+        menuBtn = view.findViewById(R.id.menuIcon);
+        editBtn = view.findViewById(R.id.editBtn);
         mAuth = MainActivity.mAuth;
         user = MainActivity.user;
 
@@ -70,16 +71,19 @@ public class FacilityMenuFragment extends Fragment {
         timeslotRef = database.getReference("facilities/timeslot");
         facilitiesRef = database.getReference("facilities/facility/");
 
-        sharedPreferences = context.getSharedPreferences("com.iicportal", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("com.iicportal", 0);
+        String role = sharedPreferences.getString("role", "Student");
 
-        sharedPreferences.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
-            if (key.equals("facility")) {
-                Log.d("FacilityMenuActivity", "Facility changed to " + sharedPreferences.getString("facility", ""));
-                facilityAdaptor.notifyDataSetChanged();
-            }
-        });
 
-        menuBtn = view.findViewById(R.id.menuIcon);
+        if (!role.equals("Admin") && !role.equals("Vendor")) {
+            editBtn.setVisibility(View.GONE);
+        } else {
+            editBtn.setVisibility(View.VISIBLE);
+            editBtn.setOnClickListener(v -> {
+                EditFacilityMenuFragment editFacilityMenuFragment = new EditFacilityMenuFragment(openDrawerInterface, childFragmentManager);
+                childFragmentManager.beginTransaction().replace(R.id.facility_fragment_container, editFacilityMenuFragment).commit();
+            });
+        }
 
         sharedPreferences = requireActivity().getSharedPreferences("com.iicportal", Context.MODE_PRIVATE);
         if (sharedPreferences.getString("role", "").equals("Admin") || sharedPreferences.getString("role", "").equals("Vendor")) {
@@ -94,21 +98,19 @@ public class FacilityMenuFragment extends Fragment {
         }
 
         FirebaseRecyclerOptions<BookingItem> facilityOptions = new FirebaseRecyclerOptions.Builder<BookingItem>()
-                .setLifecycleOwner(this)
                 .setQuery(facilitiesRef, BookingItem.class)
                 .build();
 
         facilitiesRecyclerView = view.findViewById(R.id.facilityRecyclerView);
         facilitiesRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        facilityAdaptor = new FacilityAdaptor(facilityOptions, context, getChildFragmentManager());
+        facilityAdaptor = new FacilityAdaptor(facilityOptions, requireContext(), getChildFragmentManager(), false);
         facilitiesRecyclerView.setAdapter(facilityAdaptor);
 
         historyBtnIcon = view.findViewById(R.id.historyBtnIcon);
         historyBtnIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(context, BookingHistoryActivity.class);
+            Intent intent = new Intent(requireContext(), BookingHistoryActivity.class);
             startActivity(intent);
         });
-
         return view;
     }
 
@@ -121,18 +123,6 @@ public class FacilityMenuFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        facilityAdaptor.stopListening();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        facilityAdaptor.startListening();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
         facilityAdaptor.stopListening();
     }
 }
