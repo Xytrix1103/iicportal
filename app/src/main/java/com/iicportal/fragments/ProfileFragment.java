@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,14 +33,13 @@ public class ProfileFragment extends Fragment {
     private FirebaseAuth mAuth;
     FirebaseDatabase database;
     FirebaseUser user;
-    DatabaseReference usersRef;
     Button logoutButton;
     Button profileUpdateButton;
     Button orderHistoryButton;
     Button bookingHistoryButton;
     Button contactButton;
-    TextView name;
-    ImageView barcode;
+    TextView name, studentID;
+    ImageView barcode, pfp;
     String[] initial = {"", "", "", ""};
     public ProfileFragment() {
         super(R.layout.activity_profile);
@@ -56,12 +56,29 @@ public class ProfileFragment extends Fragment {
         mAuth = MainActivity.mAuth;
         database = MainActivity.database;
         user = MainActivity.user;
-        database.getReference("users/"+user.getUid() +"/fullName").addValueEventListener(new ValueEventListener() {
+
+        name = view.findViewById(R.id.nameText);
+        studentID = view.findViewById(R.id.studentIDText);
+
+        barcode = view.findViewById(R.id.barcodeImage);
+        profileUpdateButton = view.findViewById(R.id.profileUpdateBtn);
+        pfp = view.findViewById(R.id.profileImage);
+
+        database.getReference("users/"+user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                name.setText(dataSnapshot.getValue(String.class));
+                name.setText(dataSnapshot.child("fullName").getValue(String.class));
+                String email = dataSnapshot.child("email").getValue(String.class);
+                int positionOfAtSymbol = email.indexOf("@");
+                if (positionOfAtSymbol < 0) {
+                    studentID.setText(email.toUpperCase());
+                } else {
+                    String frontSegmentOfEmail = email.substring(0, positionOfAtSymbol);
+                    studentID.setText(frontSegmentOfEmail.toUpperCase());
+                }
+                Glide.with(view.getContext()).load(dataSnapshot.child("image").getValue(String.class)).into(pfp);
             }
 
             @Override
@@ -69,10 +86,6 @@ public class ProfileFragment extends Fragment {
                 // Failed to read value
             }
         });
-        name = view.findViewById(R.id.nameText);
-
-        barcode = view.findViewById(R.id.barcodeImage);
-        profileUpdateButton = view.findViewById(R.id.profileUpdateBtn);
 
         profileUpdateButton.setOnClickListener(v -> {
             Intent intent = new Intent(context, ProfileUpdateActivity.class);

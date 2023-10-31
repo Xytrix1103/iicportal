@@ -1,5 +1,6 @@
 package com.iicportal.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     Fragment verticalViewFragment;
     Fragment horizontalViewFragment;
+    Activity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,12 +53,8 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = this.getSharedPreferences("com.iicportal", MODE_PRIVATE);
         verticalViewFragment = new VerticalViewFragment();
         horizontalViewFragment = new HorizontalViewFragment();
-    }
+        activity = this;
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d("MainActivity", "onStart: ");
         if (mAuth.getCurrentUser() == null) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
@@ -70,10 +68,10 @@ public class MainActivity extends AppCompatActivity {
                         sharedPreferences.edit().putString("role", role).apply();
                         if (role.equals("Admin") || role.equals("Vendor")) {
                             Log.d("ViewFragment", "HorizontalViewFragment");
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, horizontalViewFragment).commit();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, horizontalViewFragment).commitAllowingStateLoss();
                         } else if (role.equals("Student") || role.equals("Staff")) {
                             Log.d("ViewFragment", "VerticalViewFragment");
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, verticalViewFragment).commit();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, verticalViewFragment).commitAllowingStateLoss();
                         }
                     } else {
                         Log.d("not found", "onDataChange: ");
@@ -92,40 +90,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("MainActivity", "onResume: ");
-
-        if (mAuth.getCurrentUser() == null) {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            finish();
-        } else {
-            user = mAuth.getCurrentUser();
-            Log.d("MainActivity", "onStart: " + user.getUid());
-            usersRef.child(user.getUid()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull com.google.firebase.database.DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        String role = snapshot.child("role").getValue().toString();
-                        sharedPreferences.edit().putString("role", role).apply();
-                        if (role.equals("Admin") || role.equals("Vendor")) {
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, horizontalViewFragment).commit();
-                        } else if (role.equals("Student") || role.equals("Staff")) {
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, verticalViewFragment).commit();
-                        }
-                    } else {
-                        mAuth.signOut();
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    mAuth.signOut();
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                }
-            });
-        }
+    protected void onStart() {
+        super.onStart();
+        Log.d("MainActivity", "onStart: ");
     }
 
     //override on save instance state to prevent app from crashing when screen is rotated
