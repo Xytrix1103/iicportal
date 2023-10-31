@@ -17,6 +17,7 @@ public class Order {
     List<CartItem> items;
 
     public Order() {
+
     }
 
     public Order(String orderID, String uid, Long timestamp, Long readyTimestamp, Long completedTimestamp, PaymentMethod paymentMethod, OrderOption orderOption, double orderTotal, double takeawayFee, double total, String status, List<CartItem> items) {
