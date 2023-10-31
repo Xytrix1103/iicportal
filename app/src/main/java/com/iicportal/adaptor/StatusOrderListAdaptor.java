@@ -20,8 +20,8 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
+import com.iicportal.activity.AdminOrderDetailsActivity;
 import com.iicportal.activity.MainActivity;
-import com.iicportal.activity.OrderDetailsActivity;
 import com.iicportal.models.Order;
 
 import java.text.SimpleDateFormat;
@@ -51,25 +51,24 @@ public class StatusOrderListAdaptor extends FirebaseRecyclerAdapter<Order, Statu
         holder.orderOption.setText(model.getOrderOption().getOption());
         Glide.with(context).load(model.getOrderOption().getIcon()).into(holder.orderOptionIcon);
 
-        if (model.getCompletedTimestamp() != null) {
-            holder.button.setVisibility(View.GONE);
+        if (model.isCompleted()) {
+            holder.button.setVisibility(Button.GONE);
         } else {
-            holder.button.setVisibility(View.VISIBLE);
-
-            if (model.getReadyTimestamp() != null) {
+            holder.button.setVisibility(Button.VISIBLE);
+            if (model.isReady()) {
                 holder.button.setText("Completed");
-
                 holder.button.setOnClickListener(v -> {
-                    model.setCompletedTimestamp(System.currentTimeMillis());
                     model.setCompleted(true);
+                    model.setCompletedTimestamp(System.currentTimeMillis());
+                    model.setStatus("COMPLETED");
                     getRef(pos).setValue(model);
                 });
             } else {
                 holder.button.setText("Ready");
-
                 holder.button.setOnClickListener(v -> {
-                    model.setReadyTimestamp(System.currentTimeMillis());
                     model.setReady(true);
+                    model.setReadyTimestamp(System.currentTimeMillis());
+                    model.setStatus("READY");
                     getRef(pos).setValue(model);
                 });
             }
@@ -92,7 +91,7 @@ public class StatusOrderListAdaptor extends FirebaseRecyclerAdapter<Order, Statu
         holder.total.setText(String.format("RM %.2f", model.getTotal()));
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, OrderDetailsActivity.class);
+            Intent intent = new Intent(context, AdminOrderDetailsActivity.class);
             intent.putExtra("orderID", getRef(pos).getKey());
             context.startActivity(intent);
         });
@@ -103,7 +102,6 @@ public class StatusOrderListAdaptor extends FirebaseRecyclerAdapter<Order, Statu
         return new StatusOrderViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.vendor_order, parent, false));
     }
 
-    @Override
     public void onDataChanged() {
         super.onDataChanged();
         Log.d("OrderAdaptor", "onDataChanged: " + getItemCount());
