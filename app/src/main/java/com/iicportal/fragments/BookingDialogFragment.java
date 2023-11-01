@@ -87,7 +87,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
         timeSlotsList.remove(bookingSpinner.getSelectedItem().toString());
 
         // Disable time slots that have already passed
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma", Locale.getDefault());
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma 'Z'");
         String currentTime = timeFormat.format(Calendar.getInstance().getTime());
         String thresholdTime = "08:00AM";
 
@@ -95,10 +95,33 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
             String timeSlot = timeSlotsList.get(i);
             if (isTimeSlotPassed(currentTime, timeSlot) || isBeforeThreshold(currentTime, thresholdTime)) {
                 // If the time slot has passed or it's before the threshold time, remove it from the list
+                Log.d("BookingAdapter", "Removing time slot: " + timeSlot + isTimeSlotPassed(currentTime, timeSlot) + isBeforeThreshold(currentTime, thresholdTime));
                 timeSlotsList.remove(i);
                 i--; // Adjust the index to account for the removed item
             }
         }
+
+        bookingRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot bookingSnapshot : snapshot.getChildren()) {
+                    for (int i = 0; i < timeSlotsList.size(); i++) {
+                        String timeSlot = timeSlotsList.get(i);
+                        String bookingTime = bookingSnapshot.child("time").getValue(String.class);
+                        String bookingDate = bookingSnapshot.child("date").getValue(String.class);
+                        if (bookingDate.equals(currentDate) && bookingTime.equals(timeSlot)) {
+                            timeSlotsList.remove(timeSlot);
+                            i--; // Adjust the index to account for the removed item
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         //populate the spinner with the time slots
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, timeSlotsList);
@@ -112,7 +135,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
             String selectedBooking = bookingSpinner.getSelectedItem().toString();
 
             // Query the database to check if the selected time slot is available for this facility
-            Query query = bookingRef.child(bookingItem.getName()).orderByChild("time").equalTo(selectedBooking);
+            Query query = bookingRef.child(bookingItem.getName()).getRef().orderByChild("date").equalTo(currentDate).getRef().orderByChild("time").equalTo(selectedBooking);
 
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -149,7 +172,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
     }
 
     private boolean isTimeSlotPassed(String currentTime, String timeSlot) {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma", Locale.getDefault());
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma 'Z'");
         try {
             Date currentTimeDate = timeFormat.parse(currentTime);
             Date timeSlotDate = timeFormat.parse(timeSlot);
@@ -162,7 +185,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
 
     // Helper method to check if a time is before the threshold time
     private boolean isBeforeThreshold(String currentTime, String thresholdTime) {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma", Locale.getDefault());
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma 'Z'");
         try {
             Date currentTimeDate = timeFormat.parse(currentTime);
             Date thresholdTimeDate = timeFormat.parse(thresholdTime);
