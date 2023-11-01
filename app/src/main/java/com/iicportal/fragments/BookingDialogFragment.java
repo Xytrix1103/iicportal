@@ -44,17 +44,19 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
     FirebaseUser user;
     FirebaseAuth mAuth;
     String key;
+    String name;
     Context context;
 
     public BookingDialogFragment() {}
 
-    public BookingDialogFragment(BookingItem bookingItem, Context context, String key) {
+    public BookingDialogFragment(BookingItem bookingItem, Context context, String key, String name) {
         this.bookingItem = bookingItem;
         database = MainActivity.database;
         this.bookingRef = database.getReference("bookings/");
         mAuth = MainActivity.mAuth;
         user = MainActivity.user;
         this.key = key;
+        this.name = name;
         this.context = context;
     }
 
@@ -109,7 +111,8 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
                         String timeSlot = timeSlotsList.get(i);
                         String bookingTime = bookingSnapshot.child("time").getValue(String.class);
                         String bookingDate = bookingSnapshot.child("date").getValue(String.class);
-                        if (bookingDate.equals(currentDate) && bookingTime.equals(timeSlot)) {
+                        Log.d("BookingAdapter", "Booking name: " + bookingSnapshot.child("name").getValue(String.class) + name);
+                        if (bookingDate.equals(currentDate) && bookingTime.equals(timeSlot) && bookingSnapshot.child("name").getValue(String.class).equals(name)) {
                             timeSlotsList.remove(timeSlot);
                             i--; // Adjust the index to account for the removed item
                         }

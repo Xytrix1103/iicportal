@@ -78,7 +78,8 @@ public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, Facili
         } else {
             holder.booknowBtn.setOnClickListener(v -> {
                 Log.d("BookingAdapter", "Book button clicked");
-                BookingDialogFragment bookingDialogFragment = new BookingDialogFragment(model, context, getRef(position).getKey());
+                //also pass facility name
+                BookingDialogFragment bookingDialogFragment = new BookingDialogFragment(model, context, getRef(position).getKey(), model.getName());
                 bookingDialogFragment.show(childfragmentManager, "BookingDialogFragment");
             });
             holder.editFacility.setVisibility(View.GONE);
