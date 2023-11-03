@@ -41,8 +41,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
-import com.iicportal.activity.LoginActivity;
-import com.iicportal.activity.MainActivity;
 
 public class StudentHomeFragment extends Fragment {
 
@@ -80,7 +78,6 @@ public class StudentHomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.student_home_fragment, container, false);
 
-        mAuth = MainActivity.mAuth;
         facilityNameList = new ArrayList<String>();
         statusList = new ArrayList<Status>();
 
@@ -222,7 +219,8 @@ public class StudentHomeFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snapshotItem : snapshot.getChildren()) {
-                    String orderId = snapshotItem.getKey();
+                    String orderKey = snapshotItem.getKey();
+                    String orderId = snapshotItem.child("orderID").getValue().toString();
                     String statusValue = snapshotItem.child("status").getValue().toString();
 
                     // Only provide status reminder if order status is "PREPARING" or "READY"
@@ -230,28 +228,27 @@ public class StudentHomeFragment extends Fragment {
                         String title = "ORDER STATUS:";
                         String description = "";
                         String type = "order";
-                        Long timestamp = null;
+                        Long timestamp = System.currentTimeMillis();
 
                         if (statusValue.equals("PREPARING")) {
                             description = "Just a quick note to inform you that your order is currently being prepared and will be ready soon.";
                             timestamp = Long.parseLong(snapshotItem.child("timestamp").getValue().toString());
                         } else if (statusValue.equals("READY")) {
                             description = "Just a quick note to inform you that your order is ready for pickup or delivery.";
-                            // TODO: uncomment this when Vendor features are complete
                             //timestamp = Long.parseLong(snapshotItem.child("readyTimestamp").getValue().toString());
                         }
 
                         OrderStatus newOrderStatus = new OrderStatus(
                                 currentUser.getUid(), title, description, type, timestamp,
-                                orderId, statusValue
+                                orderKey, orderId, statusValue
                         );
-                        removeStatusFromList(statusList, orderId);
+                        removeStatusFromList(statusList, orderKey);
                         statusList.add(newOrderStatus);
                         statusAdaptor.notifyDataSetChanged();
                     }
                     // Delete old status reminder if order status is "COMPLETED"
                     else if (statusValue.equals("COMPLETED")) {
-                        removeStatusFromList(statusList, orderId);
+                        removeStatusFromList(statusList, orderKey);
                         statusAdaptor.notifyDataSetChanged();
                     }
                 }
@@ -329,7 +326,7 @@ public class StudentHomeFragment extends Fragment {
     }
 
     // Helper method to remove status item from statusList
-    public void removeStatusFromList(ArrayList<Status> statusList, String id) {
+    public void removeStatusFromList(ArrayList<Status> statusList, String key) {
         Iterator<Status> iterator = statusList.iterator();
 
         while (iterator.hasNext()) {
@@ -337,11 +334,11 @@ public class StudentHomeFragment extends Fragment {
 
             if (item.getType().equals("booking")) {
                 BookingStatus bookingStatus = (BookingStatus) item;
-                if (bookingStatus.getBookingId().equals(id))
+                if (bookingStatus.getBookingId().equals(key))
                     iterator.remove();
             } else if (item.getType().equals("order")) {
                 OrderStatus orderStatus = (OrderStatus) item;
-                if (orderStatus.getOrderId().equals(id))
+                if (orderStatus.getOrderKey().equals(key))
                     iterator.remove();
             }
         }
