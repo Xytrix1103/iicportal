@@ -35,9 +35,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 public class BookingDialogFragment extends BottomSheetDialogFragment {
     BookingItem bookingItem;
@@ -46,19 +44,19 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
     FirebaseUser user;
     FirebaseAuth mAuth;
     String key;
+    String name;
     Context context;
 
-    public BookingDialogFragment() {
-    }
+    public BookingDialogFragment() {}
 
-
-    public BookingDialogFragment(BookingItem bookingItem, Context context, String key) {
+    public BookingDialogFragment(BookingItem bookingItem, Context context, String key, String name) {
         this.bookingItem = bookingItem;
         database = MainActivity.database;
         this.bookingRef = database.getReference("bookings/");
         mAuth = MainActivity.mAuth;
         user = MainActivity.user;
         this.key = key;
+        this.name = name;
         this.context = context;
     }
 
@@ -81,7 +79,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
         String currentDate = dateFormat.format(Calendar.getInstance().getTime());
         date.setText(currentDate);
 
-        price.setText(String.valueOf(bookingItem.getPrice()));
+        price.setText(String.format("RM %.2f", bookingItem.getPrice()));
 
         ArrayList<String> timeSlotsList = new ArrayList<>();
         String[] timeSlotsArray = context.getResources().getStringArray(R.array.timeslot);
@@ -91,7 +89,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
         timeSlotsList.remove(bookingSpinner.getSelectedItem().toString());
 
         // Disable time slots that have already passed
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma", Locale.getDefault());
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma 'Z'");
         String currentTime = timeFormat.format(Calendar.getInstance().getTime());
         String thresholdTime = "08:00AM";
 
@@ -99,10 +97,34 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
             String timeSlot = timeSlotsList.get(i);
             if (isTimeSlotPassed(currentTime, timeSlot) || isBeforeThreshold(currentTime, thresholdTime)) {
                 // If the time slot has passed or it's before the threshold time, remove it from the list
+                Log.d("BookingAdapter", "Removing time slot: " + timeSlot + isTimeSlotPassed(currentTime, timeSlot) + isBeforeThreshold(currentTime, thresholdTime));
                 timeSlotsList.remove(i);
                 i--; // Adjust the index to account for the removed item
             }
         }
+
+        bookingRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot bookingSnapshot : snapshot.getChildren()) {
+                    for (int i = 0; i < timeSlotsList.size(); i++) {
+                        String timeSlot = timeSlotsList.get(i);
+                        String bookingTime = bookingSnapshot.child("time").getValue(String.class);
+                        String bookingDate = bookingSnapshot.child("date").getValue(String.class);
+                        Log.d("BookingAdapter", "Booking name: " + bookingSnapshot.child("name").getValue(String.class) + name);
+                        if (bookingDate.equals(currentDate) && bookingTime.equals(timeSlot) && bookingSnapshot.child("name").getValue(String.class).equals(name)) {
+                            timeSlotsList.remove(timeSlot);
+                            i--; // Adjust the index to account for the removed item
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         //populate the spinner with the time slots
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, timeSlotsList);
@@ -116,9 +138,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
             String selectedBooking = bookingSpinner.getSelectedItem().toString();
 
             // Query the database to check if the selected time slot is available for this facility
-            Query query = bookingRef.child(bookingItem.getName())
-                    .orderByChild("selectedTimeSlot")
-                    .equalTo(selectedBooking);
+            Query query = bookingRef.child(bookingItem.getName()).getRef().orderByChild("date").equalTo(currentDate).getRef().orderByChild("time").equalTo(selectedBooking);
 
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -126,24 +146,15 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
                     if (dataSnapshot.exists()) {
                         // The selected time slot is already taken, show an error message
                         Toast.makeText(context.getApplicationContext(), "Time slot is already booked for this facility", Toast.LENGTH_SHORT).show();
-
                     } else {
+                        // The time slot is available, and you can proceed to create a new booking
                         // Generate a unique booking ID
                         String bookingId = bookingRef.push().getKey();
 
-                        BookingItem newBookingItem = new BookingItem(bookingItem.getName(), bookingItem.getImage(), bookingItem.getPrice(), selectedBooking, currentDate);
-
-                        // Create a map to store the booking data
-                        Map<String, Object> bookingData = new HashMap<>();
-                        bookingData.put("userId", user.getUid());
-                        bookingData.put("facilityName", bookingItem.getName());
-                        bookingData.put("facilityImage", bookingItem.getImage());
-                        bookingData.put("facilityPrice", bookingItem.getPrice());
-                        bookingData.put("selectedDate", currentDate);
-                        bookingData.put("selectedTimeSlot", selectedBooking);
+                        BookingItem newBookingItem = new BookingItem(bookingItem.getName(), bookingItem.getImage(), bookingItem.getPrice(), selectedBooking, currentDate, "Paid", user.getUid());
 
                         // Save the booking data under the "bookings" node with the unique booking ID
-                        bookingRef.child(bookingItem.getName()).child(bookingId).setValue(bookingData);
+                        bookingRef.child(bookingId).setValue(newBookingItem);
                         dismiss();
                     }
                 }
@@ -164,7 +175,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
     }
 
     private boolean isTimeSlotPassed(String currentTime, String timeSlot) {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma", Locale.getDefault());
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma 'Z'");
         try {
             Date currentTimeDate = timeFormat.parse(currentTime);
             Date timeSlotDate = timeFormat.parse(timeSlot);
@@ -177,7 +188,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
 
     // Helper method to check if a time is before the threshold time
     private boolean isBeforeThreshold(String currentTime, String thresholdTime) {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma", Locale.getDefault());
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma 'Z'");
         try {
             Date currentTimeDate = timeFormat.parse(currentTime);
             Date thresholdTimeDate = timeFormat.parse(thresholdTime);
@@ -187,4 +198,5 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
             return false; // Handle parsing error as needed
         }
     }
+
 }

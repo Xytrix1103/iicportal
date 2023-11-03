@@ -67,9 +67,11 @@
     <string name="facility_name">Facility Name</string>
     <string name="booking_time">Booking Time</string>
     <string name="booking_date">Booking Date</string>
-    <string name="order_details">Order Details</string>
-    <string name="ordered_at">Ordered At</string>
-    <string name="order_id_title">Order ID</string>
+    <string name="bookingHistory">Booking History</string>
+    <string name="booking_history_empty">You have no previous bookings.</string>
+	<string name="order_details">Order Details</string>
+	<string name="ordered_at">Ordered At</string>
+	<string name="order_id_title">Order ID</string>
     <string name="collect_by_title">Collect By</string>
     <string name="payment_method_title">Payment</string>
     <string name="prices_title">Prices (RM)</string>
@@ -98,12 +100,21 @@
     <string name="edit_image">Edit Image</string>
     <string name="add_menu_item">Add Menu Item</string>
     <string name="add_image">Add Image</string>
-    <string name="orders">Orders</string>
     <string name="live_chat">Live Chat</string>
     <string name="enter_message">Enter message</string>
     <string name="live_chat_empty_text">Send a message to start chatting with our admins.</string>
+	<string name="orders">Orders</string>
+    <string name="add_facility">Add Facility</string>
+    <string name="edit_facility">Facility (Edit Mode)</string>
+    <string name="delete_facility">Delete Facility</string>
+    <string name="facilityHint">Please enter a new facility name</string>
+    <string name="new_facility">New Facility</string>
+    <string name="newFacilityHint">Please enter new facility name</string>
+    <string name="stop_edit_facility">Exit Facility edit mode</string>
 
-    <string-array name="timeslot">
+
+	<string-array name="timeslot">
+        <item>8:00AM - 9:00AM</item>
         <item>9:00AM - 10:00AM</item>
         <item>10:00AM - 11:00AM</item>
         <item>11:00AM - 12:00PM</item>

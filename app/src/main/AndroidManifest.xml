@@ -11,6 +11,7 @@
 
     <application
         android:allowBackup="true"
+        android:usesCleartextTraffic="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -18,14 +19,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".activity.LiveChatActivity"
-            android:exported="false" />
 
-        <service
-            android:name="com.google.android.gms.metadata.ModuleDependencies"
+        <service android:name="com.google.android.gms.metadata.ModuleDependencies"
             android:enabled="false"
             android:exported="false"
             tools:ignore="MissingClass">
@@ -121,13 +117,35 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activity.BookingHistoryActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".activity.AdminOrderDetailsActivity"
+            android:exported="true">
+        </activity>
+
+        <activity android:name=".activity.EditFacilityActivity"
+            android:exported="true">
+        </activity>
+
+        <activity android:name=".activity.AddFacilityActivity"
+            android:exported="true">
+        </activity>
+
         <activity
-            android:name=".activity.AdminOrderDetailsActivity"
-            android:exported="true"></activity>
+            android:name=".activity.LiveChatActivity"
+            android:exported="true">
+        </activity>
+
     </application>
 
 </manifest>
