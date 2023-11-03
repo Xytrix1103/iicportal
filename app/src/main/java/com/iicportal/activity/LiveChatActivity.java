@@ -69,9 +69,12 @@ public class LiveChatActivity extends AppCompatActivity {
         backButtonIcon = findViewById(R.id.backBtnIcon);
         sendButtonIcon = findViewById(R.id.sendBtnIcon);
         emptyChatText = findViewById(R.id.emptyChatText);
-        chatMessageRecyclerView = findViewById(R.id.messageRecyclerView);
-        chatMessageRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         messageEditText = findViewById(R.id.messageEditText);
+
+        chatMessageRecyclerView = findViewById(R.id.messageRecyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setStackFromEnd(true);
+        chatMessageRecyclerView.setLayoutManager(linearLayoutManager);
 
         // Determine if chat already exists
         chatsRef.orderByChild("initiatorUid").equalTo(intent.getStringExtra("INITIATOR_UID")).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -194,12 +197,6 @@ public class LiveChatActivity extends AppCompatActivity {
                 } else {
                     emptyChatText.setVisibility(TextView.GONE);
                 }
-            }
-
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-                chatMessageRecyclerView.smoothScrollToPosition(chatMessageAdaptor.getItemCount() - 1);
             }
         });
     }
