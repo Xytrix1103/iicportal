@@ -41,6 +41,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("com.firebaseui:firebase-ui-storage:8.0.2")
     implementation("com.firebaseui:firebase-ui-database:8.0.2")
+    implementation("androidx.work:work-runtime:2.8.1")
 
     // Add the Firebase SDKs
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
