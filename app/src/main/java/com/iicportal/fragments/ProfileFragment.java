@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
+import com.iicportal.activity.BookingHistoryActivity;
 import com.iicportal.activity.ContactActivity;
 import com.iicportal.activity.LoginActivity;
 import com.iicportal.activity.MainActivity;
@@ -102,8 +103,7 @@ public class ProfileFragment extends Fragment {
         bookingHistoryButton = view.findViewById(R.id.bookingHistoryBtn);
 
         bookingHistoryButton.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ProfileUpdateActivity.class);
-            intent.putExtra("userID",user.getUid());
+            Intent intent = new Intent(context, BookingHistoryActivity.class);
             context.startActivity(intent);
         });
 
