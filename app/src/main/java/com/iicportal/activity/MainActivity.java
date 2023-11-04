@@ -46,8 +46,7 @@ public class MainActivity extends AppCompatActivity {
         }
         mAuth = FirebaseAuth.getInstance(app);
         user = mAuth.getCurrentUser();
-        database = FirebaseDatabase.getInstance();
-        database.setPersistenceEnabled(true);
+        database = FirebaseDatabase.getInstance(app);
         database.getReference().keepSynced(true);
         usersRef = database.getReference("users");
         sharedPreferences = this.getSharedPreferences("com.iicportal", MODE_PRIVATE);
