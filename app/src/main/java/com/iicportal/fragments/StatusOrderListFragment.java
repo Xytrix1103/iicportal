@@ -46,13 +46,13 @@ public class StatusOrderListFragment extends Fragment {
 
         switch(status) {
             case 0:
-                query = ordersRef.orderByChild("completed").equalTo(false).getRef().orderByChild("ready").equalTo(false);
+                query = ordersRef.orderByChild("status").equalTo("PREPARING"); // "PREPARING
                 break;
             case 1:
-                query = ordersRef.orderByChild("ready").equalTo(true).getRef().orderByChild("completed").equalTo(false);
+                query = ordersRef.orderByChild("status").equalTo("READY"); // "READY
                 break;
             case 2:
-                query = ordersRef.orderByChild("completed").equalTo(true);
+                query = ordersRef.orderByChild("status").equalTo("COMPLETED"); // "COMPLETED
                 break;
             default:
                 Log.d("Status", "Default");
