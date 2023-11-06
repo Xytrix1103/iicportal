@@ -108,9 +108,14 @@
     <string name="new_facility">New Facility</string>
     <string name="newFacilityHint">Please enter new facility name</string>
     <string name="stop_edit_facility">Exit Facility edit mode</string>
+    <string name="total_users">Total Users</string>
+    <string name="tasks_to_complete">Tasks to Complete</string>
+    <string name="tasks_empty_text">You have no pending tasks.</string>
+    <string name="chats">Chats</string>
+    <string name="messages">Messages</string>
 
 
-	<string-array name="timeslot">
+    <string-array name="timeslot">
         <item>8:00AM - 9:00AM</item>
         <item>9:00AM - 10:00AM</item>
         <item>10:00AM - 11:00AM</item>
