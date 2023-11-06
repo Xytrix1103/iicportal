@@ -198,6 +198,12 @@ public class LiveChatActivity extends AppCompatActivity {
                     emptyChatText.setVisibility(TextView.GONE);
                 }
             }
+
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                chatMessageRecyclerView.smoothScrollToPosition(chatMessageAdaptor.getItemCount() - 1);
+            }
         });
     }
 

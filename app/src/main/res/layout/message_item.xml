@@ -5,7 +5,7 @@
     android:id="@+id/messageBody"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="20dp">
+    android:layout_marginBottom="10dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/userProfilePic"
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="7"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 tools:text="Lorem Ipsum" />
 
             <TextView

@@ -9,8 +9,8 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/userProfilePic"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:src="@drawable/baseline_account_circle_24"
         card_view:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full" />
 
@@ -23,42 +23,43 @@
         android:layout_toRightOf="@id/userProfilePic"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/chatTitle"
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="17sp"
-            tools:text="Lorem Ipsum" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:gravity="center_vertical">
 
             <TextView
-                android:id="@+id/latestMessage"
+                android:id="@+id/chatTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 android:layout_marginRight="20dp"
-                android:layout_weight="2"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textSize="16sp"
-                tools:text="Lorem ipsum dolor sit amet." />
+                android:layout_toLeftOf="@id/latestMessageTime"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                tools:text="Lorem Ipsum" />
 
             <TextView
                 android:id="@+id/latestMessageTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAlignment="center"
-                tools:text="00:00 AM" />
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="false"
+                android:textAlignment="textEnd"
+                android:textSize="12sp"
+                tools:text="0 Jan 2023" />
 
-        </LinearLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/latestMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="14sp"
+            tools:text="Lorem ipsum dolor sit amet." />
 
     </LinearLayout>
 

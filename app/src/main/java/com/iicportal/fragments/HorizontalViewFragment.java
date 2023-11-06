@@ -87,7 +87,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
         menu.add(Menu.NONE, 3, Menu.NONE, "Users").setIcon(R.drawable.baseline_people_outline_24);
         menu.add(Menu.NONE, 4, Menu.NONE, "Orders").setIcon(R.drawable.outline_food_bank_24);
         menu.add(Menu.NONE, 5, Menu.NONE, "Chats").setIcon(R.drawable.baseline_support_agent_24);
-        menu.add(Menu.NONE, 6, Menu.NONE, "Contact").setIcon(R.drawable.baseline_email_24);
+        menu.add(Menu.NONE, 6, Menu.NONE, "Messages").setIcon(R.drawable.baseline_message_24);
         menu.add(Menu.NONE, 7, Menu.NONE, "Logout").setIcon(R.drawable.baseline_logout_24);
         menu.getItem(0).setChecked(true);
 

@@ -74,7 +74,7 @@ public class ChatListFragment extends Fragment {
 
         // Set up the chats RecyclerView and Adapter
         FirebaseRecyclerOptions<Chat> options = new FirebaseRecyclerOptions.Builder<Chat>()
-                .setQuery(chatsRef, Chat.class)
+                .setQuery(chatsRef.orderByChild("latestMessageTimestamp"), Chat.class)
                 .setLifecycleOwner(this)
                 .build();
 
