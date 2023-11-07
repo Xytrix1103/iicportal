@@ -2,9 +2,7 @@ package com.iicportal.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,7 +16,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
@@ -34,16 +31,13 @@ public class ProfileFragment extends Fragment {
     private FirebaseAuth mAuth;
     FirebaseDatabase database;
     FirebaseUser user;
-    Button logoutButton;
-    Button profileUpdateButton;
-    Button orderHistoryButton;
-    Button bookingHistoryButton;
-    Button contactButton;
     TextView name, studentID;
     ImageView barcode, pfp;
+    ImageView logoutButtonIcon, profileUpdateIcon;
+    TextView orderHistoryText, bookingHistoryText, contactText;
     String[] initial = {"", "", "", ""};
     public ProfileFragment() {
-        super(R.layout.activity_profile);
+        super(R.layout.profile_fragment);
     }
 
     @Override
@@ -62,7 +56,7 @@ public class ProfileFragment extends Fragment {
         studentID = view.findViewById(R.id.studentIDText);
 
         barcode = view.findViewById(R.id.barcodeImage);
-        profileUpdateButton = view.findViewById(R.id.profileUpdateBtn);
+        profileUpdateIcon = view.findViewById(R.id.profileUpdateIcon);
         pfp = view.findViewById(R.id.profileImage);
 
         database.getReference("users/"+user.getUid()).addValueEventListener(new ValueEventListener() {
@@ -88,34 +82,34 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        profileUpdateButton.setOnClickListener(v -> {
+        profileUpdateIcon.setOnClickListener(v -> {
             Intent intent = new Intent(context, ProfileUpdateActivity.class);
             intent.putExtra("userID",user.getUid());
             context.startActivity(intent);
         });
-        orderHistoryButton = view.findViewById(R.id.orderHistoryBtn);
+        orderHistoryText = view.findViewById(R.id.orderHistoryText);
 
-        orderHistoryButton.setOnClickListener(v -> {
+        orderHistoryText.setOnClickListener(v -> {
             Intent intent = new Intent(context, OrderHistoryActivity.class);
             context.startActivity(intent);
         });
 
-        bookingHistoryButton = view.findViewById(R.id.bookingHistoryBtn);
+        bookingHistoryText = view.findViewById(R.id.bookingHistoryText);
 
-        bookingHistoryButton.setOnClickListener(v -> {
+        bookingHistoryText.setOnClickListener(v -> {
             Intent intent = new Intent(context, BookingHistoryActivity.class);
             context.startActivity(intent);
         });
 
-        contactButton = view.findViewById(R.id.contactBtn);
+        contactText = view.findViewById(R.id.contactText);
 
-        contactButton.setOnClickListener(v -> {
+        contactText.setOnClickListener(v -> {
             startActivity(new Intent(context, ContactActivity.class));
         });
 
-        logoutButton = view.findViewById(R.id.logoutBtn);
+        logoutButtonIcon = view.findViewById(R.id.logoutBtnIcon);
 
-        logoutButton.setOnClickListener(v -> {
+        logoutButtonIcon.setOnClickListener(v -> {
             mAuth.signOut();
             Intent intent = new Intent(context, LoginActivity.class);
             startActivity(intent);
