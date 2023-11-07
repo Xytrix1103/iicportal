@@ -33,8 +33,7 @@ public class ProfileFragment extends Fragment {
     FirebaseUser user;
     TextView name, studentID;
     ImageView barcode, pfp;
-    ImageView logoutButtonIcon, profileUpdateIcon;
-    TextView orderHistoryText, bookingHistoryText, contactText;
+    ImageView logoutButtonIcon, profileUpdateIcon, contactIcon;
     String[] initial = {"", "", "", ""};
     public ProfileFragment() {
         super(R.layout.profile_fragment);
@@ -87,23 +86,10 @@ public class ProfileFragment extends Fragment {
             intent.putExtra("userID",user.getUid());
             context.startActivity(intent);
         });
-        orderHistoryText = view.findViewById(R.id.orderHistoryText);
 
-        orderHistoryText.setOnClickListener(v -> {
-            Intent intent = new Intent(context, OrderHistoryActivity.class);
-            context.startActivity(intent);
-        });
+        contactIcon = view.findViewById(R.id.contactIcon);
 
-        bookingHistoryText = view.findViewById(R.id.bookingHistoryText);
-
-        bookingHistoryText.setOnClickListener(v -> {
-            Intent intent = new Intent(context, BookingHistoryActivity.class);
-            context.startActivity(intent);
-        });
-
-        contactText = view.findViewById(R.id.contactText);
-
-        contactText.setOnClickListener(v -> {
+        contactIcon.setOnClickListener(v -> {
             startActivity(new Intent(context, ContactActivity.class));
         });
 
