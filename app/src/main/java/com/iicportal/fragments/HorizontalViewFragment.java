@@ -29,6 +29,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
     FrameLayout container;
     NavigationView navigationView;
     Fragment AdminDashboardFragment;
+    Fragment VendorDashboardFragment;
     Fragment ECanteenFragment;
     Fragment FacilityFragment;
     Fragment UserListFragment;
@@ -54,6 +55,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
         drawerLayout = view.findViewById(R.id.drawer_layout);
         container = view.findViewById(R.id.horizontal_fragment_container);
         AdminDashboardFragment = new AdminDashboardFragment(this);
+        VendorDashboardFragment = new VendorDashboardFragment(this);
         ECanteenFragment = new ECanteenFragment(this);
         FacilityFragment = new FacilityFragment(this);
         UserListFragment = new UserListFragment(this);
@@ -127,7 +129,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
     private void setVendorView(ViewGroup container) {
         Menu menu = navigationView.getMenu();
         menu.clear();
-        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, AdminDashboardFragment).commit();
+        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, VendorDashboardFragment).commit();
 
         menu.add(Menu.NONE, 0, Menu.NONE, "Dashboard").setIcon(R.drawable.round_dashboard_24);
         menu.add(Menu.NONE, 1, Menu.NONE, "E-Canteen").setIcon(R.drawable.outline_coffee_24);
@@ -148,7 +150,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
 
             switch (item.getItemId()) {
                 case 0:
-                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, AdminDashboardFragment).commit();
+                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, VendorDashboardFragment).commit();
                     break;
                 case 1:
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, ECanteenFragment).commit();
