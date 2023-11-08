@@ -54,13 +54,16 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/logo"
             android:layout_centerHorizontal="true"
-            android:layout_margin="25dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="25dp"
             android:background="@color/white"
             card_view:cardCornerRadius="10dp"
             card_view:cardElevation="20dp"
-            card_view:contentPaddingTop="40dp"
+            card_view:contentPadding="30dp"
             card_view:contentPaddingBottom="40dp"
-            card_view:contentPadding="30dp">
+            card_view:contentPaddingTop="40dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -97,8 +100,8 @@
                     android:layout_marginBottom="40dp"
                     android:hint="@string/emailHint"
                     android:theme="@style/EditText.Default"
-                    input:startIconDrawable="@drawable/baseline_email_24"
-                    input:hintEnabled="false">
+                    input:hintEnabled="false"
+                    input:startIconDrawable="@drawable/baseline_email_24">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/username"
@@ -127,9 +130,9 @@
                     android:layout_below="@id/passwordLabel"
                     android:hint="@string/passwordHint"
                     android:theme="@style/EditText.Default"
-                    input:startIconDrawable="@drawable/baseline_lock_24"
                     input:hintEnabled="false"
-                    input:passwordToggleEnabled="true">
+                    input:passwordToggleEnabled="true"
+                    input:startIconDrawable="@drawable/baseline_lock_24">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/password"
@@ -138,7 +141,7 @@
                         android:background="@color/transparent"
                         android:inputType="textPassword"
                         android:paddingVertical="15dp"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
