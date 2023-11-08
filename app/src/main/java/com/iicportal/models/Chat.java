@@ -3,6 +3,7 @@ package com.iicportal.models;
 public class Chat {
     private String initiatorUid;
     private String initiatorName;
+    private String userProfilePicture;
     private String latestMessage;
     private Long latestMessageTimestamp;
     private String latestMessageSenderUid;
@@ -12,9 +13,10 @@ public class Chat {
 
     }
 
-    public Chat(String initiatorUid, String initiatorName, String latestMessage, Long latestMessageTimestamp, String latestMessageSenderUid, boolean readByAdmin) {
+    public Chat(String initiatorUid, String initiatorName, String userProfilePicture, String latestMessage, Long latestMessageTimestamp, String latestMessageSenderUid, boolean readByAdmin) {
         this.initiatorUid = initiatorUid;
         this.initiatorName = initiatorName;
+        this.userProfilePicture = userProfilePicture;
         this.latestMessage = latestMessage;
         this.latestMessageTimestamp = latestMessageTimestamp;
         this.latestMessageSenderUid = latestMessageSenderUid;
@@ -27,6 +29,10 @@ public class Chat {
 
     public String getInitiatorName() {
         return initiatorName;
+    }
+
+    public String getUserProfilePicture() {
+        return userProfilePicture;
     }
 
     public String getLatestMessage() {
@@ -51,6 +57,10 @@ public class Chat {
 
     public void setInitiatorName(String initiatorName) {
         this.initiatorName = initiatorName;
+    }
+
+    public void setUserProfilePicture(String userProfilePicture) {
+        this.userProfilePicture = userProfilePicture;
     }
 
     public void setLatestMessage(String latestMessage) {

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,19 +63,13 @@ public class ChatMessageAdaptor extends FirebaseRecyclerAdapter<ChatMessage, Rec
         if (holder instanceof ReceivedMessageViewHolder) {
             ReceivedMessageViewHolder castedHolder = (ReceivedMessageViewHolder) holder;
 
-            usersRef.child(model.getUid()).get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    String username = task.getResult().child("fullName").getValue().toString();
-                    // TODO: String userProfilePic = ?
+            if (model.getUserProfilePicture() != null)
+                Glide.with(context).load(model.getUserProfilePicture()).into(castedHolder.userProfilePic);
+            else
+                castedHolder.userProfilePic.setImageResource(R.drawable.baseline_account_circle_24);
 
-                    castedHolder.username.setText(username);
-                    // TODO: Glide.with(context).load(userProfilePic).into(castedHolder.userProfilePic);
-                    castedHolder.receivedMessage.setText(model.getMessage());
-                } else {
-                    Log.e(CHAT_MESSAGE_ADAPTOR_TAG, "Error getting user data", task.getException());
-                }
-            });
-
+            castedHolder.username.setText(model.getUsername());
+            castedHolder.receivedMessage.setText(model.getMessage());
             castedHolder.receivedMessage.setText(model.getMessage());
         } else if (holder instanceof SentMessageViewHolder) {
             SentMessageViewHolder castedHolder = (SentMessageViewHolder) holder;

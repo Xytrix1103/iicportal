@@ -27,7 +27,8 @@
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:src="@drawable/baseline_account_circle_24"
-            card_view:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full" />
+            card_view:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/receivedMessageText"

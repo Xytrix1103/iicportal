@@ -77,6 +77,8 @@ public class LiveChatActivity extends AppCompatActivity {
         chatMessageRecyclerView.setLayoutManager(linearLayoutManager);
 
         // Determine if chat already exists
+        SharedPreferences sharedPreferences = context.getSharedPreferences("com.iicportal", 0);
+        String role = sharedPreferences.getString("role", "");
         chatsRef.orderByChild("initiatorUid").equalTo(intent.getStringExtra("INITIATOR_UID")).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -90,6 +92,25 @@ public class LiveChatActivity extends AppCompatActivity {
 
                     chatMessagesRef = database.getReference("support/chatmessages/").child(chatId);
 
+                    // If user is Student or Staff, set all unread messages to read
+                    if (role.equals("Student") || role.equals("Staff")) {
+                        chatMessagesRef.orderByChild("readByUser").equalTo(false).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    for (DataSnapshot chatMessageSnapshot : snapshot.getChildren()) {
+                                        chatMessagesRef.child(chatMessageSnapshot.getKey()).child("readByUser").setValue(true);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Log.e(LIVE_CHAT_TAG, "loadChatMessages:onCancelled");
+                            }
+                        });
+                    }
+
                     setSendButtonListenerForExistingChat(chatId);
                     setChatMessageAdaptor();
                 } else {
@@ -97,18 +118,21 @@ public class LiveChatActivity extends AppCompatActivity {
                     usersRef.child(currentUser.getUid()).get().addOnCompleteListener(getUserTask -> {
                         if (getUserTask.isSuccessful()) {
                             String username = getUserTask.getResult().child("fullName").getValue().toString();
+                            String profilePicture = getUserTask.getResult().child("image").getValue() != null
+                                    ? getUserTask.getResult().child("image").getValue().toString()
+                                    : null;
 
                             sendButtonIcon.setOnClickListener(view -> {
                                 String message = messageEditText.getText().toString();
 
                                 // Start new chat
-                                Chat newChat = new Chat(currentUser.getUid(), username, message, System.currentTimeMillis(), currentUser.getUid(), false);
+                                Chat newChat = new Chat(currentUser.getUid(), username, profilePicture, message, System.currentTimeMillis(), currentUser.getUid(), false);
                                 String chatKey = chatsRef.push().getKey();
 
                                 chatsRef.child(chatKey).setValue(newChat).addOnCompleteListener(createChatTask -> {
                                     if (createChatTask.isSuccessful()) {
                                         // Send message to newly created chat
-                                        ChatMessage newChatMessage = new ChatMessage(currentUser.getUid(), message, System.currentTimeMillis());
+                                        ChatMessage newChatMessage = new ChatMessage(currentUser.getUid(), username, profilePicture, message, System.currentTimeMillis(), true);
                                         chatMessagesRef = database.getReference("support/chatmessages/").child(chatKey);
 
                                         chatMessagesRef.push().setValue(newChatMessage).addOnCompleteListener(sendMessageTask -> {
@@ -211,25 +235,40 @@ public class LiveChatActivity extends AppCompatActivity {
         sendButtonIcon.setOnClickListener(view -> {
             SharedPreferences sharedPreferences = context.getSharedPreferences("com.iicportal", 0);
             String role = sharedPreferences.getString("role", "");
+            boolean isStudentOrStaff;
 
             // Update chat latest message, latest message timestamp, and readByAdmin
             chatsRef.child(chatId).child("latestMessage").setValue(messageEditText.getText().toString());
             chatsRef.child(chatId).child("latestMessageTimestamp").setValue(System.currentTimeMillis());
             chatsRef.child(chatId).child("latestMessageSenderUid").setValue(currentUser.getUid());
-            if (role.equals("Student")) {
+            if (role.equals("Student") || role.equals("Staff")) {
                 chatsRef.child(chatId).child("readByAdmin").setValue(false);
+                isStudentOrStaff = true;
+            } else {
+                isStudentOrStaff = false;
             }
 
             // Send message in existing chat
-            ChatMessage newChatMessage = new ChatMessage(currentUser.getUid(), messageEditText.getText().toString(), System.currentTimeMillis());
-            chatMessagesRef.push().setValue(newChatMessage).addOnCompleteListener(sendMessageTask -> {
-                if (sendMessageTask.isSuccessful()) {
-                    messageEditText.getText().clear();
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            usersRef.child(currentUser.getUid()).get().addOnCompleteListener(getUserTask -> {
+                if (getUserTask.isSuccessful()) {
+                    String username = getUserTask.getResult().child("fullName").getValue().toString();
+                    String profilePicture = getUserTask.getResult().child("image").getValue() != null
+                            ? getUserTask.getResult().child("image").getValue().toString()
+                            : null;
+
+                    ChatMessage newChatMessage = new ChatMessage(currentUser.getUid(), username, profilePicture, messageEditText.getText().toString(), System.currentTimeMillis(), isStudentOrStaff);
+                    chatMessagesRef.push().setValue(newChatMessage).addOnCompleteListener(sendMessageTask -> {
+                        if (sendMessageTask.isSuccessful()) {
+                            messageEditText.getText().clear();
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        } else {
+                            Toast.makeText(context, "Unable to send your message, please try again later.", Toast.LENGTH_SHORT).show();
+                            Log.e(LIVE_CHAT_TAG, "Error sending message", sendMessageTask.getException());
+                        }
+                    });
                 } else {
-                    Toast.makeText(context, "Unable to send your message, please try again later.", Toast.LENGTH_SHORT).show();
-                    Log.e(LIVE_CHAT_TAG, "Error sending message", sendMessageTask.getException());
+                    Log.e(LIVE_CHAT_TAG, "Error getting user data", getUserTask.getException());
                 }
             });
         });

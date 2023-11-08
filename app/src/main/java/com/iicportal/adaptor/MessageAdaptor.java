@@ -61,38 +61,34 @@ public class MessageAdaptor extends FirebaseRecyclerAdapter<Message, MessageAdap
 
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position, Message model) {
-        usersRef.child(model.getUid()).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                // TODO: String userProfilePic = ?
+        if (model.getUserProfilePicture() != null)
+            Glide.with(context).load(model.getUserProfilePicture()).into(holder.userProfilePic);
+        else
+            holder.userProfilePic.setImageResource(R.drawable.baseline_account_circle_24);
 
-                // TODO: Glide.with(context).load()
-                holder.username.setText(model.getFullName());
-                holder.date.setText(new SimpleDateFormat("dd MMM yyyy").format(model.getTimestamp()));
-                holder.message.setText(model.getMessage());
+        holder.username.setText(model.getFullName());
+        holder.date.setText(new SimpleDateFormat("dd MMM yyyy").format(model.getTimestamp()));
+        holder.message.setText(model.getMessage());
 
-                // Check if message is unread
-                if (!model.isRead()) {
-                    holder.username.setTypeface(null, Typeface.BOLD);
-                    holder.date.setTypeface(null, Typeface.BOLD);
-                    holder.message.setTypeface(null, Typeface.BOLD);
-                } else {
-                    holder.username.setTypeface(null, Typeface.NORMAL);
-                    holder.date.setTypeface(null, Typeface.NORMAL);
-                    holder.message.setTypeface(null, Typeface.NORMAL);
-                }
+        // Check if message is unread
+        if (!model.isRead()) {
+            holder.username.setTypeface(null, Typeface.BOLD);
+            holder.date.setTypeface(null, Typeface.BOLD);
+            holder.message.setTypeface(null, Typeface.BOLD);
+        } else {
+            holder.username.setTypeface(null, Typeface.NORMAL);
+            holder.date.setTypeface(null, Typeface.NORMAL);
+            holder.message.setTypeface(null, Typeface.NORMAL);
+        }
 
-                holder.messageBody.setOnClickListener(view -> {
-                    MessageDetailsDialogFragment messageDetailsDialogFragment = new MessageDetailsDialogFragment(model);
-                    messageDetailsDialogFragment.show(childFragmentManager, "MessageDetailsDialogFragment");
+        holder.messageBody.setOnClickListener(view -> {
+            MessageDetailsDialogFragment messageDetailsDialogFragment = new MessageDetailsDialogFragment(model);
+            messageDetailsDialogFragment.show(childFragmentManager, "MessageDetailsDialogFragment");
 
-                    // Change status to read
-                    if (!model.isRead()) {
-                        messagesRef.child(this.getRef(position).getKey()).child("read").setValue(true);
-                        this.notifyDataSetChanged();
-                    }
-                });
-            } else {
-                Log.e(MESSAGE_ADAPTOR_TAG, "Error getting user data", task.getException());
+            // Change status to read
+            if (!model.isRead()) {
+                messagesRef.child(this.getRef(position).getKey()).child("read").setValue(true);
+                this.notifyDataSetChanged();
             }
         });
     }

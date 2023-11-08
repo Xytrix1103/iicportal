@@ -59,52 +59,48 @@ public class ChatAdaptor extends FirebaseRecyclerAdapter<Chat, ChatAdaptor.ChatV
 
     @Override
     public void onBindViewHolder(@NonNull ChatViewHolder holder, int position, Chat model) {
-        usersRef.child(model.getInitiatorUid()).get().addOnCompleteListener(task -> {
-           if (task.isSuccessful()) {
-               // TODO: String userProfilePic = ?
+        // Determine if latest message was sent today, yesterday, or more than 1 day ago
+        String latestMessageTime;
+        Long latestMessageTimestamp  = model.getLatestMessageTimestamp();
 
-               // Determine if latest message was sent today, yesterday, or more than 1 day ago
-               String latestMessageTime;
-               Long latestMessageTimestamp  = model.getLatestMessageTimestamp();
+        if (DateUtils.isToday(latestMessageTimestamp)) {
+           latestMessageTime = new SimpleDateFormat("h:mm a").format(latestMessageTimestamp);
+        } else if (DateUtils.isToday(latestMessageTimestamp + DateUtils.DAY_IN_MILLIS)) {
+           latestMessageTime = "Yesterday";
+        } else {
+           latestMessageTime = new SimpleDateFormat("dd MMM yyyy").format(latestMessageTimestamp);
+        }
 
-               if (DateUtils.isToday(latestMessageTimestamp)) {
-                   latestMessageTime = new SimpleDateFormat("h:mm a").format(latestMessageTimestamp);
-               } else if (DateUtils.isToday(latestMessageTimestamp + DateUtils.DAY_IN_MILLIS)) {
-                   latestMessageTime = "Yesterday";
-               } else {
-                   latestMessageTime = new SimpleDateFormat("dd MMM yyyy").format(latestMessageTimestamp);
-               }
+        if (model.getUserProfilePicture() != null)
+            Glide.with(context).load(model.getUserProfilePicture()).into(holder.userProfilePic);
+        else
+            holder.userProfilePic.setImageResource(R.drawable.baseline_account_circle_24);
+        if (model.getLatestMessageSenderUid().equals(currentUser.getUid()))
+            holder.latestMessage.setText(String.format("You: %s", model.getLatestMessage()));
+        else
+            holder.latestMessage.setText(model.getLatestMessage());
 
-               // TODO: Glide.with(context).load()
-               holder.title.setText(model.getInitiatorName());
-               if (model.getLatestMessageSenderUid().equals(currentUser.getUid()))
-                   holder.latestMessage.setText(String.format("You: %s", model.getLatestMessage()));
-               else
-                   holder.latestMessage.setText(model.getLatestMessage());
-               holder.latestMessageTime.setText(latestMessageTime);
+        holder.title.setText(model.getInitiatorName());
+        holder.latestMessageTime.setText(latestMessageTime);
 
-               // Check if chat is unread
-               if (!model.isReadByAdmin()) {
-                   holder.title.setTypeface(null, Typeface.BOLD);
-                   holder.latestMessage.setTypeface(null, Typeface.BOLD);
-                   holder.latestMessageTime.setTypeface(null, Typeface.BOLD);
-               } else {
-                   holder.title.setTypeface(null, Typeface.NORMAL);
-                   holder.latestMessage.setTypeface(null, Typeface.NORMAL);
-                   holder.latestMessageTime.setTypeface(null, Typeface.NORMAL);
-               }
+        // Check if chat is unread
+        if (!model.isReadByAdmin()) {
+           holder.title.setTypeface(null, Typeface.BOLD);
+           holder.latestMessage.setTypeface(null, Typeface.BOLD);
+           holder.latestMessageTime.setTypeface(null, Typeface.BOLD);
+        } else {
+           holder.title.setTypeface(null, Typeface.NORMAL);
+           holder.latestMessage.setTypeface(null, Typeface.NORMAL);
+           holder.latestMessageTime.setTypeface(null, Typeface.NORMAL);
+        }
 
-               // Go to LiveChatActivity when chat item is clicked
-               holder.chatBody.setOnClickListener(view -> {
-                   chatsRef.child(getRef(position).getKey()).child("readByAdmin").setValue(true);
+        // Go to LiveChatActivity when chat item is clicked
+        holder.chatBody.setOnClickListener(view -> {
+           chatsRef.child(getRef(position).getKey()).child("readByAdmin").setValue(true);
 
-                   Intent intent = new Intent(context, LiveChatActivity.class);
-                   intent.putExtra("INITIATOR_UID", model.getInitiatorUid());
-                   context.startActivity(intent);
-               });
-           } else {
-               Log.e(CHAT_ADAPTOR_TAG, "Error getting user data", task.getException());
-           }
+           Intent intent = new Intent(context, LiveChatActivity.class);
+           intent.putExtra("INITIATOR_UID", model.getInitiatorUid());
+           context.startActivity(intent);
         });
     }
 

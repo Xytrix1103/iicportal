@@ -38,7 +38,7 @@ public class ChatListFragment extends Fragment {
     public ChatListFragment() {
         super(R.layout.chat_list_fragment);
         this.openDrawerInterface = null;
-        this.database = MainActivity.database;
+        this.database = FirebaseDatabase.getInstance();
         this.mAuth = FirebaseAuth.getInstance();
         this.currentUser = mAuth.getCurrentUser();
         this.chatsRef = database.getReference("support/chats/");
@@ -47,7 +47,7 @@ public class ChatListFragment extends Fragment {
     public ChatListFragment(AdminDashboardFragment.OpenDrawerInterface openDrawerInterface) {
         super(R.layout.chat_list_fragment);
         this.openDrawerInterface = openDrawerInterface;
-        this.database = MainActivity.database;
+        this.database = FirebaseDatabase.getInstance();
         this.mAuth = FirebaseAuth.getInstance();
         this.currentUser = mAuth.getCurrentUser();
         this.chatsRef = database.getReference("support/chats/");

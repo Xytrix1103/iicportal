@@ -8,13 +8,14 @@ public class Message {
     private String email;
     private String phone;
     private String message;
+    private String userProfilePicture;
     private boolean read;
     private Long timestamp;
 
     public Message() {
     }
 
-    public Message(String uid, String firstName, String lastName, String fullName, String email, String phone, String message, boolean read, Long timestamp) {
+    public Message(String uid, String firstName, String lastName, String fullName, String email, String phone, String message, String userProfilePicture, boolean read, Long timestamp) {
         this.uid = uid;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -22,6 +23,7 @@ public class Message {
         this.email = email;
         this.phone = phone;
         this.message = message;
+        this.userProfilePicture = userProfilePicture;
         this.read = read;
         this.timestamp = timestamp;
     }
@@ -52,6 +54,10 @@ public class Message {
 
     public String getMessage() {
         return message;
+    }
+
+    public String getUserProfilePicture() {
+        return userProfilePicture;
     }
 
     public boolean isRead() {
@@ -88,6 +94,10 @@ public class Message {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public void setUserProfilePicture(String userProfilePicture) {
+        this.userProfilePicture = userProfilePicture;
     }
 
     public void setRead(boolean read) {
