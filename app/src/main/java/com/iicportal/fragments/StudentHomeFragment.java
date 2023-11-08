@@ -106,8 +106,7 @@ public class StudentHomeFragment extends Fragment {
         userRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 usernameText.setText(task.getResult().child("fullName").getValue().toString());
-                // TODO: uncomment this when user profile pictures are implemented
-                // Glide.with(userImage.getContext()).load(task.getResult().child("image").getValue().toString().into(userImage);
+                Glide.with(userImage.getContext()).load(task.getResult().child("image").getValue().toString()).into(userImage);
             } else {
                 Log.e(STUDENT_HOME_TAG, "Error getting user data", task.getException());
             }

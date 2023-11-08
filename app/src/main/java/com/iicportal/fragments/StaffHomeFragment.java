@@ -96,8 +96,7 @@ public class StaffHomeFragment extends Fragment {
         userRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 usernameText.setText(task.getResult().child("fullName").getValue().toString());
-                // TODO: uncomment this when user profile pictures are implemented
-                // Glide.with(userImage.getContext()).load(task.getResult().child("image").getValue().toString().into(userImage);
+                Glide.with(userImage.getContext()).load(task.getResult().child("image").getValue().toString()).into(userImage);
             } else {
                 Log.e(STAFF_HOME_TAG, "Error getting user data", task.getException());
             }
@@ -134,7 +133,7 @@ public class StaffHomeFragment extends Fragment {
                             timestamp = Long.parseLong(snapshotItem.child("timestamp").getValue().toString());
                         } else if (statusValue.equals("READY")) {
                             description = "Just a quick note to inform you that your order is ready for pickup or delivery.";
-                            //timestamp = Long.parseLong(snapshotItem.child("readyTimestamp").getValue().toString());
+                            timestamp = Long.parseLong(snapshotItem.child("readyTimestamp").getValue().toString());
                         }
 
                         OrderStatus newOrderStatus = new OrderStatus(
