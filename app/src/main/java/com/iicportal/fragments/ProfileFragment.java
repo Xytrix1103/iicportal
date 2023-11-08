@@ -1,8 +1,12 @@
 package com.iicportal.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -31,6 +35,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseAuth mAuth;
     FirebaseDatabase database;
     FirebaseUser user;
+    SharedPreferences sharedPreferences;
     TextView name, studentID;
     ImageView barcode, pfp;
     ImageView logoutButtonIcon, profileUpdateIcon, contactIcon;
@@ -57,6 +62,7 @@ public class ProfileFragment extends Fragment {
         barcode = view.findViewById(R.id.barcodeImage);
         profileUpdateIcon = view.findViewById(R.id.profileUpdateIcon);
         pfp = view.findViewById(R.id.profileImage);
+        sharedPreferences = context.getSharedPreferences("com.iicportal", MODE_PRIVATE);
 
         database.getReference("users/"+user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -64,15 +70,37 @@ public class ProfileFragment extends Fragment {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 name.setText(dataSnapshot.child("fullName").getValue(String.class));
-                String email = dataSnapshot.child("email").getValue(String.class);
-                int positionOfAtSymbol = email.indexOf("@");
-                if (positionOfAtSymbol < 0) {
-                    studentID.setText(email.toUpperCase());
-                } else {
-                    String frontSegmentOfEmail = email.substring(0, positionOfAtSymbol);
-                    studentID.setText(frontSegmentOfEmail.toUpperCase());
+                String role = dataSnapshot.child("role").getValue().toString();
+                sharedPreferences.edit().putString("role", role).apply();
+                if (role.equals("Admin") || role.equals("Vendor") || role.equals("Staff")) {
+                    String email = dataSnapshot.child("email").getValue(String.class);
+                    int positionOfAtSymbol = email.indexOf("@");
+                    if (positionOfAtSymbol < 0) {
+                        studentID.setText(email.toUpperCase());
+                        studentID.setVisibility(View.GONE);
+                        barcode.setVisibility(View.GONE);
+                    } else {
+                        String frontSegmentOfEmail = email.substring(0, positionOfAtSymbol);
+                        studentID.setText(frontSegmentOfEmail.toUpperCase());
+                        studentID.setVisibility(View.GONE);
+                        barcode.setVisibility(View.GONE);
+                    }
+                    Glide.with(view.getContext()).load(dataSnapshot.child("image").getValue(String.class)).into(pfp);
+                } else if (role.equals("Student")) {
+                    String email = dataSnapshot.child("email").getValue(String.class);
+                    int positionOfAtSymbol = email.indexOf("@");
+                    if (positionOfAtSymbol < 0) {
+                        studentID.setText(email.toUpperCase());
+                        studentID.setVisibility(View.VISIBLE);
+                        barcode.setVisibility(View.VISIBLE);
+                    } else {
+                        String frontSegmentOfEmail = email.substring(0, positionOfAtSymbol);
+                        studentID.setText(frontSegmentOfEmail.toUpperCase());
+                        studentID.setVisibility(View.VISIBLE);
+                        barcode.setVisibility(View.VISIBLE);
+                    }
+                    Glide.with(view.getContext()).load(dataSnapshot.child("image").getValue(String.class)).into(pfp);
                 }
-                Glide.with(view.getContext()).load(dataSnapshot.child("image").getValue(String.class)).into(pfp);
             }
 
             @Override
