@@ -100,11 +100,20 @@
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
+            <ImageView
+                android:id="@+id/barcodeImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/nameText"
+                android:layout_marginTop="40dp"
+                android:src="@drawable/barcode" />
+
             <TextView
                 android:id="@+id/studentIDText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/nameText"
+                android:layout_below="@id/barcodeImage"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
                 android:text="@string/fullNameLabel"
@@ -112,18 +121,10 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/barcodeImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/studentIDText"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/barcode" />
-
         </RelativeLayout>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/contactBtn"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"

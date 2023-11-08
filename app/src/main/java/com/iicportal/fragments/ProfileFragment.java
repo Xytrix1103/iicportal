@@ -5,14 +5,16 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -22,12 +24,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 import com.iicportal.R;
-import com.iicportal.activity.BookingHistoryActivity;
 import com.iicportal.activity.ContactActivity;
 import com.iicportal.activity.LoginActivity;
 import com.iicportal.activity.MainActivity;
-import com.iicportal.activity.OrderHistoryActivity;
 import com.iicportal.activity.ProfileUpdateActivity;
 
 public class ProfileFragment extends Fragment {
@@ -39,6 +43,7 @@ public class ProfileFragment extends Fragment {
     TextView name, studentID;
     ImageView barcode, pfp;
     ImageView logoutButtonIcon, profileUpdateIcon, contactIcon;
+    CardView contactButton;
     String[] initial = {"", "", "", ""};
     public ProfileFragment() {
         super(R.layout.profile_fragment);
@@ -70,36 +75,38 @@ public class ProfileFragment extends Fragment {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 name.setText(dataSnapshot.child("fullName").getValue(String.class));
+                Glide.with(view.getContext()).load(dataSnapshot.child("image").getValue(String.class)).into(pfp);
+
+                String email = dataSnapshot.child("email").getValue(String.class);
+                int positionOfAtSymbol = email.indexOf("@");
+                if (positionOfAtSymbol < 0) {
+                    studentID.setText(email.toUpperCase());
+                } else {
+                    String frontSegmentOfEmail = email.substring(0, positionOfAtSymbol);
+                    studentID.setText(frontSegmentOfEmail.toUpperCase());
+                }
+                String studentIDBarcode = (String) studentID.getText();
+                MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+                try {
+                    BitMatrix bitMatrix = multiFormatWriter.encode(studentIDBarcode, BarcodeFormat.CODE_128,barcode.getWidth(),barcode.getHeight());
+                    Bitmap bitmap = Bitmap.createBitmap(barcode.getWidth(),barcode.getHeight(),Bitmap.Config.RGB_565);
+                    for (int i = 0; i < barcode.getWidth(); i++){
+                        for (int j = 0; j < barcode.getHeight(); j++){
+                            bitmap.setPixel(i,j,bitMatrix.get(i,j)? Color.BLACK:Color.WHITE);
+                        }
+                    }
+                    barcode.setImageBitmap(bitmap);
+                } catch (WriterException e) {
+                    e.printStackTrace();
+                }
                 String role = dataSnapshot.child("role").getValue().toString();
                 sharedPreferences.edit().putString("role", role).apply();
                 if (role.equals("Admin") || role.equals("Vendor") || role.equals("Staff")) {
-                    String email = dataSnapshot.child("email").getValue(String.class);
-                    int positionOfAtSymbol = email.indexOf("@");
-                    if (positionOfAtSymbol < 0) {
-                        studentID.setText(email.toUpperCase());
-                        studentID.setVisibility(View.GONE);
-                        barcode.setVisibility(View.GONE);
-                    } else {
-                        String frontSegmentOfEmail = email.substring(0, positionOfAtSymbol);
-                        studentID.setText(frontSegmentOfEmail.toUpperCase());
-                        studentID.setVisibility(View.GONE);
-                        barcode.setVisibility(View.GONE);
-                    }
-                    Glide.with(view.getContext()).load(dataSnapshot.child("image").getValue(String.class)).into(pfp);
+                    studentID.setVisibility(View.GONE);
+                    barcode.setVisibility(View.GONE);
                 } else if (role.equals("Student")) {
-                    String email = dataSnapshot.child("email").getValue(String.class);
-                    int positionOfAtSymbol = email.indexOf("@");
-                    if (positionOfAtSymbol < 0) {
-                        studentID.setText(email.toUpperCase());
-                        studentID.setVisibility(View.VISIBLE);
-                        barcode.setVisibility(View.VISIBLE);
-                    } else {
-                        String frontSegmentOfEmail = email.substring(0, positionOfAtSymbol);
-                        studentID.setText(frontSegmentOfEmail.toUpperCase());
-                        studentID.setVisibility(View.VISIBLE);
-                        barcode.setVisibility(View.VISIBLE);
-                    }
-                    Glide.with(view.getContext()).load(dataSnapshot.child("image").getValue(String.class)).into(pfp);
+                    studentID.setVisibility(View.VISIBLE);
+                    barcode.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -115,9 +122,9 @@ public class ProfileFragment extends Fragment {
             context.startActivity(intent);
         });
 
-        contactIcon = view.findViewById(R.id.contactIcon);
+        contactButton = view.findViewById(R.id.contactBtn);
 
-        contactIcon.setOnClickListener(v -> {
+        contactButton.setOnClickListener(v -> {
             startActivity(new Intent(context, ContactActivity.class));
         });
 
