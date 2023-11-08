@@ -141,8 +141,11 @@
             android:exported="true">
         </activity>
 
-        <activity
-            android:name=".activity.LiveChatActivity"
+        <activity android:name=".activity.LiveChatActivity"
+            android:exported="true">
+        </activity>
+
+        <activity android:name=".activity.ProfileUpdateActivity"
             android:exported="true">
         </activity>
 
