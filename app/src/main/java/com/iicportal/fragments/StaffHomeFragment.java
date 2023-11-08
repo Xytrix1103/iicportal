@@ -96,7 +96,9 @@ public class StaffHomeFragment extends Fragment {
         userRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 usernameText.setText(task.getResult().child("fullName").getValue().toString());
-                Glide.with(userImage.getContext()).load(task.getResult().child("image").getValue().toString()).into(userImage);
+
+                if (task.getResult().child("image").getValue() != null)
+                    Glide.with(userImage.getContext()).load(task.getResult().child("image").getValue().toString()).into(userImage);
             } else {
                 Log.e(STAFF_HOME_TAG, "Error getting user data", task.getException());
             }
