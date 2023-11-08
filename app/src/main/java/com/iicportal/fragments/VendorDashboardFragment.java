@@ -129,6 +129,7 @@ public class VendorDashboardFragment extends Fragment {
                 pastFiveDaysOrdersChart.setData(barData);
                 pastFiveDaysOrdersChart.invalidate();
 
+
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM");
                 ArrayList<String> dateStrings = new ArrayList<String>();
                 dateStrings.add(dateFormat.format(pastFiveDays[0]));
@@ -148,13 +149,16 @@ public class VendorDashboardFragment extends Fragment {
                 XAxis xAxis = pastFiveDaysOrdersChart.getXAxis();
                 xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
                 xAxis.setLabelCount(5);
-                xAxis.setGranularity(1f);
+                xAxis.setGranularity(1);
                 xAxis.setValueFormatter(formatter);
                 // Set y-axis
-                YAxis yAxis = pastFiveDaysOrdersChart.getAxisLeft();
-                yAxis.setAxisMinimum(0f);
-                yAxis.setDrawLabels(true);
-                yAxis.setLabelCount(5);
+                YAxis leftyAxis = pastFiveDaysOrdersChart.getAxisLeft();
+                leftyAxis.setAxisMinimum(0);
+                leftyAxis.setAxisMaximum(100);
+                leftyAxis.setDrawLabels(true);
+                leftyAxis.setLabelCount(5);
+                YAxis rightYAxis = pastFiveDaysOrdersChart.getAxisRight();
+                rightYAxis.setEnabled(false);
             }
 
             @Override
