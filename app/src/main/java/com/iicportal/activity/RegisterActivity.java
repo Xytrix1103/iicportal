@@ -124,7 +124,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Log.d("RegisterActivity", "createUserWithEmail:success");
                         currentUser = mAuth.getCurrentUser();
-                        usersRef.child(currentUser.getUid()).setValue(new User(fullName, phoneNumber, email, getRole(email), password));
+                        usersRef.child(currentUser.getUid()).setValue(new User(fullName, phoneNumber, email, getRole(email), password, null));
                         updateUI(currentUser);
                     } else {
                         Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();

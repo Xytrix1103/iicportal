@@ -104,7 +104,7 @@ public class AddUserActivity extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             Log.i("AddUserActivity", "User created successfully");
                                             String uid = task.getResult().getUser().getUid();
-                                            User user = new User(fullName, phone, email, role, password);
+                                            User user = new User(fullName, phone, email, role, password, null);
                                             usersRef.child(uid).setValue(user);
                                             Toast.makeText(AddUserActivity.this, "User added successfully", Toast.LENGTH_SHORT).show();
                                             finish();
