@@ -42,13 +42,19 @@ public class ProfileFragment extends Fragment {
     SharedPreferences sharedPreferences;
     TextView name, studentID;
     ImageView barcode, pfp;
-    ImageView logoutButtonIcon, profileUpdateIcon, contactIcon;
+    ImageView logoutButtonIcon, profileUpdateIcon, menuButton;
     CardView contactButton;
+    AdminDashboardFragment.OpenDrawerInterface openDrawerInterface;
     String[] initial = {"", "", "", ""};
     public ProfileFragment() {
         super(R.layout.profile_fragment);
+        this.openDrawerInterface = null;
     }
 
+    public ProfileFragment(AdminDashboardFragment.OpenDrawerInterface openDrawerInterface) {
+        super(R.layout.profile_fragment);
+        this.openDrawerInterface = openDrawerInterface;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +73,7 @@ public class ProfileFragment extends Fragment {
         barcode = view.findViewById(R.id.barcodeImage);
         profileUpdateIcon = view.findViewById(R.id.profileUpdateIcon);
         pfp = view.findViewById(R.id.profileImage);
+        menuButton = view.findViewById(R.id.menuIcon);
         sharedPreferences = context.getSharedPreferences("com.iicportal", MODE_PRIVATE);
 
         database.getReference("users/"+user.getUid()).addValueEventListener(new ValueEventListener() {
@@ -76,6 +83,7 @@ public class ProfileFragment extends Fragment {
                 // whenever data at this location is updated.
                 name.setText(dataSnapshot.child("fullName").getValue(String.class));
                 Glide.with(view.getContext()).load(dataSnapshot.child("image").getValue(String.class)).into(pfp);
+                menuButton.setOnClickListener(v -> openDrawerInterface.openDrawer());
 
                 String email = dataSnapshot.child("email").getValue(String.class);
                 int positionOfAtSymbol = email.indexOf("@");
@@ -101,12 +109,20 @@ public class ProfileFragment extends Fragment {
                 }
                 String role = dataSnapshot.child("role").getValue().toString();
                 sharedPreferences.edit().putString("role", role).apply();
-                if (role.equals("Admin") || role.equals("Vendor") || role.equals("Staff")) {
+                if (role.equals("Staff")) {
                     studentID.setVisibility(View.GONE);
                     barcode.setVisibility(View.GONE);
+                    menuButton.setVisibility(View.GONE);
                 } else if (role.equals("Student")) {
                     studentID.setVisibility(View.VISIBLE);
                     barcode.setVisibility(View.VISIBLE);
+                    menuButton.setVisibility(View.GONE);
+                } else if (role.equals("Admin")) {
+                    studentID.setVisibility(View.GONE);
+                    barcode.setVisibility(View.GONE);
+                } else if (role.equals("Vendor")){
+                    studentID.setVisibility(View.GONE);
+                    barcode.setVisibility(View.GONE);
                 }
             }
 

@@ -33,6 +33,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
     Fragment FacilityFragment;
     Fragment UserListFragment;
     Fragment OrderListFragment;
+    Fragment ProfileFragment;
     DrawerLayout drawerLayout;
 
     public HorizontalViewFragment() {
@@ -58,6 +59,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
         FacilityFragment = new FacilityFragment(this);
         UserListFragment = new UserListFragment(this);
         OrderListFragment = new OrderListFragment(this);
+        ProfileFragment = new ProfileFragment(this);
         String role = sharedPreferences.getString("role", "");
         ViewGroup finalContainer = container;
 
@@ -82,7 +84,8 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
         menu.add(Menu.NONE, 2, Menu.NONE, "Facilities").setIcon(R.drawable.outline_videogame_asset_24);
         menu.add(Menu.NONE, 3, Menu.NONE, "Users").setIcon(R.drawable.baseline_people_outline_24);
         menu.add(Menu.NONE, 4, Menu.NONE, "Orders").setIcon(R.drawable.outline_food_bank_24);
-        menu.add(Menu.NONE, 5, Menu.NONE, "Logout").setIcon(R.drawable.baseline_logout_24);
+        menu.add(Menu.NONE, 5,Menu.NONE,"Profile").setIcon(R.drawable.baseline_person_24);
+        menu.add(Menu.NONE, 6, Menu.NONE, "Logout").setIcon(R.drawable.baseline_logout_24);
         menu.getItem(0).setChecked(true);
 
         navigationView.setNavigationItemSelectedListener(item -> {
@@ -113,6 +116,9 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, OrderListFragment).commit();
                     break;
                 case 5:
+                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, ProfileFragment).commit();
+                    break;
+                case 6:
                     mAuth.signOut();
                     startActivity(new Intent(requireContext(), LoginActivity.class));
                     requireActivity().finish();
@@ -132,7 +138,8 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
         menu.add(Menu.NONE, 0, Menu.NONE, "Dashboard").setIcon(R.drawable.round_dashboard_24);
         menu.add(Menu.NONE, 1, Menu.NONE, "E-Canteen").setIcon(R.drawable.outline_coffee_24);
         menu.add(Menu.NONE, 2, Menu.NONE, "Orders").setIcon(R.drawable.outline_food_bank_24);
-        menu.add(Menu.NONE, 3, Menu.NONE, "Logout").setIcon(R.drawable.baseline_logout_24);
+        menu.add(Menu.NONE, 3,Menu.NONE,"Profile").setIcon(R.drawable.baseline_person_24);
+        menu.add(Menu.NONE, 4, Menu.NONE, "Logout").setIcon(R.drawable.baseline_logout_24);
         menu.getItem(0).setChecked(true);
 
         navigationView.setNavigationItemSelectedListener(item -> {
@@ -157,6 +164,9 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, OrderListFragment).commit();
                     break;
                 case 3:
+                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, ProfileFragment).commit();
+                    break;
+                case 4:
                     mAuth.signOut();
                     startActivity(new Intent(requireContext(), LoginActivity.class));
                     requireActivity().finish();
