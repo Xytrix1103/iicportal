@@ -5,8 +5,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".activity.LoginActivity"
-    android:background="@color/white">
+    tools:context=".activity.LoginActivity">
+
+    <Button
+        android:id="@+id/contactBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:text="Contact Us" />
 
     <FrameLayout
         android:id="@+id/fragment_container"

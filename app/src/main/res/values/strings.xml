@@ -67,6 +67,11 @@
     <string name="facility_name">Facility Name</string>
     <string name="booking_time">Booking Time</string>
     <string name="booking_date">Booking Date</string>
+    <string name="welcome_back">Welcome back,</string>
+    <string name="services">Services</string>
+    <string name="status_reminders">Status/Reminders</string>
+    <string name="facilities">Facilities</string>
+    <string name="status_empty">There are no currently no status updates or reminders for you.</string>
     <string name="bookingHistory">Booking History</string>
     <string name="booking_history_empty">You have no previous bookings.</string>
 	<string name="order_details">Order Details</string>
@@ -111,8 +116,7 @@
     <string name="new_facility">New Facility</string>
     <string name="newFacilityHint">Please enter new facility name</string>
     <string name="stop_edit_facility">Exit Facility edit mode</string>
-
-
+    
 	<string-array name="timeslot">
         <item>8:00AM - 9:00AM</item>
         <item>9:00AM - 10:00AM</item>
