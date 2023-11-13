@@ -1,81 +1,23 @@
 package com.iicportal.models;
 
+import java.util.Map;
+
 public class Chat {
-    private String initiatorUid;
-    private String initiatorName;
-    private String userProfilePicture;
-    private String latestMessage;
-    private Long latestMessageTimestamp;
-    private String latestMessageSenderUid;
-    private boolean readByAdmin;
+    private Map<String, Boolean> members;
 
     public Chat() {
 
     }
 
-    public Chat(String initiatorUid, String initiatorName, String userProfilePicture, String latestMessage, Long latestMessageTimestamp, String latestMessageSenderUid, boolean readByAdmin) {
-        this.initiatorUid = initiatorUid;
-        this.initiatorName = initiatorName;
-        this.userProfilePicture = userProfilePicture;
-        this.latestMessage = latestMessage;
-        this.latestMessageTimestamp = latestMessageTimestamp;
-        this.latestMessageSenderUid = latestMessageSenderUid;
-        this.readByAdmin = readByAdmin;
+    public Chat(Map<String, Boolean> members) {
+        this.members = members;
     }
 
-    public String getInitiatorUid() {
-        return initiatorUid;
+    public Map<String, Boolean> getMembers() {
+        return members;
     }
 
-    public String getInitiatorName() {
-        return initiatorName;
-    }
-
-    public String getUserProfilePicture() {
-        return userProfilePicture;
-    }
-
-    public String getLatestMessage() {
-        return latestMessage;
-    }
-
-    public Long getLatestMessageTimestamp() {
-        return latestMessageTimestamp;
-    }
-
-    public String getLatestMessageSenderUid() {
-        return latestMessageSenderUid;
-    }
-
-    public boolean isReadByAdmin() {
-        return readByAdmin;
-    }
-
-    public void setInitiatorUid(String initiatorUid) {
-        this.initiatorUid = initiatorUid;
-    }
-
-    public void setInitiatorName(String initiatorName) {
-        this.initiatorName = initiatorName;
-    }
-
-    public void setUserProfilePicture(String userProfilePicture) {
-        this.userProfilePicture = userProfilePicture;
-    }
-
-    public void setLatestMessage(String latestMessage) {
-        this.latestMessage = latestMessage;
-    }
-
-    public void setLatestMessageTimestamp(Long latestMessageTimestamp) {
-        this.latestMessageTimestamp = latestMessageTimestamp;
-    }
-
-    public void setLatestMessageSenderUid(String latestMessageSenderUid) {
-        this.latestMessageSenderUid = latestMessageSenderUid;
-    }
-
-    public void setReadByAdmin(boolean readByAdmin) {
-        this.readByAdmin = readByAdmin;
+    public void setMembers(Map<String, Boolean> members) {
+        this.members = members;
     }
 }

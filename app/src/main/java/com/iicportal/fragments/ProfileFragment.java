@@ -6,9 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,11 +21,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
-import com.iicportal.activity.BookingHistoryActivity;
-import com.iicportal.activity.ContactActivity;
 import com.iicportal.activity.LoginActivity;
 import com.iicportal.activity.MainActivity;
-import com.iicportal.activity.OrderHistoryActivity;
 import com.iicportal.activity.ProfileUpdateActivity;
 
 public class ProfileFragment extends Fragment {
@@ -113,12 +108,6 @@ public class ProfileFragment extends Fragment {
             Intent intent = new Intent(context, ProfileUpdateActivity.class);
             intent.putExtra("userID",user.getUid());
             context.startActivity(intent);
-        });
-
-        contactIcon = view.findViewById(R.id.contactIcon);
-
-        contactIcon.setOnClickListener(v -> {
-            startActivity(new Intent(context, ContactActivity.class));
         });
 
         logoutButtonIcon = view.findViewById(R.id.logoutBtnIcon);

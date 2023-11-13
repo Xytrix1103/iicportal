@@ -1,17 +1,14 @@
 package com.iicportal.adaptor;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,13 +59,6 @@ public class ChatMessageAdaptor extends FirebaseRecyclerAdapter<ChatMessage, Rec
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, ChatMessage model) {
         if (holder instanceof ReceivedMessageViewHolder) {
             ReceivedMessageViewHolder castedHolder = (ReceivedMessageViewHolder) holder;
-
-            if (model.getUserProfilePicture() != null)
-                Glide.with(context).load(model.getUserProfilePicture()).into(castedHolder.userProfilePic);
-            else
-                castedHolder.userProfilePic.setImageResource(R.drawable.baseline_account_circle_24);
-
-            castedHolder.username.setText(model.getUsername());
             castedHolder.receivedMessage.setText(model.getMessage());
             castedHolder.receivedMessage.setText(model.getMessage());
         } else if (holder instanceof SentMessageViewHolder) {
@@ -98,14 +88,10 @@ public class ChatMessageAdaptor extends FirebaseRecyclerAdapter<ChatMessage, Rec
     }
 
     public class ReceivedMessageViewHolder extends RecyclerView.ViewHolder {
-        TextView username;
-        ImageView userProfilePic;
         TextView receivedMessage;
 
         public ReceivedMessageViewHolder(@NonNull View itemView) {
             super(itemView);
-            username = itemView.findViewById(R.id.chatTitle);
-            userProfilePic = itemView.findViewById(R.id.userProfilePic);
             receivedMessage = itemView.findViewById(R.id.receivedMessageText);
         }
     }

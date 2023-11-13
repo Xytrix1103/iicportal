@@ -2,7 +2,6 @@
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:gravity="center"
     android:windowSoftInputMode="adjustNothing"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:clipChildren="false"
@@ -122,25 +121,6 @@
                 android:src="@drawable/barcode" />
 
         </RelativeLayout>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:background="@color/colorPrimary"
-            app:cardCornerRadius="100dp"
-            app:cardElevation="10dp"
-            app:contentPadding="10dp">
-
-            <ImageView
-                android:id="@+id/contactIcon"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/baseline_chat_bubble_outline_24" />
-
-        </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
 

@@ -15,6 +15,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,6 +37,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
     Fragment ChatListFragment;
     Fragment MessageListFragment;
     DrawerLayout drawerLayout;
+    FloatingActionButton fab;
 
     public HorizontalViewFragment() {
         super(R.layout.horizontal_view_fragment);

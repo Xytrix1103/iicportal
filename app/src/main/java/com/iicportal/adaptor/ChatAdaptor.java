@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +19,19 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
-import com.iicportal.activity.LiveChatActivity;
+import com.iicportal.activity.ChatActivity;
 import com.iicportal.activity.MainActivity;
 import com.iicportal.models.Chat;
+import com.iicportal.models.ChatMessage;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.HashMap;
 
 public class ChatAdaptor extends FirebaseRecyclerAdapter<Chat, ChatAdaptor.ChatViewHolder> {
     private Context context;
@@ -47,7 +50,7 @@ public class ChatAdaptor extends FirebaseRecyclerAdapter<Chat, ChatAdaptor.ChatV
         this.currentUser = mAuth.getCurrentUser();
         this.database = MainActivity.database;
         this.usersRef = database.getReference("users/");
-        this.chatsRef = database.getReference("support/chats/");
+        this.chatsRef = database.getReference("chats/");
     }
 
     @NonNull
@@ -59,47 +62,85 @@ public class ChatAdaptor extends FirebaseRecyclerAdapter<Chat, ChatAdaptor.ChatV
 
     @Override
     public void onBindViewHolder(@NonNull ChatViewHolder holder, int position, Chat model) {
-        // Determine if latest message was sent today, yesterday, or more than 1 day ago
-        String latestMessageTime;
-        Long latestMessageTimestamp  = model.getLatestMessageTimestamp();
+        HashMap<String, Boolean> members = (HashMap<String, Boolean>) model.getMembers();
+        String recipientId = null;
 
-        if (DateUtils.isToday(latestMessageTimestamp)) {
-           latestMessageTime = new SimpleDateFormat("h:mm a").format(latestMessageTimestamp);
-        } else if (DateUtils.isToday(latestMessageTimestamp + DateUtils.DAY_IN_MILLIS)) {
-           latestMessageTime = "Yesterday";
-        } else {
-           latestMessageTime = new SimpleDateFormat("dd MMM yyyy").format(latestMessageTimestamp);
+        for (String key : members.keySet()) {
+            if (!key.equals(currentUser.getUid())) {
+                recipientId = key;
+            }
         }
 
-        if (model.getUserProfilePicture() != null)
-            Glide.with(context).load(model.getUserProfilePicture()).into(holder.userProfilePic);
-        else
-            holder.userProfilePic.setImageResource(R.drawable.baseline_account_circle_24);
-        if (model.getLatestMessageSenderUid().equals(currentUser.getUid()))
-            holder.latestMessage.setText(String.format("You: %s", model.getLatestMessage()));
-        else
-            holder.latestMessage.setText(model.getLatestMessage());
+        database.getReference("users/" + recipientId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String fullName = snapshot.child("fullName").getValue(String.class);
+                String role = snapshot.child("role").getValue(String.class);
+                String image = snapshot.child("image").getValue(String.class);
 
-        holder.title.setText(model.getInitiatorName());
-        holder.latestMessageTime.setText(latestMessageTime);
+                holder.title.setText(fullName);
 
-        // Check if chat is unread
-        if (!model.isReadByAdmin()) {
-           holder.title.setTypeface(null, Typeface.BOLD);
-           holder.latestMessage.setTypeface(null, Typeface.BOLD);
-           holder.latestMessageTime.setTypeface(null, Typeface.BOLD);
-        } else {
-           holder.title.setTypeface(null, Typeface.NORMAL);
-           holder.latestMessage.setTypeface(null, Typeface.NORMAL);
-           holder.latestMessageTime.setTypeface(null, Typeface.NORMAL);
-        }
+                if (image != null) {
+                    Glide.with(context).load(image).into(holder.userProfilePic);
+                }
 
-        // Go to LiveChatActivity when chat item is clicked
+                if (role.equals("Admin")) {
+                    holder.title.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        database.getReference("messages/" + getRef(position).getKey()).limitToLast(1).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String latestMessage;
+                Long latestMessageTimestamp;
+                String latestMessageTime;
+
+                for (DataSnapshot messageSnapshot : snapshot.getChildren()) {
+                    ChatMessage message = messageSnapshot.getValue(ChatMessage.class);
+                    latestMessage = message.getMessage();
+                    latestMessageTimestamp = message.getTimestamp();
+
+                    if (DateUtils.isToday(latestMessageTimestamp)) {
+                        latestMessageTime = new SimpleDateFormat("h:mm a").format(latestMessageTimestamp);
+                    } else if (DateUtils.isToday(latestMessageTimestamp + DateUtils.DAY_IN_MILLIS)) {
+                        latestMessageTime = "Yesterday";
+                    } else {
+                        latestMessageTime = new SimpleDateFormat("dd MMM yyyy").format(latestMessageTimestamp);
+                    }
+
+                    holder.latestMessage.setText(latestMessage);
+                    holder.latestMessageTime.setText(latestMessageTime);
+
+                    // Check if chat is unread
+                    if (!message.isRead()) {
+                        holder.title.setTypeface(null, Typeface.BOLD);
+                        holder.latestMessage.setTypeface(null, Typeface.BOLD);
+                        holder.latestMessageTime.setTypeface(null, Typeface.BOLD);
+                    } else {
+                        holder.title.setTypeface(null, Typeface.NORMAL);
+                        holder.latestMessage.setTypeface(null, Typeface.NORMAL);
+                        holder.latestMessageTime.setTypeface(null, Typeface.NORMAL);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        // Go to ChatActivity when chat item is clicked
         holder.chatBody.setOnClickListener(view -> {
-           chatsRef.child(getRef(position).getKey()).child("readByAdmin").setValue(true);
-
-           Intent intent = new Intent(context, LiveChatActivity.class);
-           intent.putExtra("INITIATOR_UID", model.getInitiatorUid());
+           Intent intent = new Intent(context, ChatActivity.class);
+           intent.putExtra("CHAT_ID", getRef(position).getKey());
            context.startActivity(intent);
         });
     }

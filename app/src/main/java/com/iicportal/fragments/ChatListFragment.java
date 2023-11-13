@@ -1,15 +1,16 @@
 package com.iicportal.fragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.textfield.TextInputEditText;
@@ -19,10 +20,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
 import com.iicportal.activity.MainActivity;
+import com.iicportal.activity.SelectChatRecipientActivity;
 import com.iicportal.adaptor.ChatAdaptor;
 import com.iicportal.models.Chat;
 
 public class ChatListFragment extends Fragment {
+    private ImageView addIcon;
+    private Context context;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private FirebaseDatabase database;
@@ -38,68 +42,47 @@ public class ChatListFragment extends Fragment {
     public ChatListFragment() {
         super(R.layout.chat_list_fragment);
         this.openDrawerInterface = null;
-        this.database = FirebaseDatabase.getInstance();
-        this.mAuth = FirebaseAuth.getInstance();
+        this.database = MainActivity.database;
+        this.mAuth = MainActivity.mAuth;
         this.currentUser = mAuth.getCurrentUser();
-        this.chatsRef = database.getReference("support/chats/");
+        this.chatsRef = database.getReference("chats/");
     }
 
     public ChatListFragment(AdminDashboardFragment.OpenDrawerInterface openDrawerInterface) {
         super(R.layout.chat_list_fragment);
         this.openDrawerInterface = openDrawerInterface;
-        this.database = FirebaseDatabase.getInstance();
-        this.mAuth = FirebaseAuth.getInstance();
+        this.database = MainActivity.database;
+        this.mAuth = MainActivity.mAuth;
         this.currentUser = mAuth.getCurrentUser();
-        this.chatsRef = database.getReference("support/chats/");
+        this.chatsRef = database.getReference("chats/");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.chat_list_fragment, container, false);
+        context = requireContext();
 
         // Set reference to views
         menuButton = view.findViewById(R.id.menuIcon);
-        searchEditText = view.findViewById(R.id.searchWidgetEditText);
+        addIcon = view.findViewById(R.id.addIcon);
         chatListRecyclerView = view.findViewById(R.id.chatListReyclerView);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         chatListRecyclerView.setLayoutManager(linearLayoutManager);
 
-        // onClick listeners
-        menuButton.setOnClickListener(v -> {
-            openDrawerInterface.openDrawer();
-        });
-
         // Set up the chats RecyclerView and Adapter
         FirebaseRecyclerOptions<Chat> options = new FirebaseRecyclerOptions.Builder<Chat>()
-                .setQuery(chatsRef.orderByChild("latestMessageTimestamp"), Chat.class)
+                .setQuery(chatsRef.orderByChild("/members/" + currentUser.getUid()).equalTo(true), Chat.class)
                 .setLifecycleOwner(this)
                 .build();
 
-        chatAdaptor = new ChatAdaptor(options, requireContext());
+        chatAdaptor = new ChatAdaptor(options, context);
         chatListRecyclerView.setAdapter(chatAdaptor);
 
-        // Set up the search widget
-        searchEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
-            String query = searchEditText.getText().toString();
-
-            if (query.isEmpty()) {
-                chatAdaptor.updateOptions(options);
-            } else {
-                chatAdaptor.stopListening();
-
-                FirebaseRecyclerOptions<Chat> searchOptions = new FirebaseRecyclerOptions.Builder<Chat>()
-                        .setQuery(chatsRef.orderByChild("initiatorName").startAt(query).endAt(query + "\uf8ff"), Chat.class)
-                        .setLifecycleOwner(this)
-                        .build();
-
-                chatAdaptor.updateOptions(searchOptions);
-                chatAdaptor.startListening();
-            }
-
-            return false;
+        addIcon.setOnClickListener(v -> {
+            startActivity(new Intent(context, SelectChatRecipientActivity.class));
         });
 
         return view;

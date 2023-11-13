@@ -141,7 +141,7 @@
             android:exported="true">
         </activity>
 
-        <activity android:name=".activity.LiveChatActivity"
+        <activity android:name=".activity.ChatActivity"
             android:exported="true">
         </activity>
 
@@ -149,6 +149,9 @@
             android:exported="true">
         </activity>
 
+        <activity android:name=".activity.SelectChatRecipientActivity"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>
