@@ -2,12 +2,15 @@ package com.iicportal.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -61,7 +64,11 @@ public class ChatListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.chat_list_fragment, container, false);
         context = requireContext();
+        return view;
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         // Set reference to views
         menuButton = view.findViewById(R.id.menuIcon);
         addIcon = view.findViewById(R.id.addIcon);
@@ -85,7 +92,17 @@ public class ChatListFragment extends Fragment {
             startActivity(new Intent(context, SelectChatRecipientActivity.class));
         });
 
-        return view;
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("com.iicportal", 0);
+        if (sharedPreferences.getString("role", "").equals("Admin") || sharedPreferences.getString("role", "").equals("Vendor")) {
+            menuButton.setVisibility(View.VISIBLE);
+            menuButton.setOnClickListener(v -> {
+                if (openDrawerInterface != null) {
+                    openDrawerInterface.openDrawer();
+                }
+            });
+        } else {
+            menuButton.setVisibility(View.GONE);
+        }
     }
 
     @Override

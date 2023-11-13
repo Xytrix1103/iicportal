@@ -121,12 +121,12 @@ public class VerticalHomeFragment extends Fragment {
 
         //region Services
         ecanteenButtonCard.setOnClickListener(v -> {
-            bottomNavigationView.getMenu().getItem(1).setChecked(true);
+            bottomNavigationView.getMenu().getItem(0).setChecked(true);
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.vertical_fragment_container, new ECanteenMenuFragment()).commit();
         });
 
         facilitiesButtonCard.setOnClickListener(v -> {
-            bottomNavigationView.getMenu().getItem(2).setChecked(true);
+            bottomNavigationView.getMenu().getItem(1).setChecked(true);
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.vertical_fragment_container, new FacilityMenuFragment()).commit();
         });
         //endregion

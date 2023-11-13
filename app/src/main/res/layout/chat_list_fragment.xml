@@ -9,6 +9,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="start"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="10dp">
 
@@ -21,9 +22,9 @@
             android:src="@drawable/baseline_menu_24"/>
 
         <ImageView
-            android:id="@+id/chatListHeaderIcon"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:id="@+id/headerIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_toEndOf="@id/menuIcon"
             android:layout_centerVertical="true"
             android:src="@drawable/baseline_support_agent_24"
@@ -34,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/chatListHeaderIcon"
+            android:layout_toEndOf="@id/headerIcon"
             android:text="@string/chats"
             android:textColor="@color/black"
             android:textSize="24sp"
@@ -42,8 +43,8 @@
 
         <ImageView
             android:id="@+id/addIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
             android:src="@drawable/outline_add_circle_outline_24"/>
