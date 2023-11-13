@@ -7,12 +7,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activity.LoginActivity">
 
-<!--    <Button-->
-<!--        android:id="@+id/contactBtn"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_centerInParent="true"-->
-<!--        android:text="Contact Us" />-->
+    <Button
+        android:id="@+id/contactBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:text="Contact Us" />
 
     <FrameLayout
         android:id="@+id/fragment_container"
