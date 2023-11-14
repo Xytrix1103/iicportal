@@ -1,57 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/facilityBody"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
+    app:contentPadding="10dp"
     android:layout_marginHorizontal="10dp"
-    android:layout_centerInParent="true"
-    android:padding="10dp"
-    android:background="@drawable/box">
+    app:cardCornerRadius="10dp"
+    app:cardElevation="5dp">
 
-    <ImageView
-        android:id="@+id/facility_image"
-        android:layout_width="39dp"
-        android:layout_height="39dp"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="10dp"
-        android:src="@drawable/facility" />
-
-    <TextView
-        android:id="@+id/facility_name"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/facilityBody"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/facility_image"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="10dp"
-        android:text="@string/facility_name"
-        android:textColor="@color/black"
-        android:textSize="16sp"/>
+        android:layout_centerInParent="true">
 
-    <TextView
-        android:id="@+id/booknowBtn"
-        android:theme="@style/Button.Transparent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:textColor="@color/colorPrimary"
-        android:text="Book Now"
-        android:textSize="10sp"
-        android:layout_marginEnd="10dp" />
+        <ImageView
+            android:id="@+id/facility_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/facility" />
 
-    <TextView
-        android:id="@+id/editFacilityBtn"
-        android:theme="@style/Button.Transparent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:textColor="@color/colorPrimary"
-        android:text="Edit Facility"
-        android:textSize="10sp"
-        android:layout_marginEnd="10dp" />
+        <TextView
+            android:id="@+id/facility_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/facility_image"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:text="@string/facility_name"
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
 
+        <TextView
+            android:id="@+id/booknowBtn"
+            android:theme="@style/Button.Transparent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/colorPrimary"
+            android:text="Book Now"
+            android:textSize="10sp"
+            android:layout_marginEnd="10dp" />
 
+        <TextView
+            android:id="@+id/editFacilityBtn"
+            android:theme="@style/Button.Transparent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/colorPrimary"
+            android:text="Edit Facility"
+            android:textSize="10sp"
+            android:layout_marginEnd="10dp" />
 
+    </RelativeLayout>
 
-</RelativeLayout>
+</androidx.cardview.widget.CardView>
