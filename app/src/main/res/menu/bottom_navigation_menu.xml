@@ -1,3 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="@color/white" >
+	<item
+		android:id="@+id/ecanteen"
+		android:icon="@drawable/baseline_restaurant_24"
+		android:title="E-Canteen" />
+
+	<item
+		android:id="@+id/facilities"
+		android:icon="@drawable/outline_videogame_asset_24"
+		android:title="Facilities" />
+
+	<item
+		android:id="@+id/fab_item"
+		android:title="Home"
+		android:enabled="false"/>
+
+	<item
+		android:id="@+id/chat"
+		android:icon="@drawable/baseline_chat_bubble_outline_24"
+		android:title="Chat" />
+
+	<item
+		android:id="@+id/profile"
+		android:icon="@drawable/baseline_account_circle_24"
+		android:title="Profile" />
 </menu>
