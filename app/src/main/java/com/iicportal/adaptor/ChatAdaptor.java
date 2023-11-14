@@ -14,7 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -79,10 +78,7 @@ public class ChatAdaptor extends FirebaseRecyclerAdapter<Chat, ChatAdaptor.ChatV
                 String image = snapshot.child("image").getValue(String.class);
 
                 holder.title.setText(fullName);
-
-                if (image != null) {
-                    Glide.with(context).load(image).placeholder(R.drawable.baseline_account_circle_24).into(holder.userProfilePic);
-                }
+                MainActivity.loadImage(image, holder.userProfilePic, R.drawable.baseline_account_circle_24);
 
                 if (role.equals("Admin")) {
                     holder.title.setTextColor(context.getResources().getColor(R.color.colorPrimary));

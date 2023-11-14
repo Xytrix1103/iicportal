@@ -10,10 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.iicportal.R;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.models.CartItem;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public class CheckoutItemAdaptor extends FirebaseRecyclerAdapter<CartItem, Check
         holder.name.setText(model.getName());
         holder.price.setText(String.format("RM %.2f", model.getPrice() * model.getQuantity()));
         holder.quantity.setText("x" + model.getQuantity());
-        Glide.with(context).load(model.getImage()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.image);
+        MainActivity.loadImage(model.getImage(), holder.image, R.drawable.baseline_image_placeholder);
     }
 
     public void onDataChanged() {

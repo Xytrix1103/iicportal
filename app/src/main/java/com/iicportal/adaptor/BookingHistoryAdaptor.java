@@ -10,13 +10,13 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.models.BookingItem;
 
 public class BookingHistoryAdaptor extends FirebaseRecyclerAdapter<BookingItem, BookingHistoryAdaptor.BookingViewHolder> {
@@ -39,7 +39,7 @@ public class BookingHistoryAdaptor extends FirebaseRecyclerAdapter<BookingItem, 
     @Override
     protected void onBindViewHolder(BookingViewHolder holder, int position, BookingItem model) {
         holder.facilityName.setText(model.getName());
-        Glide.with(context).load(model.getImage()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.facilityImage);
+        MainActivity.loadImage(model.getImage(), holder.facilityImage);
         holder.timeslot.setText(model.getTime());
 
         // Set the payment method icon (you can modify this logic as needed)
