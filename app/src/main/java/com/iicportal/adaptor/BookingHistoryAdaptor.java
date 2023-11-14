@@ -39,7 +39,7 @@ public class BookingHistoryAdaptor extends FirebaseRecyclerAdapter<BookingItem, 
     @Override
     protected void onBindViewHolder(BookingViewHolder holder, int position, BookingItem model) {
         holder.facilityName.setText(model.getName());
-        Glide.with(context).load(model.getImage()).into(holder.facilityImage);
+        Glide.with(context).load(model.getImage()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.facilityImage);
         holder.timeslot.setText(model.getTime());
 
         // Set the payment method icon (you can modify this logic as needed)

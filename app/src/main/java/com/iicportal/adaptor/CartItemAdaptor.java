@@ -53,7 +53,7 @@ public class CartItemAdaptor extends FirebaseRecyclerAdapter<CartItem, CartItemA
 
         holder.name.setText(model.getName());
         holder.price.setText(String.format("RM %.2f", model.getPrice()));
-        Glide.with(holder.image.getContext()).load(model.getImage()).into(holder.image);
+        Glide.with(holder.image.getContext()).load(model.getImage()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.image);
         holder.quantity.setText(String.valueOf(model.getQuantity()));
 
         holder.plusBtn.setOnClickListener(v -> {

@@ -4,21 +4,27 @@ public class Message {
     private String uid;
     private String firstName;
     private String lastName;
+    private String fullName;
     private String email;
     private String phone;
     private String message;
+    private String userProfilePicture;
+    private boolean read;
     private Long timestamp;
 
     public Message() {
     }
 
-    public Message(String uid, String firstName, String lastName, String email, String phone, String message, Long timestamp) {
+    public Message(String uid, String firstName, String lastName, String fullName, String email, String phone, String message, String userProfilePicture, boolean read, Long timestamp) {
         this.uid = uid;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.fullName = fullName;
         this.email = email;
         this.phone = phone;
         this.message = message;
+        this.userProfilePicture = userProfilePicture;
+        this.read = read;
         this.timestamp = timestamp;
     }
 
@@ -34,6 +40,10 @@ public class Message {
         return lastName;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -44,6 +54,14 @@ public class Message {
 
     public String getMessage() {
         return message;
+    }
+
+    public String getUserProfilePicture() {
+        return userProfilePicture;
+    }
+
+    public boolean isRead() {
+        return read;
     }
 
     public Long getTimestamp() {
@@ -62,6 +80,10 @@ public class Message {
         this.lastName = lastName;
     }
 
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -72,6 +94,14 @@ public class Message {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public void setUserProfilePicture(String userProfilePicture) {
+        this.userProfilePicture = userProfilePicture;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
     }
 
     public void setTimestamp(Long timestamp) {

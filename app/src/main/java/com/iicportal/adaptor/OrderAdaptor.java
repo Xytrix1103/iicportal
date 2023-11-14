@@ -46,9 +46,9 @@ public class OrderAdaptor extends FirebaseRecyclerAdapter<Order, OrderAdaptor.Or
         holder.orderItems.setLayoutManager(new LinearLayoutManager(context));
         orderItemAdaptor = new OrderItemAdaptor(context, model.getItems());
         holder.orderItems.setAdapter(orderItemAdaptor);
-        Glide.with(context).load(model.getPaymentMethod().getIcon()).into(holder.paymentMethodIcon);
+        Glide.with(context).load(model.getPaymentMethod().getIcon()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.paymentMethodIcon);
         holder.orderOption.setText(model.getOrderOption().getOption());
-        Glide.with(context).load(model.getOrderOption().getIcon()).into(holder.orderOptionIcon);
+        Glide.with(context).load(model.getOrderOption().getIcon()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.orderOptionIcon);
 
         int totalQuantity = 0;
         for (int i = 0; i < model.getItems().size(); i++) {

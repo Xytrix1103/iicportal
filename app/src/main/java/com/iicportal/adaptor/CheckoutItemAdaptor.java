@@ -38,7 +38,7 @@ public class CheckoutItemAdaptor extends FirebaseRecyclerAdapter<CartItem, Check
         holder.name.setText(model.getName());
         holder.price.setText(String.format("RM %.2f", model.getPrice() * model.getQuantity()));
         holder.quantity.setText("x" + model.getQuantity());
-        Glide.with(context).load(model.getImage()).into(holder.image);
+        Glide.with(context).load(model.getImage()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.image);
     }
 
     public void onDataChanged() {
