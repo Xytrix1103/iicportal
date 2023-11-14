@@ -2,55 +2,238 @@
 <RelativeLayout android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	xmlns:card_view="http://schemas.android.com/apk/res-auto"
-	xmlns:app="http://schemas.and;roid.com/apk/res-auto"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	tools:context=".activity.LoginActivity">
 
-	<androidx.cardview.widget.CardView
-		android:id="@+id/loginCard"
-		android:layout_width="wrap_content"
+	<RelativeLayout
+		android:id="@+id/header"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_centerHorizontal="true"
-		android:layout_margin="25dp"
-		android:background="@color/white"
-		card_view:cardCornerRadius="10dp"
-		card_view:cardElevation="20dp"
-		card_view:contentPadding="30dp">
+		android:layout_marginHorizontal="20dp"
+		android:layout_marginVertical="10dp">
+
+		<ImageView
+			android:id="@+id/appIcon"
+			android:layout_width="190dp"
+			android:layout_height="50dp"
+			android:layout_alignParentStart="true"
+			android:layout_centerVertical="true"
+			android:src="@drawable/logo_foreground_red" />
+
+		<ImageView
+			android:id="@+id/messageBtnIcon"
+			android:layout_width="30dp"
+			android:layout_height="30dp"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:scaleType="fitCenter"
+			android:src="@drawable/outline_chat_24" />
+
+	</RelativeLayout>
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:overScrollMode="never"
+		android:layout_below="@id/header">
 
 		<RelativeLayout
 			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:gravity="center">
+			android:layout_height="wrap_content">
 
-			<TextView
-				android:id="@+id/welcomeText"
+			<RelativeLayout
+				android:id="@+id/welcomeBody"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginBottom="20dp"
-				android:fontFamily="@font/lato"
-				android:gravity="center"
-				android:text="Welcome"
-				android:textColor="@color/blue_grey_600"
-				android:textSize="24sp"
-				android:textStyle="bold"/>
+				android:layout_marginTop="10dp"
+				android:layout_marginHorizontal="20dp">
+
+				<com.google.android.material.imageview.ShapeableImageView
+					android:id="@+id/userImage"
+					android:layout_width="125dp"
+					android:layout_height="125dp"
+					android:layout_alignParentStart="true"
+					android:padding="10dp"
+					android:src="@drawable/baseline_account_circle_24"
+					card_view:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+					android:scaleType="centerCrop" />
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_centerVertical="true"
+					android:layout_toRightOf="@id/userImage"
+					android:orientation="vertical"
+					android:padding="10dp">
+
+					<TextView
+						android:id="@+id/welcomeMessageText"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="@string/welcome_back"
+						android:textColor="@color/black" />
+
+					<TextView
+						android:id="@+id/usernameText"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="10dp"
+						android:textColor="@color/black"
+						android:textSize="22sp"
+						tools:text="Lorem Ipsum" />
+
+				</LinearLayout>
+
+			</RelativeLayout>
+
+			<RelativeLayout
+				android:id="@+id/servicesBody"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_below="@id/welcomeBody"
+				android:layout_marginVertical="10dp"
+				android:clipToPadding="false"
+				android:paddingHorizontal="20dp"
+				android:paddingTop="10dp"
+				android:paddingBottom="30dp">
+
+				<TextView
+					android:id="@+id/servicesText"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/services"
+					android:textColor="@color/black"
+					android:textSize="18sp" />
+
+				<androidx.cardview.widget.CardView
+					android:id="@+id/ecanteenCard"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/servicesText"
+					android:layout_marginTop="10dp"
+					android:outlineSpotShadowColor="@color/grey_600"
+					card_view:cardCornerRadius="10dp"
+					card_view:cardElevation="15dp"
+					card_view:contentPadding="10dp">
+
+					<RelativeLayout
+						android:layout_width="match_parent"
+						android:layout_height="match_parent">
+
+						<ImageView
+							android:id="@+id/ecanteenIcon"
+							android:layout_width="40dp"
+							android:layout_height="40dp"
+							android:scaleType="fitCenter"
+							android:src="@drawable/ecanteen_icon" />
+
+						<TextView
+							android:id="@+id/ecanteenTitle"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_centerVertical="true"
+							android:layout_marginStart="20dp"
+							android:layout_toRightOf="@id/ecanteenIcon"
+							android:text="@string/ecanteen"
+							android:textColor="@color/black"
+							android:textSize="18sp" />
+
+						<ImageView
+							android:id="@+id/ecanteenArrowIcon"
+							android:layout_width="30dp"
+							android:layout_height="30dp"
+							android:layout_alignParentEnd="true"
+							android:layout_centerVertical="true"
+							android:src="@drawable/baseline_keyboard_arrow_right_24" />
+
+					</RelativeLayout>
+
+				</androidx.cardview.widget.CardView>
+
+				<androidx.cardview.widget.CardView
+					android:id="@+id/facilitiesCard"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/ecanteenCard"
+					android:layout_marginTop="20dp"
+					android:outlineSpotShadowColor="@color/grey_600"
+					card_view:cardCornerRadius="10dp"
+					card_view:cardElevation="15dp"
+					card_view:contentPadding="10dp">
+
+					<RelativeLayout
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:clipToPadding="false">
+
+						<ImageView
+							android:id="@+id/facilitiesIcon"
+							android:layout_width="40dp"
+							android:layout_height="40dp"
+							android:scaleType="fitCenter"
+							android:src="@drawable/facility" />
+
+						<TextView
+							android:id="@+id/facilitiesTitle"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_centerVertical="true"
+							android:layout_marginStart="20dp"
+							android:layout_toRightOf="@id/facilitiesIcon"
+							android:text="@string/facilities"
+							android:textColor="@color/black"
+							android:textSize="18sp" />
+
+						<ImageView
+							android:id="@+id/facilitiesArrowIcon"
+							android:layout_width="30dp"
+							android:layout_height="30dp"
+							android:layout_alignParentEnd="true"
+							android:layout_centerVertical="true"
+							android:src="@drawable/baseline_keyboard_arrow_right_24" />
+
+					</RelativeLayout>
+
+				</androidx.cardview.widget.CardView>
+
+			</RelativeLayout>
+
+			<RelativeLayout
+				android:id="@+id/statusBody"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_below="@id/servicesBody"
+				android:paddingHorizontal="20dp">
+
+				<TextView
+					android:id="@+id/statusText"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/status_reminders"
+					android:textColor="@color/black"
+					android:textSize="18sp" />
+
+				<TextView
+					android:id="@+id/statusEmptyText"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/statusText"
+					android:layout_marginVertical="10dp"
+					android:text="@string/status_empty"
+					android:textSize="15sp" />
+
+				<androidx.recyclerview.widget.RecyclerView
+					android:id="@+id/statusRecyclerView"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_below="@id/statusText"
+					android:layout_marginBottom="10dp" />
+
+			</RelativeLayout>
 
 		</RelativeLayout>
 
-	</androidx.cardview.widget.CardView>
-
-	<Button
-		android:id="@+id/logoutBtn"
-		android:theme="@style/Button.Primary"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@+id/loginCard"
-		android:padding="10dp"
-		android:text="Logout"
-		android:layout_centerHorizontal="true"
-		android:layout_marginBottom="20dp"
-		android:layout_marginTop="20dp"
-		app:cornerRadius="40dp"
-		app:elevation="20dp" />
+	</ScrollView>
 
 </RelativeLayout>
