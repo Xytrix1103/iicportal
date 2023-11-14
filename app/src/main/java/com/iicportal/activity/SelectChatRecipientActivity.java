@@ -2,6 +2,7 @@ package com.iicportal.activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import com.iicportal.models.User;
 public class SelectChatRecipientActivity extends AppCompatActivity {
     ChatUserAdaptor chatUserAdaptor;
     FirebaseDatabase database;
+    ImageView backBtnIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +28,13 @@ public class SelectChatRecipientActivity extends AppCompatActivity {
 
         TextInputEditText search = findViewById(R.id.searchWidgetEditText);
         RecyclerView recyclerView = findViewById(R.id.usersRecyclerView);
+        backBtnIcon = findViewById(R.id.backBtnIcon);
+
         FirebaseRecyclerOptions<User> options = new FirebaseRecyclerOptions.Builder<User>()
                 .setQuery(database.getReference().child("users"), User.class)
                 .setLifecycleOwner(this)
                 .build();
+
         chatUserAdaptor = new ChatUserAdaptor(options, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(chatUserAdaptor);

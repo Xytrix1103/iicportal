@@ -46,7 +46,7 @@ public class ChatAdaptor extends FirebaseRecyclerAdapter<Chat, ChatAdaptor.ChatV
     public ChatAdaptor(FirebaseRecyclerOptions<Chat> options, Context context) {
         super(options);
         this.context = context;
-        this.mAuth = FirebaseAuth.getInstance();
+        this.mAuth = MainActivity.mAuth;
         this.currentUser = mAuth.getCurrentUser();
         this.database = MainActivity.database;
         this.usersRef = database.getReference("users/");
@@ -71,7 +71,7 @@ public class ChatAdaptor extends FirebaseRecyclerAdapter<Chat, ChatAdaptor.ChatV
             }
         }
 
-        database.getReference("users/" + recipientId).addListenerForSingleValueEvent(new ValueEventListener() {
+        database.getReference("users/" + recipientId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String fullName = snapshot.child("fullName").getValue(String.class);
@@ -81,7 +81,7 @@ public class ChatAdaptor extends FirebaseRecyclerAdapter<Chat, ChatAdaptor.ChatV
                 holder.title.setText(fullName);
 
                 if (image != null) {
-                    Glide.with(context).load(image).into(holder.userProfilePic);
+                    Glide.with(context).load(image).placeholder(R.drawable.baseline_account_circle_24).into(holder.userProfilePic);
                 }
 
                 if (role.equals("Admin")) {

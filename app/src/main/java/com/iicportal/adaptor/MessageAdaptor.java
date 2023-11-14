@@ -62,7 +62,7 @@ public class MessageAdaptor extends FirebaseRecyclerAdapter<Message, MessageAdap
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position, Message model) {
         if (model.getUserProfilePicture() != null)
-            Glide.with(context).load(model.getUserProfilePicture()).into(holder.userProfilePic);
+            Glide.with(context).load(model.getUserProfilePicture()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.userProfilePic);
         else
             holder.userProfilePic.setImageResource(R.drawable.baseline_account_circle_24);
 

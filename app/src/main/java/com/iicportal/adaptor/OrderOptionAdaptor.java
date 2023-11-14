@@ -30,7 +30,7 @@ public class OrderOptionAdaptor extends FirebaseRecyclerAdapter<OrderOption, Ord
     protected void onBindViewHolder(OrderOptionViewHolder holder, int position, OrderOption model) {
         int pos = position;
         holder.option.setText(model.getOption());
-        Glide.with(context).load(model.getIcon()).into(holder.icon);
+        Glide.with(context).load(model.getIcon()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.icon);
         holder.radioButton.setChecked(pos == selectedPosition);
 
         holder.radioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {

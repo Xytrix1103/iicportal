@@ -81,7 +81,7 @@ public class ProfileFragment extends Fragment {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 name.setText(dataSnapshot.child("fullName").getValue(String.class));
-                Glide.with(view.getContext()).load(dataSnapshot.child("image").getValue(String.class)).into(pfp);
+                Glide.with(view.getContext()).load(dataSnapshot.child("image").getValue(String.class)).placeholder(R.drawable.baseline_account_circle_24).into(pfp);
                 menuButton.setOnClickListener(v -> openDrawerInterface.openDrawer());
 
                 String email = dataSnapshot.child("email").getValue(String.class);

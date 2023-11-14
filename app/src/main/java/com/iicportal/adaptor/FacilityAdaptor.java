@@ -60,7 +60,7 @@ public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, Facili
     @Override
     protected void onBindViewHolder(@NonNull FacilityViewHolder holder, int position, @NonNull BookingItem model) {
         holder.facilityName.setText(model.getName());
-        Glide.with(holder.facilityImage.getContext()).load(model.getImage()).into(holder.facilityImage);
+        Glide.with(holder.facilityImage.getContext()).load(model.getImage()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.facilityImage);
 
         SharedPreferences sharedPreferences = context.getSharedPreferences("com.iicportal", 0);
         String role = sharedPreferences.getString("role", "Student");

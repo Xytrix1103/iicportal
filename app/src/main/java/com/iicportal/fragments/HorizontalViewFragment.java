@@ -152,8 +152,9 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
         menu.add(Menu.NONE, 0, Menu.NONE, "Dashboard").setIcon(R.drawable.round_dashboard_24);
         menu.add(Menu.NONE, 1, Menu.NONE, "E-Canteen").setIcon(R.drawable.outline_coffee_24);
         menu.add(Menu.NONE, 2, Menu.NONE, "Orders").setIcon(R.drawable.outline_food_bank_24);
-        menu.add(Menu.NONE, 3,Menu.NONE,"Profile").setIcon(R.drawable.baseline_person_24);
-        menu.add(Menu.NONE, 4, Menu.NONE, "Logout").setIcon(R.drawable.baseline_logout_24);
+        menu.add(Menu.NONE, 3, Menu.NONE, "Chats").setIcon(R.drawable.baseline_support_agent_24);
+        menu.add(Menu.NONE, 4,Menu.NONE,"Profile").setIcon(R.drawable.baseline_person_24);
+        menu.add(Menu.NONE, 5, Menu.NONE, "Logout").setIcon(R.drawable.baseline_logout_24);
         menu.getItem(0).setChecked(true);
 
         navigationView.setNavigationItemSelectedListener(item -> {
@@ -178,9 +179,12 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, OrderListFragment).commit();
                     break;
                 case 3:
-                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, ProfileFragment).commit();
+                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, ChatListFragment).commit();
                     break;
                 case 4:
+                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, ProfileFragment).commit();
+                    break;
+                case 5:
                     mAuth.signOut();
                     startActivity(new Intent(requireContext(), LoginActivity.class));
                     requireActivity().finish();

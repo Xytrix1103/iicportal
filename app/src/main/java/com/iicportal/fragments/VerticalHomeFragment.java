@@ -112,7 +112,7 @@ public class VerticalHomeFragment extends Fragment {
                 usernameText.setText(task.getResult().child("fullName").getValue().toString());
 
                 if (task.getResult().child("image").getValue() != null)
-                    Glide.with(userImage.getContext()).load(task.getResult().child("image").getValue().toString()).into(userImage);
+                    Glide.with(userImage.getContext()).load(task.getResult().child("image").getValue().toString()).placeholder(R.drawable.baseline_image_placeholdeer).into(userImage);
             } else {
                 Log.e(STUDENT_HOME_TAG, "Error getting user data", task.getException());
             }

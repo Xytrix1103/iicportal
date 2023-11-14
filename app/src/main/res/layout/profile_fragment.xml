@@ -85,8 +85,7 @@
         <RelativeLayout
             android:id="@+id/profileLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/profileImage"
@@ -112,8 +111,8 @@
                 android:id="@+id/barcodeImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:layout_below="@id/nameText"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="40dp"
                 android:src="@drawable/barcode" />
 
