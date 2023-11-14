@@ -65,7 +65,7 @@ public class ChatUserAdaptor extends FirebaseRecyclerAdapter<User, ChatUserAdapt
         holder.role.setText(model.getRole());
         holder.name.setText(model.getFullName());
         if (model.getImage() != null) {
-            Glide.with(context).load(model.getImage()).placeholder(R.drawable.baseline_person_outline_24).into(holder.profileImage);
+            MainActivity.loadImage(model.getImage(), holder.profileImage, R.drawable.baseline_account_circle_24);
         }
         FirebaseUser currentUser = MainActivity.mAuth.getCurrentUser();
 

@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -41,6 +40,6 @@ public class EditFoodItemDialogFragment extends BottomSheetDialogFragment {
     }
 
     private void updateImage(Uri uri, ImageView image) {
-        Glide.with(requireContext()).load(uri).placeholder(R.drawable.baseline_image_placeholdeer).into(image);
+        MainActivity.loadImage(uri.toString(), image);
     }
 }

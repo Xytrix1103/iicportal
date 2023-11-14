@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -109,10 +108,8 @@ public class VerticalHomeFragment extends Fragment {
         //region Welcome section
         userRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                usernameText.setText(task.getResult().child("fullName").getValue().toString());
-
-                if (task.getResult().child("image").getValue() != null)
-                    Glide.with(userImage.getContext()).load(task.getResult().child("image").getValue().toString()).placeholder(R.drawable.baseline_image_placeholdeer).into(userImage);
+                usernameText.setText(task.getResult().child("fullName").getValue(String.class));
+                MainActivity.loadImage(task.getResult().child("image").getValue(String.class), userImage);
             } else {
                 Log.e(STUDENT_HOME_TAG, "Error getting user data", task.getException());
             }

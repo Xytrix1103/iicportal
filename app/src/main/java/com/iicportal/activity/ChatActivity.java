@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -83,10 +82,7 @@ public class ChatActivity extends AppCompatActivity {
                         usersRef.child(member).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                Glide.with(context)
-                                        .load(snapshot.child("image").getValue().toString())
-                                        .placeholder(R.drawable.baseline_people_outline_24)
-                                        .into(userProfilePic);
+                                MainActivity.loadImage(snapshot.child("image").getValue(String.class), userProfilePic, R.drawable.baseline_people_outline_24);
                                 chatNameTextView.setText(snapshot.child("fullName").getValue().toString());
                             }
 
