@@ -13,8 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.iicportal.R;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.models.BookingStatus;
 import com.iicportal.models.OrderStatus;
 import com.iicportal.models.Status;
@@ -60,7 +60,7 @@ public class StatusAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             BookingStatusViewHolder castedHolder = (BookingStatusViewHolder) holder;
             BookingStatus bookingStatus = (BookingStatus) item;
 
-            Glide.with(castedHolder.image.getContext()).load(bookingStatus.getFacilityImage()).placeholder(R.drawable.baseline_image_placeholdeer).into(castedHolder.image);
+            MainActivity.loadImage(bookingStatus.getFacilityImage(), castedHolder.image);
             castedHolder.facilityName.setText(bookingStatus.getFacilityName());
             castedHolder.title.setText(bookingStatus.getTitle());
             castedHolder.bookingId.setText("Booking ID: " + bookingStatus.getBookingId());

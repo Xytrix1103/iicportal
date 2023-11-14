@@ -17,7 +17,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -64,7 +63,7 @@ public class EditFoodItemActivity extends AppCompatActivity {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
                         imageUri = uri;
                         fileName = uri.getPath().substring(uri.getPath().lastIndexOf('/') + 1);
-                        Glide.with(context).load(uri).placeholder(R.drawable.baseline_image_placeholdeer).into(image);
+                        MainActivity.loadImage(uri.toString(), image);
                         addImageBtn.setVisibility(View.GONE);
                         editImageBtn.setVisibility(View.VISIBLE);
                     } else {
@@ -79,7 +78,7 @@ public class EditFoodItemActivity extends AppCompatActivity {
                 nameEditText.setText(foodItem.getName());
                 descriptionEditText.setText(foodItem.getDescription());
                 priceEditText.setText(String.valueOf(foodItem.getPrice()));
-                Glide.with(context).load(foodItem.getImage()).placeholder(R.drawable.baseline_image_placeholdeer).into(image);
+                MainActivity.loadImage(foodItem.getImage(), image);
                 Log.d("EditFoodItemDialogFragment", "Image: " + foodItem.getImage());
                 imageUri = Uri.parse(foodItem.getImage());
                 Log.d("EditFoodItemDialogFragment", "Image URI: " + imageUri);

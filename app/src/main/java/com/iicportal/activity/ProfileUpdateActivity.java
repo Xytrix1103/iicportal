@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -85,7 +84,7 @@ public class ProfileUpdateActivity extends AppCompatActivity {
                 String pictureURL = dataSnapshot.child("image").getValue(String.class);
                 if (pictureURL != null && !pictureURL.equals("")){
                     if(!activity.isFinishing()) {
-                        Glide.with(context).load(pictureURL).placeholder(R.drawable.baseline_account_circle_24).into(picture);
+                        MainActivity.loadImage(pictureURL, picture, R.drawable.baseline_account_circle_24);
                     }
                     addImageBtn.setVisibility(View.GONE);
                     editImageBtn.setVisibility(View.VISIBLE);
@@ -106,7 +105,7 @@ public class ProfileUpdateActivity extends AppCompatActivity {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
                         profileUri = uri;
                         fileName = uri.getPath().substring(uri.getPath().lastIndexOf('/') + 1);
-                        Glide.with(context).load(uri).placeholder(R.drawable.baseline_account_circle_24).into(picture);
+                        MainActivity.loadImage(uri.toString(), picture, R.drawable.baseline_account_circle_24);
                         addImageBtn.setVisibility(View.GONE);
                         editImageBtn.setVisibility(View.VISIBLE);
                     } else {

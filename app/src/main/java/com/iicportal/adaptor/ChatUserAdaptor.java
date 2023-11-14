@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -64,9 +63,7 @@ public class ChatUserAdaptor extends FirebaseRecyclerAdapter<User, ChatUserAdapt
         holder.email.setText(model.getEmail());
         holder.role.setText(model.getRole());
         holder.name.setText(model.getFullName());
-        if (model.getImage() != null) {
-            Glide.with(context).load(model.getImage()).placeholder(R.drawable.baseline_person_outline_24).into(holder.profileImage);
-        }
+        MainActivity.loadImage(model.getImage(), holder.profileImage, R.drawable.baseline_account_circle_24);
         FirebaseUser currentUser = MainActivity.mAuth.getCurrentUser();
 
         holder.itemView.setOnClickListener(v -> {
