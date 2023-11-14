@@ -143,7 +143,6 @@
 
             </RelativeLayout>
 
-
             <RelativeLayout
                 android:id="@+id/buttonWrapper"
                 android:layout_width="match_parent"
@@ -153,27 +152,18 @@
                 android:layout_marginBottom="10dp"
                 android:gravity="center_vertical">
 
-                <ImageView
-                    android:id="@+id/deleteBtn"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_centerVertical="true"
-                    android:contentDescription="@string/delete_facility"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/baseline_delete_outline_24" />
-
                 <TextView
                     android:id="@+id/cancelBtn"
+                    android:theme="@style/Button.Transparent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@+id/saveBtn"
+                    android:layout_alignParentStart="true"
+                    android:textColor="@color/colorPrimary"
                     android:gravity="center"
                     android:text="@string/cancel"
-                    android:textColor="@color/colorPrimary"
-                    android:theme="@style/Button.Transparent"
                     button:cornerRadius="20dp"
-                    button:elevation="20dp" />
+                    button:elevation="20dp"/>
 
                 <Button
                     android:id="@+id/saveBtn"
