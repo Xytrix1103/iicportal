@@ -14,6 +14,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
 import com.iicportal.activity.MainActivity;
 import com.iicportal.models.BookingItem;
+import com.iicportal.workers.BookingNotificationWorker;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,6 +40,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class BookingDialogFragment extends BottomSheetDialogFragment {
     BookingItem bookingItem;
@@ -159,6 +165,9 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
 
                         // Save the booking data under the "bookings" node with the unique booking ID
                         bookingRef.child(bookingId).setValue(newBookingItem);
+
+                        scheduleNotification(selectedBooking, currentDate);
+
                         dismiss();
                     }
                 }
@@ -174,6 +183,49 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
             Log.d("BookingAdapter", "Cancel button clicked");
             dismiss();
         });
+    }
+
+    private void scheduleNotification(String selectedTimeSlot, String currentDate) {
+        // Get booking start timestamp and one hour before booking timestamp for notification scheduling
+        Long currentTimestamp = System.currentTimeMillis();
+        Long oneHourBeforeTimestamp, bookingStartTimestamp;
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mma");
+        String[] timeParts = selectedTimeSlot.split(" - ");
+        try {
+            Date startTime = timeFormat.parse(timeParts[0].trim());
+            startTime.setDate(dateFormat.parse(currentDate).getDate());
+            startTime.setMonth(dateFormat.parse(currentDate).getMonth());
+            startTime.setYear(dateFormat.parse(currentDate).getYear());
+
+            bookingStartTimestamp = startTime.getTime();
+            oneHourBeforeTimestamp = bookingStartTimestamp - (60 * 60 * 1000);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Schedule booking reminder notifications by sending WorkRequests to WorkManager
+        Data oneHourBeforeData = new Data.Builder()
+                .putString("TITLE", "Facility Booking Reminder")
+                .putString("MESSAGE", String.format("Hey there, just reminding you that your %s booking for today at %s is starting in an hour.", bookingItem.getName(), selectedTimeSlot))
+                .build();
+        Data bookingStartData = new Data.Builder()
+                .putString("TITLE", "Facility Booking Started")
+                .putString("MESSAGE", String.format("Hey there, just reminding you that your %s booking for today at %s has started.", bookingItem.getName(), selectedTimeSlot))
+                .build();
+
+        WorkRequest oneHourBeforeWork = new OneTimeWorkRequest.Builder(BookingNotificationWorker.class)
+                .setInputData(oneHourBeforeData)
+                .setInitialDelay(oneHourBeforeTimestamp - currentTimestamp, TimeUnit.MILLISECONDS)
+                .build();
+        WorkRequest bookingStartWork = new OneTimeWorkRequest.Builder(BookingNotificationWorker.class)
+                .setInputData(bookingStartData)
+                .setInitialDelay(bookingStartTimestamp - currentTimestamp, TimeUnit.MILLISECONDS)
+                .build();
+
+        WorkManager.getInstance(context).enqueue(oneHourBeforeWork);
+        WorkManager.getInstance(context).enqueue(bookingStartWork);
     }
 
     private boolean isTimeSlotPassed(String currentTime, String timeSlot) {
