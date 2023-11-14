@@ -4,8 +4,9 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <uses-feature android:name="android.hardware.camera" />
 
     <application
@@ -27,10 +28,14 @@
             <intent-filter>
                 <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
             </intent-filter>
-            <meta-data android:name="photopicker_activity:0:required" android:value="" />
+
+            <meta-data
+                android:name="photopicker_activity:0:required"
+                android:value="" />
         </service>
 
-        <activity android:name=".activity.MainActivity"
+        <activity
+            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,8 +43,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activity.LoginActivity"
+        <activity
+            android:name=".activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,8 +52,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activity.RegisterActivity"
+        <activity
+            android:name=".activity.RegisterActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,8 +61,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activity.ForgotPasswordActivity"
+        <activity
+            android:name=".activity.ForgotPasswordActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,8 +70,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activity.CartActivity"
+        <activity
+            android:name=".activity.CartActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -74,8 +79,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activity.CheckoutActivity"
+        <activity
+            android:name=".activity.CheckoutActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -83,8 +88,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activity.OrderHistoryActivity"
+        <activity
+            android:name=".activity.OrderHistoryActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -92,28 +97,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activity.OrderDetailsActivity"
-            android:exported="true">
-        </activity>
-
-        <activity android:name=".activity.EditUserActivity"
-            android:exported="true">
-        </activity>
-
-        <activity android:name=".activity.AddUserActivity"
-            android:exported="true">
-        </activity>
-
-        <activity android:name=".activity.EditFoodItemActivity"
-            android:exported="true">
-        </activity>
-
-        <activity android:name=".activity.AddFoodItemActivity"
-            android:exported="true">
-        </activity>
-
-        <activity android:name=".activity.ContactActivity"
+        <activity
+            android:name=".activity.OrderDetailsActivity"
+            android:exported="true"></activity>
+        <activity
+            android:name=".activity.EditUserActivity"
+            android:exported="true"></activity>
+        <activity
+            android:name=".activity.AddUserActivity"
+            android:exported="true"></activity>
+        <activity
+            android:name=".activity.EditFoodItemActivity"
+            android:exported="true"></activity>
+        <activity
+            android:name=".activity.AddFoodItemActivity"
+            android:exported="true"></activity>
+        <activity
+            android:name=".activity.ContactActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -141,10 +141,17 @@
             android:exported="true">
         </activity>
 
+        <activity android:name=".activity.ChatActivity"
+            android:exported="true">
+        </activity>
+
         <activity android:name=".activity.ProfileUpdateActivity"
             android:exported="true">
         </activity>
 
+        <activity android:name=".activity.SelectChatRecipientActivity"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>

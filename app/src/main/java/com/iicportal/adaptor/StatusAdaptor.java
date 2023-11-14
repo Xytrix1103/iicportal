@@ -14,9 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
 import com.iicportal.models.BookingStatus;
 import com.iicportal.models.OrderStatus;
@@ -63,7 +60,7 @@ public class StatusAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             BookingStatusViewHolder castedHolder = (BookingStatusViewHolder) holder;
             BookingStatus bookingStatus = (BookingStatus) item;
 
-            Glide.with(castedHolder.image.getContext()).load(bookingStatus.getFacilityImage()).into(castedHolder.image);
+            Glide.with(castedHolder.image.getContext()).load(bookingStatus.getFacilityImage()).placeholder(R.drawable.baseline_image_placeholdeer).into(castedHolder.image);
             castedHolder.facilityName.setText(bookingStatus.getFacilityName());
             castedHolder.title.setText(bookingStatus.getTitle());
             castedHolder.bookingId.setText("Booking ID: " + bookingStatus.getBookingId());

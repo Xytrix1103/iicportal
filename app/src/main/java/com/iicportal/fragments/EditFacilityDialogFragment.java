@@ -83,7 +83,7 @@ public class EditFacilityDialogFragment extends BottomSheetDialogFragment {
     }
 
     private void updateImage(Uri uri, ImageView image) {
-        Glide.with(requireContext()).load(uri).into(image);
+        Glide.with(requireContext()).load(uri).placeholder(R.drawable.baseline_image_placeholdeer).into(image);
     }
 
 }
