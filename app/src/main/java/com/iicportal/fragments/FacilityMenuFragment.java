@@ -77,24 +77,19 @@ public class FacilityMenuFragment extends Fragment {
 
         if (!role.equals("Admin") && !role.equals("Vendor")) {
             editBtn.setVisibility(View.GONE);
+            menuBtn.setVisibility(View.GONE);
         } else {
             editBtn.setVisibility(View.VISIBLE);
             editBtn.setOnClickListener(v -> {
                 EditFacilityMenuFragment editFacilityMenuFragment = new EditFacilityMenuFragment(openDrawerInterface, childFragmentManager);
                 childFragmentManager.beginTransaction().replace(R.id.facility_fragment_container, editFacilityMenuFragment).commit();
             });
-        }
-
-        sharedPreferences = requireActivity().getSharedPreferences("com.iicportal", Context.MODE_PRIVATE);
-        if (sharedPreferences.getString("role", "").equals("Admin") || sharedPreferences.getString("role", "").equals("Vendor")) {
             menuBtn.setVisibility(View.VISIBLE);
             menuBtn.setOnClickListener(v -> {
                 if (openDrawerInterface != null) {
                     openDrawerInterface.openDrawer();
                 }
             });
-        } else {
-            menuBtn.setVisibility(View.GONE);
         }
 
         FirebaseRecyclerOptions<BookingItem> facilityOptions = new FirebaseRecyclerOptions.Builder<BookingItem>()

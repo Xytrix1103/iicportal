@@ -30,12 +30,13 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
     FrameLayout container;
     NavigationView navigationView;
     Fragment AdminDashboardFragment;
+    Fragment VendorDashboardFragment;
     Fragment ECanteenFragment;
     Fragment FacilityFragment;
     Fragment UserListFragment;
     Fragment OrderListFragment;
     Fragment ChatListFragment;
-    Fragment MessageListFragment;
+    Fragment FeedbackListFragment;
     Fragment ProfileFragment;
     DrawerLayout drawerLayout;
     FloatingActionButton fab;
@@ -59,13 +60,14 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
         drawerLayout = view.findViewById(R.id.drawer_layout);
         container = view.findViewById(R.id.horizontal_fragment_container);
         AdminDashboardFragment = new AdminDashboardFragment(this);
+        VendorDashboardFragment = new VendorDashboardFragment(this);
         ECanteenFragment = new ECanteenFragment(this);
         FacilityFragment = new FacilityFragment(this);
         UserListFragment = new UserListFragment(this);
         OrderListFragment = new OrderListFragment(this);
         ProfileFragment = new ProfileFragment(this);
         ChatListFragment = new ChatListFragment(this);
-        MessageListFragment = new MessageListFragment(this);
+        FeedbackListFragment = new FeedbackListFragment(this);
         String role = sharedPreferences.getString("role", "");
         ViewGroup finalContainer = container;
 
@@ -91,7 +93,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
         menu.add(Menu.NONE, 3, Menu.NONE, "Users").setIcon(R.drawable.baseline_people_outline_24);
         menu.add(Menu.NONE, 4, Menu.NONE, "Orders").setIcon(R.drawable.outline_food_bank_24);
         menu.add(Menu.NONE, 5, Menu.NONE, "Chats").setIcon(R.drawable.baseline_support_agent_24);
-        menu.add(Menu.NONE, 6, Menu.NONE, "Messages").setIcon(R.drawable.baseline_message_24);
+        menu.add(Menu.NONE, 6, Menu.NONE, "Feedback").setIcon(R.drawable.baseline_feedback_24);
         menu.add(Menu.NONE, 7,Menu.NONE,"Profile").setIcon(R.drawable.baseline_person_24);
         menu.add(Menu.NONE, 8, Menu.NONE, "Logout").setIcon(R.drawable.baseline_logout_24);
         menu.getItem(0).setChecked(true);
@@ -127,7 +129,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, ChatListFragment).commit();
                     break;
                 case 6:
-                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, MessageListFragment).commit();
+                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, FeedbackListFragment).commit();
                     break;
                 case 7:
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, ProfileFragment).commit();
@@ -147,7 +149,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
     private void setVendorView(ViewGroup container) {
         Menu menu = navigationView.getMenu();
         menu.clear();
-        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, AdminDashboardFragment).commit();
+        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, VendorDashboardFragment).commit();
 
         menu.add(Menu.NONE, 0, Menu.NONE, "Dashboard").setIcon(R.drawable.round_dashboard_24);
         menu.add(Menu.NONE, 1, Menu.NONE, "E-Canteen").setIcon(R.drawable.outline_coffee_24);
@@ -170,7 +172,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
 
             switch (item.getItemId()) {
                 case 0:
-                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, AdminDashboardFragment).commit();
+                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, VendorDashboardFragment).commit();
                     break;
                 case 1:
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, ECanteenFragment).commit();

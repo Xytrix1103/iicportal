@@ -116,8 +116,15 @@
     <string name="new_facility">New Facility</string>
     <string name="newFacilityHint">Please enter new facility name</string>
     <string name="stop_edit_facility">Exit Facility edit mode</string>
-    
-	<string-array name="timeslot">
+    <string name="total_users">Total Users</string>
+    <string name="tasks_to_complete">Tasks to Complete</string>
+    <string name="tasks_empty_text">You have no pending tasks.</string>
+    <string name="chats">Chats</string>
+    <string name="messages">Messages</string>
+    <string name="total_orders">Total Orders</string>
+
+
+    <string-array name="timeslot">
         <item>8:00AM - 9:00AM</item>
         <item>9:00AM - 10:00AM</item>
         <item>10:00AM - 11:00AM</item>
@@ -130,11 +137,12 @@
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="chats">Chats</string>
-    <string name="messages">Messages</string>
     <string name="message_details">Message Details</string>
     <string name="phone">Phone</string>
     <string name="message">Message</string>
     <string name="close">Close</string>
     <string name="email">Email</string>
+    <string name="feedback">Feedback</string>
+    <string name="feedback_description">Reach out to us with any feedback! We\'re all ears and we\'ll strive to improve your experience with this application.</string>
+    <string name="feedback_details">Feedback Details</string>
 </resources>
