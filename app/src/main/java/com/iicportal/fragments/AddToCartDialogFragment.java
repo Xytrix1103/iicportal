@@ -61,7 +61,7 @@ public class AddToCartDialogFragment extends BottomSheetDialogFragment {
         title.setText(cartItem.getName());
         description.setText(cartItem.getDescription());
         price.setText(String.format("RM %.2f", cartItem.getPrice()));
-        Glide.with(image.getContext()).load(cartItem.getImage()).placeholder(R.drawable.baseline_image_placeholdeer).into(image);
+        MainActivity.loadImage(cartItem.getImage(), image);
         quantity.setText(String.valueOf(cartItem.getQuantity()));
 
         plusBtn.setOnClickListener(v1 -> {

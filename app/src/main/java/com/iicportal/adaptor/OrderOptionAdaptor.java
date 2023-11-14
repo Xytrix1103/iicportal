@@ -15,6 +15,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.iicportal.R;
 import com.iicportal.activity.CheckoutActivity;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.models.OrderOption;
 
 public class OrderOptionAdaptor extends FirebaseRecyclerAdapter<OrderOption, OrderOptionAdaptor.OrderOptionViewHolder> {
@@ -30,7 +31,7 @@ public class OrderOptionAdaptor extends FirebaseRecyclerAdapter<OrderOption, Ord
     protected void onBindViewHolder(OrderOptionViewHolder holder, int position, OrderOption model) {
         int pos = position;
         holder.option.setText(model.getOption());
-        Glide.with(context).load(model.getIcon()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.icon);
+        MainActivity.loadImage(model.getIcon(), holder.icon);
         holder.radioButton.setChecked(pos == selectedPosition);
 
         holder.radioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
