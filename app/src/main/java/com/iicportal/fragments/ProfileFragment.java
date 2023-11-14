@@ -27,6 +27,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.iicportal.R;
+import com.iicportal.activity.FeedbackActivity;
 import com.iicportal.activity.LoginActivity;
 import com.iicportal.activity.MainActivity;
 import com.iicportal.activity.ProfileUpdateActivity;

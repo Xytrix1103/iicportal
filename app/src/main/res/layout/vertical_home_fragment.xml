@@ -22,13 +22,13 @@
 			android:src="@drawable/logo_foreground_red" />
 
 		<ImageView
-			android:id="@+id/messageBtnIcon"
+			android:id="@+id/feedbackBtnIcon"
 			android:layout_width="30dp"
 			android:layout_height="30dp"
 			android:layout_alignParentEnd="true"
 			android:layout_centerVertical="true"
 			android:scaleType="fitCenter"
-			android:src="@drawable/outline_chat_24" />
+			android:src="@drawable/outline_feedback_24" />
 
 	</RelativeLayout>
 
