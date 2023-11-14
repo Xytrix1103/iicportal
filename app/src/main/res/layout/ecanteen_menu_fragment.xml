@@ -70,7 +70,7 @@
 			android:layout_height="wrap_content"
 			android:layout_alignParentEnd="true"
 			android:layout_centerInParent="true"
-			android:padding="5dp">
+			android:layout_marginHorizontal="5dp">
 
 			<ImageView
 				android:id="@+id/cartBtnIcon"
