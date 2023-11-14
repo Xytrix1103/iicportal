@@ -136,12 +136,6 @@ public class ProfileFragment extends Fragment {
             context.startActivity(intent);
         });
 
-        contactButton = view.findViewById(R.id.contactBtn);
-
-        contactButton.setOnClickListener(v -> {
-            startActivity(new Intent(context, FeedbackActivity.class));
-        });
-
         logoutButtonIcon = view.findViewById(R.id.logoutBtnIcon);
 
         logoutButtonIcon.setOnClickListener(v -> {
