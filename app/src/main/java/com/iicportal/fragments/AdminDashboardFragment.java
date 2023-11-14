@@ -30,17 +30,17 @@ public class AdminDashboardFragment extends Fragment {
     FirebaseAuth mAuth;
     FirebaseUser user;
     FirebaseDatabase database;
-    DatabaseReference usersRef, chatsRef, chatMessagesRef, messagesRef;
+    DatabaseReference usersRef, chatsRef, chatMessagesRef, feedbackRef;
 
     TextView userCountText;
     TextView chatCountText;
-    TextView messageCountText;
+    TextView feedbackCountText;
     TextView emptyTasksText;
     RelativeLayout chatsLayout;
-    RelativeLayout messagesLayout;
+    RelativeLayout feedbackLayout;
 
     boolean unreadChats;
-    boolean unreadMessages;
+    boolean unreadFeedback;
 
     static final String ADMIN_DASHBOARD_TAG = "AdminDashboardFragment";
 
@@ -53,7 +53,7 @@ public class AdminDashboardFragment extends Fragment {
         usersRef = database.getReference("users/");
         chatsRef = database.getReference("chats/");
         chatMessagesRef = database.getReference("messages/");
-        messagesRef = database.getReference("messages/");
+        feedbackRef = database.getReference("feedback/");
     }
 
     public AdminDashboardFragment(OpenDrawerInterface openDrawerInterface) {
@@ -65,7 +65,7 @@ public class AdminDashboardFragment extends Fragment {
         usersRef = database.getReference("users/");
         chatsRef = database.getReference("chats/");
         chatMessagesRef = database.getReference("messages/");
-        messagesRef = database.getReference("messages/");
+        feedbackRef = database.getReference("feedback/");
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,10 +75,10 @@ public class AdminDashboardFragment extends Fragment {
         ImageView menuBtn = view.findViewById(R.id.menuIcon);
         userCountText = view.findViewById(R.id.userCountText);
         chatCountText = view.findViewById(R.id.chatCountText);
-        messageCountText = view.findViewById(R.id.messageCountText);
+        feedbackCountText = view.findViewById(R.id.feedbackCountText);
         emptyTasksText = view.findViewById(R.id.tasksEmptyText);
         chatsLayout = view.findViewById(R.id.chatsLayout);
-        messagesLayout = view.findViewById(R.id.messagesLayout);
+        feedbackLayout = view.findViewById(R.id.feedbackLayout);
 
         // Get user count
         usersRef.addValueEventListener(new ValueEventListener() {
@@ -140,19 +140,19 @@ public class AdminDashboardFragment extends Fragment {
         });
 
         // Get unread messages count
-        unreadMessages = false;
-        messagesRef.orderByChild("read").equalTo(false).addValueEventListener(new ValueEventListener() {
+        unreadFeedback = false;
+        feedbackRef.orderByChild("read").equalTo(false).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 long unreadMessagesCount = snapshot.getChildrenCount();
 
                 if (unreadMessagesCount == 0) {
-                    messagesLayout.setVisibility(View.GONE);
-                    unreadMessages = false;
+                    feedbackLayout.setVisibility(View.GONE);
+                    unreadFeedback = false;
                 } else {
-                    messagesLayout.setVisibility(View.VISIBLE);
-                    messageCountText.setText(unreadMessagesCount + " unread message" + ((unreadMessagesCount != 1) ? "s" : ""));
-                    unreadMessages = true;
+                    feedbackLayout.setVisibility(View.VISIBLE);
+                    feedbackCountText.setText(unreadMessagesCount + " unread feedback");
+                    unreadFeedback = true;
                 }
 
                 displayEmptyTasksText();
@@ -170,7 +170,7 @@ public class AdminDashboardFragment extends Fragment {
     }
 
     private void displayEmptyTasksText() {
-        if (!unreadChats && !unreadMessages) {
+        if (!unreadChats && !unreadFeedback) {
             emptyTasksText.setVisibility(View.VISIBLE);
         } else {
             emptyTasksText.setVisibility(View.GONE);
