@@ -72,8 +72,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
         TextView cancel = view.findViewById(R.id.cancelBtn);
 
         facilityName.setText(bookingItem.getName());
-        Glide.with(context).load(bookingItem.getImage()).placeholder(R.drawable.baseline_image_placeholdeer).into(facilityImage);
-
+        MainActivity.loadImage(bookingItem.getImage(), facilityImage);
         // Display the current date
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         String currentDate = dateFormat.format(Calendar.getInstance().getTime());

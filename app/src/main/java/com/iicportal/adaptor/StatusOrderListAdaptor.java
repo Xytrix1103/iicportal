@@ -47,9 +47,10 @@ public class StatusOrderListAdaptor extends FirebaseRecyclerAdapter<Order, Statu
         holder.orderItems.setLayoutManager(new LinearLayoutManager(context));
         orderItemAdaptor = new OrderItemAdaptor(context, model.getItems());
         holder.orderItems.setAdapter(orderItemAdaptor);
-        Glide.with(context).load(model.getPaymentMethod().getIcon()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.paymentMethodIcon);
+        Glide.with(context).load(model.getPaymentMethod().getIcon()).placeholder(R.drawable.baseline_image_placeholder).into(holder.paymentMethodIcon);
+        MainActivity.loadImage(model.getPaymentMethod().getIcon(), holder.paymentMethodIcon);
         holder.orderOption.setText(model.getOrderOption().getOption());
-        Glide.with(context).load(model.getOrderOption().getIcon()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.orderOptionIcon);
+        MainActivity.loadImage(model.getOrderOption().getIcon(), holder.orderOptionIcon);
 
         if (model.isCompleted()) {
             holder.button.setVisibility(Button.GONE);
