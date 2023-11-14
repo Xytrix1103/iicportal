@@ -1,6 +1,7 @@
 package com.iicportal.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
+import com.iicportal.activity.FeedbackActivity;
 import com.iicportal.activity.MainActivity;
 import com.iicportal.adaptor.StatusAdaptor;
 import com.iicportal.models.BookingStatus;
@@ -48,7 +50,7 @@ public class VerticalHomeFragment extends Fragment {
 
     private BottomNavigationView bottomNavigationView;
     private CardView facilitiesButtonCard, ecanteenButtonCard;
-    private ImageView messageButtonIcon, userImage;
+    private ImageView feedbackButtonIcon, userImage;
     private TextView usernameText, statusEmptyText;
 
     private FirebaseAuth mAuth;
@@ -97,7 +99,7 @@ public class VerticalHomeFragment extends Fragment {
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
         facilitiesButtonCard = view.findViewById(R.id.facilitiesCard);
         ecanteenButtonCard = view.findViewById(R.id.ecanteenCard);
-        messageButtonIcon = view.findViewById(R.id.messageBtnIcon);
+        feedbackButtonIcon = view.findViewById(R.id.feedbackBtnIcon);
         userImage = view.findViewById(R.id.userImage);
         usernameText = view.findViewById(R.id.usernameText);
         statusEmptyText = view.findViewById(R.id.statusEmptyText);
@@ -308,8 +310,8 @@ public class VerticalHomeFragment extends Fragment {
         //endregion
 
         // Button onClick listeners
-        messageButtonIcon.setOnClickListener(v -> {
-            // TODO: add navigation when chat feature is implemented
+        feedbackButtonIcon.setOnClickListener(v -> {
+            startActivity(new Intent(this.getActivity(), FeedbackActivity.class));
         });
 
         return view;

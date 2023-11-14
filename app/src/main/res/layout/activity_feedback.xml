@@ -5,7 +5,7 @@
     xmlns:input="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".activity.ContactActivity">
+    tools:context=".activity.FeedbackActivity">
 
     <RelativeLayout
         android:id="@+id/header"
@@ -23,15 +23,15 @@
             android:src="@drawable/baseline_arrow_back_24"/>
 
         <TextView
-            android:id="@+id/contactHeaderText"
+            android:id="@+id/feedbackHeaderText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/backBtnIcon"
-            android:text="@string/contact_us"
+            android:text="@string/feedback"
             android:textColor="@color/black"
             android:textSize="24sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
@@ -49,7 +49,7 @@
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="30dp"
-            android:text="@string/contact_description"
+            android:text="@string/feedback_description"
             android:textColor="@color/black"
             android:textSize="16sp" />
 

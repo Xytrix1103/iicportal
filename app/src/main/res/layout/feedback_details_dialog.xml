@@ -7,23 +7,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
-        android:id="@+id/messageDetailsDialogHeader"
+        android:id="@+id/feedbackDialogHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/messageDetailsDialogTitle"
+            android:id="@+id/feedbackDialogTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/message_details"
+            android:text="@string/feedback_details"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/messageDetailsDate"
+            android:id="@+id/feedbackDialogDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -32,10 +32,10 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/messageDetailsDialogContent"
+        android:id="@+id/feedbackDialogContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/messageDetailsDialogHeader">
+        android:layout_below="@id/feedbackDialogHeader">
 
         <LinearLayout
             android:id="@+id/nameLayout"
@@ -179,7 +179,7 @@
         android:id="@+id/closeBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/messageDetailsDialogContent"
+        android:layout_below="@id/feedbackDialogContent"
         android:layout_marginTop="30dp"
         android:text="@string/close"
         android:textAlignment="center"

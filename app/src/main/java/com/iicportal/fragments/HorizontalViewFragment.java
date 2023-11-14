@@ -35,7 +35,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
     Fragment UserListFragment;
     Fragment OrderListFragment;
     Fragment ChatListFragment;
-    Fragment MessageListFragment;
+    Fragment FeedbackListFragment;
     Fragment ProfileFragment;
     DrawerLayout drawerLayout;
     FloatingActionButton fab;
@@ -65,7 +65,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
         OrderListFragment = new OrderListFragment(this);
         ProfileFragment = new ProfileFragment(this);
         ChatListFragment = new ChatListFragment(this);
-        MessageListFragment = new MessageListFragment(this);
+        FeedbackListFragment = new FeedbackListFragment(this);
         String role = sharedPreferences.getString("role", "");
         ViewGroup finalContainer = container;
 
@@ -91,7 +91,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
         menu.add(Menu.NONE, 3, Menu.NONE, "Users").setIcon(R.drawable.baseline_people_outline_24);
         menu.add(Menu.NONE, 4, Menu.NONE, "Orders").setIcon(R.drawable.outline_food_bank_24);
         menu.add(Menu.NONE, 5, Menu.NONE, "Chats").setIcon(R.drawable.baseline_support_agent_24);
-        menu.add(Menu.NONE, 6, Menu.NONE, "Messages").setIcon(R.drawable.baseline_message_24);
+        menu.add(Menu.NONE, 6, Menu.NONE, "Feedback").setIcon(R.drawable.baseline_feedback_24);
         menu.add(Menu.NONE, 7,Menu.NONE,"Profile").setIcon(R.drawable.baseline_person_24);
         menu.add(Menu.NONE, 8, Menu.NONE, "Logout").setIcon(R.drawable.baseline_logout_24);
         menu.getItem(0).setChecked(true);
@@ -127,7 +127,7 @@ public class HorizontalViewFragment extends Fragment implements AdminDashboardFr
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, ChatListFragment).commit();
                     break;
                 case 6:
-                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, MessageListFragment).commit();
+                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, FeedbackListFragment).commit();
                     break;
                 case 7:
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.horizontal_fragment_container, ProfileFragment).commit();

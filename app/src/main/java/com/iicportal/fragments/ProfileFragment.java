@@ -27,7 +27,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.iicportal.R;
-import com.iicportal.activity.ContactActivity;
+import com.iicportal.activity.FeedbackActivity;
 import com.iicportal.activity.LoginActivity;
 import com.iicportal.activity.MainActivity;
 import com.iicportal.activity.ProfileUpdateActivity;
@@ -139,7 +139,7 @@ public class ProfileFragment extends Fragment {
         contactButton = view.findViewById(R.id.contactBtn);
 
         contactButton.setOnClickListener(v -> {
-            startActivity(new Intent(context, ContactActivity.class));
+            startActivity(new Intent(context, FeedbackActivity.class));
         });
 
         logoutButtonIcon = view.findViewById(R.id.logoutBtnIcon);
