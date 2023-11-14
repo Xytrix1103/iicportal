@@ -78,8 +78,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
         TextView cancel = view.findViewById(R.id.cancelBtn);
 
         facilityName.setText(bookingItem.getName());
-        Glide.with(context).load(bookingItem.getImage()).placeholder(R.drawable.baseline_image_placeholdeer).into(facilityImage);
-
+        MainActivity.loadImage(bookingItem.getImage(), facilityImage);
         // Display the current date
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         String currentDate = dateFormat.format(Calendar.getInstance().getTime());
@@ -95,7 +94,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
         timeSlotsList.remove(bookingSpinner.getSelectedItem().toString());
 
         // Disable time slots that have already passed
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma 'Z'");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma");
         String currentTime = timeFormat.format(Calendar.getInstance().getTime());
         String thresholdTime = "08:00AM";
 
@@ -227,7 +226,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
     }
 
     private boolean isTimeSlotPassed(String currentTime, String timeSlot) {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma 'Z'");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma");
         try {
             Date currentTimeDate = timeFormat.parse(currentTime);
             Date timeSlotDate = timeFormat.parse(timeSlot);
@@ -240,7 +239,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
 
     // Helper method to check if a time is before the threshold time
     private boolean isBeforeThreshold(String currentTime, String thresholdTime) {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma 'Z'");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma");
         try {
             Date currentTimeDate = timeFormat.parse(currentTime);
             Date thresholdTimeDate = timeFormat.parse(thresholdTime);

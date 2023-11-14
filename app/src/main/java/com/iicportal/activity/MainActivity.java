@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -85,6 +87,22 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 }
             });
+        }
+    }
+
+    public static void loadImage(String url, ImageView imageView, int placeholder) {
+        if (url == null) {
+            imageView.setImageResource(placeholder);
+        } else {
+            Glide.with(imageView.getContext()).load(url).fallback(placeholder).into(imageView);
+        }
+    }
+
+    public static void loadImage(String url, ImageView imageView) {
+        if (url == null) {
+            imageView.setImageResource(R.drawable.baseline_image_placeholder);
+        } else {
+            Glide.with(imageView.getContext()).load(url).fallback(R.drawable.baseline_image_placeholder).into(imageView);
         }
     }
 
