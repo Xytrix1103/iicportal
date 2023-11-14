@@ -49,6 +49,7 @@ public class VerticalViewFragment extends Fragment {
         fab = view.findViewById(R.id.fab);
 
         requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.vertical_fragment_container, verticalHomeFragment).commit();
+        bottomNavigationView.setSelectedItemId(R.id.fab_item);
 
         fab.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.vertical_fragment_container, verticalHomeFragment).commit();
