@@ -55,7 +55,7 @@ public class AddFacilityActivity extends AppCompatActivity {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
                         imageUri = uri;
                         fileName = uri.getPath().substring(uri.getPath().lastIndexOf('/') + 1);
-                        Glide.with(context).load(uri).into(image);
+                        Glide.with(context).load(uri).placeholder(R.drawable.baseline_image_placeholdeer).into(image);
                         addImageBtn.setVisibility(View.GONE);
                         editImageBtn.setVisibility(View.VISIBLE);
                     } else {

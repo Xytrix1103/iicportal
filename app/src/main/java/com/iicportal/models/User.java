@@ -6,16 +6,18 @@ public class User {
     private String phoneNumber;
     private String role;
     private String password;
+    private String image;
 
     public User() {
     }
 
-    public User(String fullName, String phoneNumber, String email, String role, String password) {
+    public User(String fullName, String phoneNumber, String email, String role, String password, String image){
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.role = role;
         this.password = password;
+        this.image = image;
     }
 
     public String getFullName() {
@@ -28,6 +30,14 @@ public class User {
 
     public String getPhoneNumber() {
         return this.phoneNumber;
+    }
+
+    public String getImage() {
+        return this.image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public void setPhoneNumber(String phoneNumber) {

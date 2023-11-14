@@ -62,7 +62,7 @@ public class EditFacilityActivity extends AppCompatActivity {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
                         imageUri = uri;
                         fileName = uri.getPath().substring(uri.getPath().lastIndexOf('/') + 1);
-                        Glide.with(context).load(uri).into(image);
+                        Glide.with(context).load(uri).placeholder(R.drawable.baseline_image_placeholdeer).into(image);
                         addImageBtn.setVisibility(View.GONE);
                         editImageBtn.setVisibility(View.VISIBLE);
                     } else {
@@ -77,7 +77,7 @@ public class EditFacilityActivity extends AppCompatActivity {
                 if (activity != null && !activity.isFinishing()){
                     nameEditText.setText(facility.getName());
                     priceEditText.setText(String.valueOf(facility.getPrice()));
-                    Glide.with(context).load(facility.getImage()).into(image);
+                    Glide.with(context).load(facility.getImage()).placeholder(R.drawable.baseline_image_placeholdeer).into(image);
                     Log.d("EditFacilityDialogFragment", "Facility: " + facility);
                     imageUri = Uri.parse(facility.getImage());
                     Log.d("EditFacilityDialogFragment", "Image: " + facility.getImage());

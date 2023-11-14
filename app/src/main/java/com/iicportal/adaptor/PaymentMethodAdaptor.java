@@ -50,7 +50,7 @@ public class PaymentMethodAdaptor extends FirebaseRecyclerAdapter<PaymentMethod,
     protected void onBindViewHolder(@NonNull PaymentMethodViewHolder holder, int position, @NonNull PaymentMethod model) {
         int pos = position;
         holder.method.setText(model.getMethod());
-        Glide.with(context).load(model.getIcon()).into(holder.icon);
+        Glide.with(context).load(model.getIcon()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.icon);
         holder.radioButton.setChecked(pos == selectedPosition);
 
         holder.radioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
