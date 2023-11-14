@@ -61,19 +61,12 @@ public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, Facili
         holder.facilityName.setText(model.getName());
         MainActivity.loadImage(model.getImage(), holder.facilityImage);
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences("com.iicportal", 0);
-        String role = sharedPreferences.getString("role", "Student");
-
         if (isEdit) {
-            if (!role.equals("Admin") || !role.equals("Vendor")) {
-                holder.editFacility.setVisibility(View.VISIBLE);
-                holder.booknowBtn.setVisibility(View.GONE);
-                holder.editFacility.setOnClickListener(v -> {
-                    context.startActivity(new Intent(context, EditFacilityActivity.class).putExtra("key", getRef(position).getKey()));
-                });
-            } else {
-                holder.editFacility.setVisibility(View.GONE);
-            }
+            holder.editFacility.setVisibility(View.VISIBLE);
+            holder.booknowBtn.setVisibility(View.GONE);
+            holder.editFacility.setOnClickListener(v -> {
+                context.startActivity(new Intent(context, EditFacilityActivity.class).putExtra("key", getRef(position).getKey()));
+            });
         } else {
             holder.booknowBtn.setOnClickListener(v -> {
                 Log.d("BookingAdapter", "Book button clicked");
