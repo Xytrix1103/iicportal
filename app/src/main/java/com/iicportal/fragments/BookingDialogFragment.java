@@ -89,7 +89,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
         timeSlotsList.remove(bookingSpinner.getSelectedItem().toString());
 
         // Disable time slots that have already passed
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma 'Z'");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma");
         String currentTime = timeFormat.format(Calendar.getInstance().getTime());
         String thresholdTime = "08:00AM";
 
@@ -175,7 +175,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
     }
 
     private boolean isTimeSlotPassed(String currentTime, String timeSlot) {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma 'Z'");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma");
         try {
             Date currentTimeDate = timeFormat.parse(currentTime);
             Date timeSlotDate = timeFormat.parse(timeSlot);
@@ -188,7 +188,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
 
     // Helper method to check if a time is before the threshold time
     private boolean isBeforeThreshold(String currentTime, String thresholdTime) {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma 'Z'");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma");
         try {
             Date currentTimeDate = timeFormat.parse(currentTime);
             Date thresholdTimeDate = timeFormat.parse(thresholdTime);
