@@ -53,8 +53,7 @@ public class MenuItemAdaptor extends FirebaseRecyclerAdapter<FoodItem, MenuItemA
         holder.name.setText(model.getName());
         holder.description.setText(model.getDescription());
         holder.price.setText(String.format("RM %.2f", model.getPrice()));
-        Glide.with(holder.image.getContext()).load(model.getImage()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.image);
-
+        MainActivity.loadImage(model.getImage(), holder.image);
         //get role from shared preferences
         //if role is admin, show edit button
         SharedPreferences sharedPreferences = context.getSharedPreferences("com.iicportal", 0);

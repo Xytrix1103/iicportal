@@ -15,7 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,7 +52,7 @@ public class CartItemAdaptor extends FirebaseRecyclerAdapter<CartItem, CartItemA
 
         holder.name.setText(model.getName());
         holder.price.setText(String.format("RM %.2f", model.getPrice()));
-        Glide.with(holder.image.getContext()).load(model.getImage()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.image);
+        MainActivity.loadImage(model.getImage(), holder.image, R.drawable.baseline_image_placeholder);
         holder.quantity.setText(String.valueOf(model.getQuantity()));
 
         holder.plusBtn.setOnClickListener(v -> {
