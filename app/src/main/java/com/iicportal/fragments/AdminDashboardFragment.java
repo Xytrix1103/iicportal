@@ -22,12 +22,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
 import com.iicportal.activity.MainActivity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class AdminDashboardFragment extends Fragment {
     OpenDrawerInterface openDrawerInterface;
     FirebaseAuth mAuth;
     FirebaseUser user;
     FirebaseDatabase database;
-    DatabaseReference usersRef, chatsRef, messagesRef;
+    DatabaseReference usersRef, chatsRef, chatMessagesRef, messagesRef;
 
     TextView userCountText;
     TextView chatCountText;
@@ -48,7 +51,8 @@ public class AdminDashboardFragment extends Fragment {
         user = MainActivity.user;
         database = MainActivity.database;
         usersRef = database.getReference("users/");
-        chatsRef = database.getReference("support/chats/");
+        chatsRef = database.getReference("chats/");
+        chatMessagesRef = database.getReference("messages/");
         messagesRef = database.getReference("messages/");
     }
 
@@ -59,7 +63,8 @@ public class AdminDashboardFragment extends Fragment {
         user = MainActivity.user;
         database = MainActivity.database;
         usersRef = database.getReference("users/");
-        chatsRef = database.getReference("support/chats/");
+        chatsRef = database.getReference("chats/");
+        chatMessagesRef = database.getReference("messages/");
         messagesRef = database.getReference("messages/");
     }
 
@@ -91,21 +96,41 @@ public class AdminDashboardFragment extends Fragment {
 
         // TODO: Get unread chats count
         unreadChats = false;
-        chatsRef.orderByChild("readByAdmin").equalTo(false).addValueEventListener(new ValueEventListener() {
+        Set<String> unreadChatIdSet = new HashSet<String>();
+        chatsRef.orderByChild("/members/" + user.getUid()).equalTo(true).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                long unreadChatsCount = snapshot.getChildrenCount();
+                for (DataSnapshot chatSnapshot : snapshot.getChildren()) {
+                    String chatId = chatSnapshot.getKey().toString();
 
-                if (unreadChatsCount == 0) {
-                    chatsLayout.setVisibility(View.GONE);
-                    unreadChats = false;
-                } else {
-                    chatsLayout.setVisibility(View.VISIBLE);
-                    chatCountText.setText(unreadChatsCount + " unread chat" + ((unreadChatsCount != 1) ? "s" : ""));
-                    unreadChats = true;
+                    chatMessagesRef.child(chatId).orderByChild("read").equalTo(false).limitToLast(1).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.getValue() != null) {
+                                unreadChatIdSet.add(chatId);
+                            } else {
+                                unreadChatIdSet.remove(chatId);
+                            }
+
+                            int unreadChatsCount = unreadChatIdSet.size();
+                            if (unreadChatIdSet.size() > 0) {
+                                chatsLayout.setVisibility(View.VISIBLE);
+                                chatCountText.setText(unreadChatsCount + " unread chat" + ((unreadChatsCount != 1) ? "s" : ""));
+                                unreadChats = true;
+                            } else {
+                                chatsLayout.setVisibility(View.GONE);
+                                unreadChats = false;
+                            }
+
+                            displayEmptyTasksText();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Log.d(ADMIN_DASHBOARD_TAG, "loadChatMessages:onCancelled");
+                        }
+                    });
                 }
-
-                displayEmptyTasksText();
             }
 
             @Override
