@@ -79,18 +79,18 @@
 	<string name="order_id_title">Order ID</string>
     <string name="collect_by_title">Collect By</string>
     <string name="payment_method_title">Payment</string>
-	<string name="prices_title">Prices (RM)</string>
+    <string name="prices_title">Prices (RM)</string>
     <string name="subtotal_title">Subtotal</string>
-	<string name="takeaway_fees_title">Takeaway Fees</string>
-	<string name="dashboard">Dashboard</string>
-	<string name="users">Users</string>
-	<string name="search">Search</string>
-	<string name="userRoleHint">User Role</string>
+    <string name="takeaway_fees_title">Takeaway Fees</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="users">Users</string>
+    <string name="search">Search</string>
+    <string name="userRoleHint">User Role</string>
     <string name="userRoleLabel">Role</string>
     <string name="edit_user">Edit User</string>
-	<string name="save">Save</string>
+    <string name="save">Save</string>
     <string name="cancel">Cancel</string>
-	<string name="add_user">Add User</string>
+    <string name="add_user">Add User</string>
     <string name="edit_ecanteen">E-Canteen (Edit Mode)</string>
     <string name="stop_edit_ecanteen">Exit E-Canteen edit mode</string>
     <string name="add_category">Add category</string>
@@ -105,6 +105,9 @@
     <string name="edit_image">Edit Image</string>
     <string name="add_menu_item">Add Menu Item</string>
     <string name="add_image">Add Image</string>
+    <string name="live_chat">Live Chat</string>
+    <string name="enter_message">Enter message</string>
+    <string name="live_chat_empty_text">Send a message to start chatting with our admins.</string>
 	<string name="orders">Orders</string>
     <string name="add_facility">Add Facility</string>
     <string name="edit_facility">Facility (Edit Mode)</string>
@@ -132,4 +135,13 @@
         <item>3:00PM - 4:00PM</item>
         <item>4:00PM - 5:00PM</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="chats">Chats</string>
+    <string name="messages">Messages</string>
+    <string name="message_details">Message Details</string>
+    <string name="phone">Phone</string>
+    <string name="message">Message</string>
+    <string name="close">Close</string>
+    <string name="email">Email</string>
 </resources>

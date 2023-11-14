@@ -1,15 +1,21 @@
 package com.iicportal.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
 import com.iicportal.models.Message;
@@ -25,6 +31,9 @@ public class ContactActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseDatabase database;
+    private DatabaseReference usersRef, messagesRef;
+
+    private static final String CONTACT_TAG = "ContactActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +43,9 @@ public class ContactActivity extends AppCompatActivity {
         // Initialize firebase objects
         mAuth = MainActivity.mAuth;
         user = MainActivity.user;
+        database = FirebaseDatabase.getInstance();
+        usersRef = database.getReference("users/");
+        messagesRef = database.getReference("messages/");
 
         // Set reference to views
         firstNameEdit = findViewById(R.id.firstName);
@@ -60,18 +72,29 @@ public class ContactActivity extends AppCompatActivity {
                     validateField(!message.isEmpty(), messageEdit, "Message is required") &&
                     validateField(isValidEmail(email), emailEdit, "Invalid email format") &&
                     validateField(isValidPhoneNumber(phone), phoneEdit, "Invalid phone number format")) {
-                // Push new contact message
-                Message newMessage = new Message(mAuth.getCurrentUser().getUid(), firstName, lastName, email, phone, message, System.currentTimeMillis());
+                usersRef.child(user.getUid()).get().addOnCompleteListener(userTask -> {
+                    if (userTask.isSuccessful()) {
+                        // Get user's profile picture link
+                        String profilePicture = userTask.getResult().child("image").getValue() != null
+                                ? userTask.getResult().child("image").getValue().toString()
+                                : null;
 
-                database.getReference("messages/").push().setValue(newMessage).addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        firstNameEdit.getText().clear();
-                        lastNameEdit.getText().clear();
-                        emailEdit.getText().clear();
-                        phoneEdit.getText().clear();
-                        messageEdit.getText().clear();
+                        // Push new contact message
+                        Message newMessage = new Message(user.getUid(), firstName, lastName, firstName + " " + lastName, email, phone, message, profilePicture, false, System.currentTimeMillis());
 
-                        Toast.makeText(this, "We've received your message, thank you for reaching out to us!", Toast.LENGTH_LONG).show();
+                        messagesRef.push().setValue(newMessage).addOnCompleteListener(messageTask -> {
+                            if (messageTask.isSuccessful()) {
+                                firstNameEdit.getText().clear();
+                                lastNameEdit.getText().clear();
+                                emailEdit.getText().clear();
+                                phoneEdit.getText().clear();
+                                messageEdit.getText().clear();
+
+                                Toast.makeText(this, "We've received your message, thank you for reaching out to us!", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } else {
+                        Log.e(CONTACT_TAG, "loadUser:");
                     }
                 });
             }

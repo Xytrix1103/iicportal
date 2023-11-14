@@ -1,19 +1,11 @@
 package com.iicportal.activity;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -27,7 +19,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,14 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.iicportal.R;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.security.AccessController;
-
-import javax.xml.transform.Result;
 
 public class ProfileUpdateActivity extends AppCompatActivity {
     FirebaseDatabase database;
@@ -101,7 +85,7 @@ public class ProfileUpdateActivity extends AppCompatActivity {
                 String pictureURL = dataSnapshot.child("image").getValue(String.class);
                 if (pictureURL != null && !pictureURL.equals("")){
                     if(!activity.isFinishing()) {
-                        Glide.with(context).load(pictureURL).into(picture);
+                        Glide.with(context).load(pictureURL).placeholder(R.drawable.baseline_account_circle_24).into(picture);
                     }
                     addImageBtn.setVisibility(View.GONE);
                     editImageBtn.setVisibility(View.VISIBLE);
@@ -122,7 +106,7 @@ public class ProfileUpdateActivity extends AppCompatActivity {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
                         profileUri = uri;
                         fileName = uri.getPath().substring(uri.getPath().lastIndexOf('/') + 1);
-                        Glide.with(context).load(uri).into(picture);
+                        Glide.with(context).load(uri).placeholder(R.drawable.baseline_account_circle_24).into(picture);
                         addImageBtn.setVisibility(View.GONE);
                         editImageBtn.setVisibility(View.VISIBLE);
                     } else {
@@ -395,20 +379,6 @@ public class ProfileUpdateActivity extends AppCompatActivity {
                         usersRef.child(key).child("phoneNumber").setValue(phone.getText().toString());
                     }
                     if (editable[4]) {
-                        // Ask Shu Yi tmr about this problem of not being able to set the image to what you need
-//                        if (profileUri == null){
-//                            picture.setImageResource(R.drawable.baseline_person_24);
-//                            String fileName = profileUri.getPath().substring(profileUri.getPath().lastIndexOf('/') + 1);
-//                            Log.d("ProfileUpdateActivity", "fileName: " + fileName);
-//                            StorageReference newImageRef = storage.getReference("profile_picture/" + fileName);
-//                            newImageRef.putFile(profileUri).addOnSuccessListener(taskSnapshot -> {
-//                                taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
-//                                    usersRef = database.getReference("users/" + user.getUid() + "/image");
-//                                    usersRef.setValue(uri.toString());
-//                                    finish();
-//                                });
-//                            });
-//                        } else {
                         Log.d("Profile URI", String.valueOf(profileUri));
                         if (profileUri == null) {
                             usersRef = database.getReference("users/" + user.getUid() + "/image");

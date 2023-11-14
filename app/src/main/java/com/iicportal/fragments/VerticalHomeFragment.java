@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
+import com.iicportal.activity.MainActivity;
 import com.iicportal.adaptor.StatusAdaptor;
 import com.iicportal.models.BookingStatus;
 import com.iicportal.models.OrderStatus;
@@ -42,8 +44,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 
-public class StudentHomeFragment extends Fragment {
-
+public class VerticalHomeFragment extends Fragment {
     private Context context;
 
     private BottomNavigationView bottomNavigationView;
@@ -53,6 +54,9 @@ public class StudentHomeFragment extends Fragment {
 
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
+    Button logoutButton;
+    Button livechatButton;
+    Button contactButton;
     private FirebaseDatabase database;
     private DatabaseReference userRef, facilityRef, bookingRef, orderRef;
 
@@ -64,8 +68,8 @@ public class StudentHomeFragment extends Fragment {
 
     private static final String STUDENT_HOME_TAG = "StudentHomeFragment";
 
-    public StudentHomeFragment() {
-        super(R.layout.student_home_fragment);
+    public VerticalHomeFragment() {
+        super(R.layout.vertical_home_fragment);
     }
 
     @Override
@@ -76,22 +80,22 @@ public class StudentHomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.student_home_fragment, container, false);
+        View view = inflater.inflate(R.layout.vertical_home_fragment, container, false);
 
         facilityNameList = new ArrayList<String>();
         statusList = new ArrayList<Status>();
 
         // Initialize firebase objects
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = MainActivity.mAuth;
         currentUser = mAuth.getCurrentUser();
-        database = FirebaseDatabase.getInstance();
+        database = MainActivity.database;
         userRef = database.getReference("users/").child(currentUser.getUid());
         facilityRef = database.getReference("facilities/facility/");
         bookingRef = database.getReference("bookings/");
         orderRef = database.getReference("orders/");
 
         // Set reference to views
-        bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
+        bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
         facilitiesButtonCard = view.findViewById(R.id.facilitiesCard);
         ecanteenButtonCard = view.findViewById(R.id.ecanteenCard);
         messageButtonIcon = view.findViewById(R.id.messageBtnIcon);
@@ -108,7 +112,7 @@ public class StudentHomeFragment extends Fragment {
                 usernameText.setText(task.getResult().child("fullName").getValue().toString());
 
                 if (task.getResult().child("image").getValue() != null)
-                    Glide.with(userImage.getContext()).load(task.getResult().child("image").getValue().toString()).into(userImage);
+                    Glide.with(userImage.getContext()).load(task.getResult().child("image").getValue().toString()).placeholder(R.drawable.baseline_image_placeholdeer).into(userImage);
             } else {
                 Log.e(STUDENT_HOME_TAG, "Error getting user data", task.getException());
             }
@@ -117,12 +121,12 @@ public class StudentHomeFragment extends Fragment {
 
         //region Services
         ecanteenButtonCard.setOnClickListener(v -> {
-            bottomNavigationView.getMenu().getItem(1).setChecked(true);
+            bottomNavigationView.getMenu().getItem(0).setChecked(true);
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.vertical_fragment_container, new ECanteenMenuFragment()).commit();
         });
 
         facilitiesButtonCard.setOnClickListener(v -> {
-            bottomNavigationView.getMenu().getItem(2).setChecked(true);
+            bottomNavigationView.getMenu().getItem(1).setChecked(true);
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.vertical_fragment_container, new FacilityMenuFragment()).commit();
         });
         //endregion
