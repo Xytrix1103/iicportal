@@ -1,6 +1,6 @@
 package com.iicportal.models;
 
-public class Message {
+public class Feedback {
     private String uid;
     private String firstName;
     private String lastName;
@@ -12,10 +12,10 @@ public class Message {
     private boolean read;
     private Long timestamp;
 
-    public Message() {
+    public Feedback() {
     }
 
-    public Message(String uid, String firstName, String lastName, String fullName, String email, String phone, String message, String userProfilePicture, boolean read, Long timestamp) {
+    public Feedback(String uid, String firstName, String lastName, String fullName, String email, String phone, String message, String userProfilePicture, boolean read, Long timestamp) {
         this.uid = uid;
         this.firstName = firstName;
         this.lastName = lastName;

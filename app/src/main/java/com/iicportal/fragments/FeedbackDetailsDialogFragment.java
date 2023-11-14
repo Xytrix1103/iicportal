@@ -16,34 +16,34 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
 import com.iicportal.activity.MainActivity;
-import com.iicportal.models.Message;
+import com.iicportal.models.Feedback;
 
 import java.text.SimpleDateFormat;
 
-public class MessageDetailsDialogFragment extends BottomSheetDialogFragment {
-    private Message message;
+public class FeedbackDetailsDialogFragment extends BottomSheetDialogFragment {
+    private Feedback feedback;
 
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private FirebaseDatabase database;
-    private DatabaseReference messagesRef;
+    private DatabaseReference feedbackRef;
 
-    public MessageDetailsDialogFragment() {
+    public FeedbackDetailsDialogFragment() {
     }
 
-    public MessageDetailsDialogFragment(Message message) {
-        this.message = message;
+    public FeedbackDetailsDialogFragment(Feedback feedback) {
+        this.feedback = feedback;
         this.mAuth = MainActivity.mAuth;
         this.currentUser = MainActivity.user;
         this.database = MainActivity.database;
-        this.messagesRef = database.getReference("message/");
+        this.feedbackRef = database.getReference("feedback/");
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.message_details_dialog, container, false);
+        View view = inflater.inflate(R.layout.feedback_details_dialog, container, false);
 
-        TextView messageDateText = view.findViewById(R.id.messageDetailsDate);
+        TextView feedbackDateText = view.findViewById(R.id.feedbackDialogDate);
         TextView firstNameText = view.findViewById(R.id.firstNameValue);
         TextView lastNameText = view.findViewById(R.id.lastNameValue);
         TextView emailText = view.findViewById(R.id.emailValue);
@@ -51,12 +51,12 @@ public class MessageDetailsDialogFragment extends BottomSheetDialogFragment {
         TextView messageText = view.findViewById(R.id.messageValue);
         TextView closeButton = view.findViewById(R.id.closeBtn);
 
-        messageDateText.setText(new SimpleDateFormat("dd MMM yyyy").format(message.getTimestamp()));
-        firstNameText.setText(message.getFirstName());
-        lastNameText.setText(message.getLastName());
-        emailText.setText(message.getEmail());
-        phoneText.setText(message.getPhone());
-        messageText.setText(message.getMessage());
+        feedbackDateText.setText(new SimpleDateFormat("dd MMM yyyy").format(feedback.getTimestamp()));
+        firstNameText.setText(feedback.getFirstName());
+        lastNameText.setText(feedback.getLastName());
+        emailText.setText(feedback.getEmail());
+        phoneText.setText(feedback.getPhone());
+        messageText.setText(feedback.getMessage());
 
         closeButton.setOnClickListener(view1 -> {
             dismiss();
