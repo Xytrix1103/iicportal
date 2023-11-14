@@ -42,6 +42,7 @@ dependencies {
     implementation("com.firebaseui:firebase-ui-storage:8.0.2")
     implementation("com.firebaseui:firebase-ui-database:8.0.2")
     implementation("com.google.zxing:core:3.2.1")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
     // Add the Firebase SDKs
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
