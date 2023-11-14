@@ -26,9 +26,10 @@
 			android:id="@+id/bottomAppBar"
 			android:layout_gravity="bottom"
 			android:background="@color/white"
+			app:fabAlignmentMode="center"
+			app:contentInsetEnd="0dp"
 			app:contentInsetStart="0dp"
-			app:fabCradleMargin="10dp"
-			app:fabCradleRoundedCornerRadius="50dp">
+			app:fabCradleMargin="10dp">
 
 			<com.google.android.material.bottomnavigation.BottomNavigationView
 				android:layout_width="match_parent"
@@ -45,7 +46,9 @@
 			android:layout_width="wrap_content"
 			android:layout_height="match_parent"
 			android:backgroundTint="@color/colorPrimary"
+			android:layout_marginBottom="10dp"
 			android:src="@drawable/outline_home_24"
+			app:layout_anchorGravity="bottom|center"
 			app:layout_anchor="@id/bottomAppBar"
 			app:tint ="@color/white"/>
 

@@ -10,7 +10,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
+        android:layout_marginHorizontal="10dp"
         android:layout_marginTop="10dp">
 
         <ImageView
@@ -21,12 +21,23 @@
             android:layout_marginEnd="10dp"
             android:src="@drawable/baseline_arrow_back_24" />
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/userProfilePic"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/backBtnIcon"
+            android:scaleType="centerCrop"
+            android:src="@drawable/baseline_account_circle_24"
+            android:layout_marginEnd="10dp"
+            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full" />
+
         <TextView
             android:id="@+id/contactHeaderText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/backBtnIcon"
+            android:layout_toEndOf="@id/userProfilePic"
             android:text="@string/live_chat"
             android:textColor="@color/black"
             android:textSize="24sp"
