@@ -22,18 +22,9 @@ import com.iicportal.models.BookingItem;
 public class BookingHistoryAdaptor extends FirebaseRecyclerAdapter<BookingItem, BookingHistoryAdaptor.BookingViewHolder> {
     Context context;
 
-    FirebaseDatabase database;
-    FirebaseAuth auth;
-    DatabaseReference bookingRef;
-
     public BookingHistoryAdaptor(FirebaseRecyclerOptions<BookingItem> options, Context context) {
         super(options);
         this.context = context;
-        this.auth = FirebaseAuth.getInstance();
-        // Get the current user's ID
-        String userId = auth.getCurrentUser().getUid();
-        this.bookingRef = FirebaseDatabase.getInstance().getReference("bookings");
-        this.bookingRef.keepSynced(true);
     }
 
     @Override

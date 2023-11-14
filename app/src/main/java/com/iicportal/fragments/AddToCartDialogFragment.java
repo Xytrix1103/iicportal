@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -46,7 +45,12 @@ public class AddToCartDialogFragment extends BottomSheetDialogFragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.order_menu_item_dialog, container, false);
+        return inflater.inflate(R.layout.order_menu_item_dialog, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         TextView title = view.findViewById(R.id.order_menu_item_dialog_title);
         TextView description = view.findViewById(R.id.order_menu_item_dialog_description);
@@ -96,7 +100,5 @@ public class AddToCartDialogFragment extends BottomSheetDialogFragment {
         getDialog().setOnDismissListener(dialog -> {
             cartItem.resetQuantity();
         });
-
-        return view;
     }
 }

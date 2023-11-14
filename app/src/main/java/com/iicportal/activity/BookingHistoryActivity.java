@@ -2,6 +2,7 @@ package com.iicportal.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.iicportal.R;
 import com.iicportal.adaptor.BookingHistoryAdaptor;
 import com.iicportal.models.BookingItem;
@@ -38,7 +40,7 @@ public class BookingHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_history);
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = MainActivity.mAuth;
         user = mAuth.getCurrentUser();
 
         database = FirebaseDatabase.getInstance();
@@ -53,10 +55,12 @@ public class BookingHistoryActivity extends AppCompatActivity {
         mLayoutManager.setReverseLayout(true);
         mLayoutManager.setStackFromEnd(true);
         bookingRecyclerView.setLayoutManager(mLayoutManager);
+        Log.d("BookingHistoryActivity", "onCreate: " + user.getUid());
+        Query query = bookingRef.orderByChild("userId").equalTo(user.getUid());
 
         FirebaseRecyclerOptions<BookingItem> options = new FirebaseRecyclerOptions.Builder<BookingItem>()
                 .setLifecycleOwner(this)
-                .setQuery(bookingRef.orderByChild("userId").equalTo(user.getUid()), BookingItem.class)
+                .setQuery(query, BookingItem.class)
                 .build();
 
         BookingHistoryAdaptor = new BookingHistoryAdaptor(options, context);
