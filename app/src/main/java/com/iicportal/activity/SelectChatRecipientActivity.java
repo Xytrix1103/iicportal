@@ -2,6 +2,7 @@ package com.iicportal.activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,6 +58,10 @@ public class SelectChatRecipientActivity extends AppCompatActivity {
                 chatUserAdaptor.startListening();
             }
             return false;
+        });
+
+        backBtnIcon.setOnClickListener(view -> {
+            finish();
         });
     }
 
