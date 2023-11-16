@@ -103,6 +103,7 @@ public class ChatActivity extends AppCompatActivity {
 
         chatMessageRecyclerView = findViewById(R.id.messageRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         chatMessageRecyclerView.setLayoutManager(linearLayoutManager);
 

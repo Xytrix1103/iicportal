@@ -94,6 +94,11 @@ public class ChatAdaptor extends FirebaseRecyclerAdapter<Chat, ChatAdaptor.ChatV
         database.getReference("messages/" + getRef(position).getKey()).limitToLast(1).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    holder.itemView.setVisibility(View.GONE);
+                    return;
+                }
+
                 String latestMessage;
                 Long latestMessageTimestamp;
                 String latestMessageTime;
