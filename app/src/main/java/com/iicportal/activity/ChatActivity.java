@@ -82,7 +82,7 @@ public class ChatActivity extends AppCompatActivity {
                         usersRef.child(member).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                MainActivity.loadImage(snapshot.child("image").getValue(String.class), userProfilePic, R.drawable.baseline_people_outline_24);
+                                MainActivity.loadImage(snapshot.child("image").getValue(String.class), userProfilePic, R.drawable.baseline_account_circle_24);
                                 chatNameTextView.setText(snapshot.child("fullName").getValue().toString());
                             }
 
@@ -103,7 +103,6 @@ public class ChatActivity extends AppCompatActivity {
 
         chatMessageRecyclerView = findViewById(R.id.messageRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         chatMessageRecyclerView.setLayoutManager(linearLayoutManager);
 
@@ -138,7 +137,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot message : snapshot.getChildren()) {
-                    if (Boolean.FALSE.equals(message.child("read").getValue())) {
+                    if (Boolean.FALSE.equals(message.child("read").getValue()) && !message.child("uid").getValue(String.class).equals(currentUser.getUid())) {
                         messagesRef.child(message.getKey()).child("read").setValue(true);
                     }
                 }
