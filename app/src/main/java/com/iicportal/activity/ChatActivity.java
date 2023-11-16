@@ -138,7 +138,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot message : snapshot.getChildren()) {
                     if (Boolean.FALSE.equals(message.child("read").getValue())) {
-                        messagesRef.child(message.getKey()).child("read").setValue(false);
+                        messagesRef.child(message.getKey()).child("read").setValue(true);
                     }
                 }
             }
