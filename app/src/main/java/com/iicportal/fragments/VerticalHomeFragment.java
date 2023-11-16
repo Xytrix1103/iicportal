@@ -35,6 +35,7 @@ import com.iicportal.adaptor.StatusAdaptor;
 import com.iicportal.models.BookingStatus;
 import com.iicportal.models.OrderStatus;
 import com.iicportal.models.Status;
+import com.iicportal.notifications.OrderNotification;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -230,6 +231,21 @@ public class VerticalHomeFragment extends Fragment {
                             timestamp = Long.parseLong(snapshotItem.child("readyTimestamp").getValue().toString());
                         }
 
+                        // Only send notifications for ongoing orders whose status have been changed to READY
+                        for (Status status : statusList) {
+                            OrderStatus orderStatus = (OrderStatus) status;
+                            if (orderStatus.getOrderKey().equals(orderKey)) {
+                                if (!orderStatus.getOrderStatus().equals(statusValue)) {
+                                    if (statusValue.equals("READY")) {
+                                        OrderNotification orderNotification = new OrderNotification(context);
+                                        orderNotification.sendNotification("Order Ready", String.format("Your order (%s) is ready for pickup or delivery.", orderId));
+                                    }
+                                }
+                                break;
+                            }
+                        }
+
+                        // Update status list
                         OrderStatus newOrderStatus = new OrderStatus(
                                 currentUser.getUid(), title, description, type, timestamp,
                                 orderKey, orderId, statusValue
@@ -240,6 +256,20 @@ public class VerticalHomeFragment extends Fragment {
                     }
                     // Delete old status reminder if order status is "COMPLETED"
                     else if (statusValue.equals("COMPLETED")) {
+                        // Only send notifications for ongoing orders whose status have been changed to COMPLETED
+                        for (Status status : statusList) {
+                            OrderStatus orderStatus = (OrderStatus) status;
+                            if (orderStatus.getOrderKey().equals(orderKey)) {
+                                if (!orderStatus.getOrderStatus().equals(statusValue)) {
+                                    if (statusValue.equals("COMPLETED")) {
+                                        OrderNotification orderNotification = new OrderNotification(context);
+                                        orderNotification.sendNotification("Order Complete", String.format("Your order (%s) has been completed.", orderId));
+                                    }
+                                }
+                                break;
+                            }
+                        }
+
                         removeStatusFromList(statusList, orderKey);
                         statusAdaptor.notifyDataSetChanged();
                     }
