@@ -57,15 +57,33 @@
 				android:textAlignment="center"
 				android:textSize="16sp" />
 
-			<TextView
-				android:id="@+id/userCountText"
-				android:layout_width="wrap_content"
+			<RelativeLayout
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_below="@id/totalUsersText"
-				android:layout_marginTop="20dp"
-				android:textColor="@color/black"
-				android:textSize="36sp"
-				tools:text="99,999" />
+				android:layout_marginTop="20dp">
+
+				<TextView
+					android:id="@+id/userCountText"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentStart="true"
+					android:layout_centerVertical="true"
+					android:layout_marginRight="30dp"
+					android:layout_toLeftOf="@id/userCountIcon"
+					android:textColor="@color/black"
+					android:textSize="36sp"
+					tools:text="99,999" />
+
+				<ImageView
+					android:id="@+id/userCountIcon"
+					android:layout_width="50dp"
+					android:layout_height="50dp"
+					android:layout_alignParentEnd="true"
+					android:layout_centerVertical="true"
+					android:src="@drawable/baseline_people_outline_24" />
+
+			</RelativeLayout>
 
 		</RelativeLayout>
 
