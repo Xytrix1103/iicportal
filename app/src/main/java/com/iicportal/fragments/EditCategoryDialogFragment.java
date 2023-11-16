@@ -79,7 +79,12 @@ public class EditCategoryDialogFragment extends BottomSheetDialogFragment {
             builder.setMessage("Are you sure you want to delete this category?");
             builder.setPositiveButton("Yes", (dialog, which) -> {
                 database.getReference("ecanteen/categories/" + category).removeValue();
-                database.getReference("ecanteen/fooditems").orderByChild("category").equalTo(category).getRef().removeValue();
+                //remove all food items in this category
+                database.getReference("ecanteen/fooditems").orderByChild("category").equalTo(category).get().addOnSuccessListener(dataSnapshot -> {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        ds.getRef().removeValue();
+                    }
+                });
                 dialog.dismiss();
                 dismiss();
             });
