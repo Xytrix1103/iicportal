@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -71,9 +72,9 @@ public class EditFoodItemActivity extends AppCompatActivity {
                     }
                 });
 
-        database.getReference("ecanteen/fooditems/" + key + "/").addValueEventListener(new ValueEventListener() {
+        itemRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 foodItem = dataSnapshot.getValue(FoodItem.class);
                 nameEditText.setText(foodItem.getName());
                 descriptionEditText.setText(foodItem.getDescription());
@@ -180,24 +181,23 @@ public class EditFoodItemActivity extends AppCompatActivity {
                 foodItem.setPrice(Double.parseDouble(price));
                 foodItem.setCategory(categorySpinner.getSelectedItem().toString());
 
-                if (imageUri != null && !imageUri.toString().equals(Uri.parse(foodItem.getImage()).toString())) {
+                if (imageUri != null) {
                     String fileName = imageUri.getPath().substring(imageUri.getPath().lastIndexOf('/') + 1);
+                    Log.d("EditFoodItemDialogFragment", "Image URI: " + imageUri);
+                    Log.d("EditFoodItemDialogFragment", "File Name: " + fileName);
                     StorageReference newImageRef = storage.getReference("canteen_food_images/" + fileName);
                     newImageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
-                        newImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                            foodItem.setImage(uri.toString());
+                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
+                            itemRef.child("image").setValue(uri.toString());
+                            finish();
                         });
                     });
                 }
-
-                menuRef = database.getReference("ecanteen/fooditems/").child(key);
-                menuRef.setValue(foodItem);
-                finish();
             }
         });
 
         deleteBtn.setOnClickListener(v -> {
-            menuRef.child(key).removeValue();
+            itemRef.removeValue();
             finish();
         });
     }
