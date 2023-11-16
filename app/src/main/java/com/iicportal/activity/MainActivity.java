@@ -111,10 +111,4 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         Log.d("MainActivity", "onStart: ");
     }
-
-    //override on save instance state to prevent app from crashing when screen is rotated
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
 }
