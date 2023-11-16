@@ -46,6 +46,7 @@ public class ChatActivity extends AppCompatActivity {
     private TextView chatNameTextView;
 
     private static final String LIVE_CHAT_TAG = "ChatActivity";
+    private String chatId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class ChatActivity extends AppCompatActivity {
         context = this;
 
         Intent intent = getIntent();
-        String chatId = intent.getStringExtra("CHAT_ID");
+        chatId = intent.getStringExtra("CHAT_ID");
 
         // Initialize firebase objects
         mAuth = FirebaseAuth.getInstance();
@@ -82,7 +83,7 @@ public class ChatActivity extends AppCompatActivity {
                         usersRef.child(member).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                MainActivity.loadImage(snapshot.child("image").getValue(String.class), userProfilePic, R.drawable.baseline_people_outline_24);
+                                MainActivity.loadImage(snapshot.child("image").getValue(String.class), userProfilePic, R.drawable.baseline_account_circle_24);
                                 chatNameTextView.setText(snapshot.child("fullName").getValue().toString());
                             }
 
@@ -137,8 +138,8 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot message : snapshot.getChildren()) {
-                    if (Boolean.FALSE.equals(message.child("read").getValue())) {
-                        messagesRef.child(message.getKey()).child("read").setValue(false);
+                    if (Boolean.FALSE.equals(message.child("read").getValue()) && !message.child("uid").getValue(String.class).equals(currentUser.getUid())) {
+                        messagesRef.child(message.getKey()).child("read").setValue(true);
                     }
                 }
             }
@@ -188,36 +189,8 @@ public class ChatActivity extends AppCompatActivity {
             // Return to homepage
             finish();
         });
-    }
 
-    private void setChatMessageAdaptor() {
-        // Set up the messages RecyclerView and Adapter
-        FirebaseRecyclerOptions<ChatMessage> options = new FirebaseRecyclerOptions.Builder<ChatMessage>()
-                .setLifecycleOwner(this)
-                .setQuery(messagesRef, ChatMessage.class)
-                .build();
-
-        chatMessageAdaptor = new ChatMessageAdaptor(options, context);
-        chatMessageRecyclerView.setAdapter(chatMessageAdaptor);
-        chatMessageAdaptor.startListening();
-
-        chatMessageAdaptor.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                if (chatMessageAdaptor.getItemCount() == 0) {
-                    emptyChatText.setVisibility(TextView.VISIBLE);
-                } else {
-                    emptyChatText.setVisibility(TextView.GONE);
-                }
-            }
-
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-                chatMessageRecyclerView.smoothScrollToPosition(chatMessageAdaptor.getItemCount() - 1);
-            }
-        });
+        chatMessageRecyclerView.scrollToPosition(chatMessageAdaptor.getItemCount() - 1);
     }
 
     @Override
@@ -234,5 +207,29 @@ public class ChatActivity extends AppCompatActivity {
 
         if (chatMessageAdaptor != null)
             chatMessageAdaptor.stopListening();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+
+        database.getReference("messages/" + chatId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    database.getReference("chats/" + chatId).removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

@@ -19,8 +19,11 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
 import com.iicportal.activity.MainActivity;
 import com.iicportal.activity.SelectChatRecipientActivity;
@@ -75,7 +78,6 @@ public class ChatListFragment extends Fragment {
         chatListRecyclerView = view.findViewById(R.id.chatListReyclerView);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-        linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         chatListRecyclerView.setLayoutManager(linearLayoutManager);
 
@@ -103,6 +105,34 @@ public class ChatListFragment extends Fragment {
         } else {
             menuButton.setVisibility(View.GONE);
         }
+
+        database.getReference("chats/").orderByChild("/members/" + currentUser.getUid()).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot chat : snapshot.getChildren()) {
+                    database.getReference("messages/" + chat.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (!snapshot.exists()) {
+                                database.getReference("chats/" + chat.getKey()).removeValue();
+                                chatAdaptor.onDataChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+                chatAdaptor.onDataChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override

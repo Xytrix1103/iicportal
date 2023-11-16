@@ -107,7 +107,7 @@
     <string name="add_image">Add Image</string>
     <string name="live_chat">Live Chat</string>
     <string name="enter_message">Enter message</string>
-    <string name="live_chat_empty_text">Send a message to start chatting with our admins.</string>
+    <string name="live_chat_empty_text">Send a message to start chatting.</string>
 	<string name="orders">Orders</string>
     <string name="add_facility">Add Facility</string>
     <string name="edit_facility">Facility (Edit Mode)</string>

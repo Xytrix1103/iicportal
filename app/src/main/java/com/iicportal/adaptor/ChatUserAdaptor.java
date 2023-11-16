@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
 import com.iicportal.activity.ChatActivity;
 import com.iicportal.activity.MainActivity;
+import com.iicportal.activity.SelectChatRecipientActivity;
 import com.iicportal.models.User;
 
 import java.util.HashMap;
@@ -67,6 +68,7 @@ public class ChatUserAdaptor extends FirebaseRecyclerAdapter<User, ChatUserAdapt
         FirebaseUser currentUser = MainActivity.mAuth.getCurrentUser();
 
         holder.itemView.setOnClickListener(v -> {
+            ((SelectChatRecipientActivity) context).finish();
             DatabaseReference chatRef = MainActivity.database.getReference("chats/");
 
             chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
