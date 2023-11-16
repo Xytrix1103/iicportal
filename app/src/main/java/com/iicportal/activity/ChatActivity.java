@@ -46,6 +46,7 @@ public class ChatActivity extends AppCompatActivity {
     private TextView chatNameTextView;
 
     private static final String LIVE_CHAT_TAG = "ChatActivity";
+    private String chatId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class ChatActivity extends AppCompatActivity {
         context = this;
 
         Intent intent = getIntent();
-        String chatId = intent.getStringExtra("CHAT_ID");
+        chatId = intent.getStringExtra("CHAT_ID");
 
         // Initialize firebase objects
         mAuth = FirebaseAuth.getInstance();
@@ -234,5 +235,38 @@ public class ChatActivity extends AppCompatActivity {
 
         if (chatMessageAdaptor != null)
             chatMessageAdaptor.stopListening();
+
+        database.getReference("messages/" + chatId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    database.getReference("chats/" + chatId).removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        database.getReference("messages/" + chatId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    database.getReference("chats/" + chatId).removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
