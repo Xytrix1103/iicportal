@@ -115,7 +115,7 @@ public class ChatAdaptor extends FirebaseRecyclerAdapter<Chat, ChatAdaptor.ChatV
                     holder.latestMessageTime.setText(latestMessageTime);
 
                     // Check if chat is unread
-                    if (!message.isRead()) {
+                    if (!message.isRead() && !message.getUid().equals(currentUser.getUid())) {
                         holder.title.setTypeface(null, Typeface.BOLD);
                         holder.latestMessage.setTypeface(null, Typeface.BOLD);
                         holder.latestMessageTime.setTypeface(null, Typeface.BOLD);
