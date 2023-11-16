@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,7 +49,7 @@ public class PaymentMethodAdaptor extends FirebaseRecyclerAdapter<PaymentMethod,
     protected void onBindViewHolder(@NonNull PaymentMethodViewHolder holder, int position, @NonNull PaymentMethod model) {
         int pos = position;
         holder.method.setText(model.getMethod());
-        Glide.with(context).load(model.getIcon()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.icon);
+        MainActivity.loadImage(model.getIcon(), holder.icon);
         holder.radioButton.setChecked(pos == selectedPosition);
 
         holder.radioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {

@@ -18,53 +18,53 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
 import com.iicportal.activity.MainActivity;
-import com.iicportal.adaptor.MessageAdaptor;
-import com.iicportal.models.Message;
+import com.iicportal.adaptor.FeedbackAdaptor;
+import com.iicportal.models.Feedback;
 
-public class MessageListFragment extends Fragment {
+public class FeedbackListFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private FirebaseDatabase database;
-    private DatabaseReference messagesRef;
+    private DatabaseReference feedbackRef;
 
-    private MessageAdaptor messageAdaptor;
-    private RecyclerView messageListRecyclerView;
+    private FeedbackAdaptor feedbackAdaptor;
+    private RecyclerView feedbackRecyclerView;
 
     private AdminDashboardFragment.OpenDrawerInterface openDrawerInterface;
     private ImageView menuButton;
     private TextInputEditText searchEditText;
 
-    public MessageListFragment() {
-        super(R.layout.chat_list_fragment);
+    public FeedbackListFragment() {
+        super(R.layout.feedback_list_fragment);
         this.openDrawerInterface = null;
         this.database = MainActivity.database;
         this.mAuth = FirebaseAuth.getInstance();
         this.currentUser = mAuth.getCurrentUser();
-        this.messagesRef = database.getReference("messages/");
+        this.feedbackRef = database.getReference("feedback/");
     }
 
-    public MessageListFragment(AdminDashboardFragment.OpenDrawerInterface openDrawerInterface) {
+    public FeedbackListFragment(AdminDashboardFragment.OpenDrawerInterface openDrawerInterface) {
         super(R.layout.chat_list_fragment);
         this.openDrawerInterface = openDrawerInterface;
         this.database = MainActivity.database;
         this.mAuth = MainActivity.mAuth;
         this.currentUser = mAuth.getCurrentUser();
-        this.messagesRef = database.getReference("messages/");
+        this.feedbackRef = database.getReference("feedback/");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.message_list_fragment, container, false);
+        View view = inflater.inflate(R.layout.feedback_list_fragment, container, false);
 
         // Set reference to views
         menuButton = view.findViewById(R.id.menuIcon);
         searchEditText = view.findViewById(R.id.searchWidgetEditText);
-        messageListRecyclerView = view.findViewById(R.id.messageListRecyclerView);
+        feedbackRecyclerView = view.findViewById(R.id.feedbackListRecyclerView);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
-        messageListRecyclerView.setLayoutManager(linearLayoutManager);
+        feedbackRecyclerView.setLayoutManager(linearLayoutManager);
 
         // onClick listeners
         menuButton.setOnClickListener(v -> {
@@ -72,30 +72,30 @@ public class MessageListFragment extends Fragment {
         });
 
         // Set up the chats RecyclerView and Adapter
-        FirebaseRecyclerOptions<Message> options = new FirebaseRecyclerOptions.Builder<Message>()
-                .setQuery(messagesRef, Message.class)
+        FirebaseRecyclerOptions<Feedback> options = new FirebaseRecyclerOptions.Builder<Feedback>()
+                .setQuery(feedbackRef, Feedback.class)
                 .setLifecycleOwner(this)
                 .build();
 
-        messageAdaptor = new MessageAdaptor(options, requireContext(), getChildFragmentManager());
-        messageListRecyclerView.setAdapter(messageAdaptor);
+        feedbackAdaptor = new FeedbackAdaptor(options, requireContext(), getChildFragmentManager());
+        feedbackRecyclerView.setAdapter(feedbackAdaptor);
 
         // Set up the search widget
         searchEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
             String query = searchEditText.getText().toString();
 
             if (query.isEmpty()) {
-                messageAdaptor.updateOptions(options);
+                feedbackAdaptor.updateOptions(options);
             } else {
-                messageAdaptor.stopListening();
+                feedbackAdaptor.stopListening();
 
-                FirebaseRecyclerOptions<Message> searchOptions = new FirebaseRecyclerOptions.Builder<Message>()
-                        .setQuery(messagesRef.orderByChild("fullName").startAt(query).endAt(query + "\uf8ff"), Message.class)
+                FirebaseRecyclerOptions<Feedback> searchOptions = new FirebaseRecyclerOptions.Builder<Feedback>()
+                        .setQuery(feedbackRef.orderByChild("fullName").startAt(query).endAt(query + "\uf8ff"), Feedback.class)
                         .setLifecycleOwner(this)
                         .build();
 
-                messageAdaptor.updateOptions(searchOptions);
-                messageAdaptor.startListening();
+                feedbackAdaptor.updateOptions(searchOptions);
+                feedbackAdaptor.startListening();
             }
 
             return false;
@@ -107,12 +107,12 @@ public class MessageListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        messageAdaptor.startListening();
+        feedbackAdaptor.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        messageAdaptor.stopListening();
+        feedbackAdaptor.stopListening();
     }
 }

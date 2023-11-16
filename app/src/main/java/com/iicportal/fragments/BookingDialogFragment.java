@@ -15,7 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -62,7 +61,13 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.booking_dialog, container, false);
+        return inflater.inflate(R.layout.booking_dialog, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view,  savedInstanceState);
+
         TextView facilityName = view.findViewById(R.id.facility_name);
         ImageView facilityImage = view.findViewById(R.id.facility_image);
         Spinner bookingSpinner = view.findViewById(R.id.booking_time);
@@ -72,8 +77,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
         TextView cancel = view.findViewById(R.id.cancelBtn);
 
         facilityName.setText(bookingItem.getName());
-        Glide.with(context).load(bookingItem.getImage()).placeholder(R.drawable.baseline_image_placeholdeer).into(facilityImage);
-
+        MainActivity.loadImage(bookingItem.getImage(), facilityImage);
         // Display the current date
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         String currentDate = dateFormat.format(Calendar.getInstance().getTime());
@@ -170,8 +174,6 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
             Log.d("BookingAdapter", "Cancel button clicked");
             dismiss();
         });
-
-        return view;
     }
 
     private boolean isTimeSlotPassed(String currentTime, String timeSlot) {
@@ -198,5 +200,4 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
             return false; // Handle parsing error as needed
         }
     }
-
 }

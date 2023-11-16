@@ -1,6 +1,7 @@
 package com.iicportal.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,7 +19,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.iicportal.R;
+import com.iicportal.activity.FeedbackActivity;
 import com.iicportal.activity.MainActivity;
 import com.iicportal.adaptor.StatusAdaptor;
 import com.iicportal.models.BookingStatus;
@@ -49,7 +50,7 @@ public class VerticalHomeFragment extends Fragment {
 
     private BottomNavigationView bottomNavigationView;
     private CardView facilitiesButtonCard, ecanteenButtonCard;
-    private ImageView messageButtonIcon, userImage;
+    private ImageView feedbackButtonIcon, userImage;
     private TextView usernameText, statusEmptyText;
 
     private FirebaseAuth mAuth;
@@ -98,7 +99,7 @@ public class VerticalHomeFragment extends Fragment {
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
         facilitiesButtonCard = view.findViewById(R.id.facilitiesCard);
         ecanteenButtonCard = view.findViewById(R.id.ecanteenCard);
-        messageButtonIcon = view.findViewById(R.id.messageBtnIcon);
+        feedbackButtonIcon = view.findViewById(R.id.feedbackBtnIcon);
         userImage = view.findViewById(R.id.userImage);
         usernameText = view.findViewById(R.id.usernameText);
         statusEmptyText = view.findViewById(R.id.statusEmptyText);
@@ -109,10 +110,8 @@ public class VerticalHomeFragment extends Fragment {
         //region Welcome section
         userRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                usernameText.setText(task.getResult().child("fullName").getValue().toString());
-
-                if (task.getResult().child("image").getValue() != null)
-                    Glide.with(userImage.getContext()).load(task.getResult().child("image").getValue().toString()).placeholder(R.drawable.baseline_image_placeholdeer).into(userImage);
+                usernameText.setText(task.getResult().child("fullName").getValue(String.class));
+                MainActivity.loadImage(task.getResult().child("image").getValue(String.class), userImage);
             } else {
                 Log.e(STUDENT_HOME_TAG, "Error getting user data", task.getException());
             }
@@ -311,8 +310,8 @@ public class VerticalHomeFragment extends Fragment {
         //endregion
 
         // Button onClick listeners
-        messageButtonIcon.setOnClickListener(v -> {
-            // TODO: add navigation when chat feature is implemented
+        feedbackButtonIcon.setOnClickListener(v -> {
+            startActivity(new Intent(this.getActivity(), FeedbackActivity.class));
         });
 
         return view;

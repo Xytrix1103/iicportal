@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
@@ -46,9 +45,9 @@ public class OrderAdaptor extends FirebaseRecyclerAdapter<Order, OrderAdaptor.Or
         holder.orderItems.setLayoutManager(new LinearLayoutManager(context));
         orderItemAdaptor = new OrderItemAdaptor(context, model.getItems());
         holder.orderItems.setAdapter(orderItemAdaptor);
-        Glide.with(context).load(model.getPaymentMethod().getIcon()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.paymentMethodIcon);
+        MainActivity.loadImage(model.getPaymentMethod().getIcon(), holder.paymentMethodIcon);
         holder.orderOption.setText(model.getOrderOption().getOption());
-        Glide.with(context).load(model.getOrderOption().getIcon()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.orderOptionIcon);
+        MainActivity.loadImage(model.getOrderOption().getIcon(), holder.orderOptionIcon);
 
         int totalQuantity = 0;
         for (int i = 0; i < model.getItems().size(); i++) {

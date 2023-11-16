@@ -1,5 +1,6 @@
 package com.iicportal.activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -109,21 +110,48 @@ public class LoginActivity extends AppCompatActivity {
 
                                     } else {
                                         Log.d("LoginActivity", "Password is incorrect");
-                                        Toast.makeText(LoginActivity.this, "Password is incorrect", Toast.LENGTH_SHORT).show();
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                                        builder.setTitle("Password is incorrect");
+                                        builder.setMessage("Please enter the correct password");
+                                        builder.setPositiveButton("OK", (dialog, which) -> {
+                                            passwordEdit.requestFocus();
+                                        });
+                                        AlertDialog alertDialog = builder.create();
+                                        alertDialog.show();
                                     }
                                 } else {
                                     Log.d("LoginActivity", "User does not exist");
-                                    Toast.makeText(LoginActivity.this, "User does not exist", Toast.LENGTH_SHORT).show();
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                                    builder.setTitle("User does not exist");
+                                    builder.setMessage("Please enter the correct username");
+                                    builder.setPositiveButton("OK", (dialog, which) -> {
+                                        usernameEdit.requestFocus();
+                                    });
+                                    AlertDialog alertDialog = builder.create();
+                                    alertDialog.show();
                                 }
                             } else {
                                 Log.d("LoginActivity", "Error getting user: " + task.getException());
-                                Toast.makeText(LoginActivity.this, "Error getting user", Toast.LENGTH_SHORT).show();
+                                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                                builder.setTitle("Error getting user");
+                                builder.setMessage("Please try again later");
+                                builder.setPositiveButton("OK", (dialog, which) -> {
+                                    usernameEdit.requestFocus();
+                                });
+                                AlertDialog alertDialog = builder.create();
+                                alertDialog.show();
                             }
                         });
 
                         Log.w("LoginActivity", "signInWithEmail:failure", task.getException());
-                        Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                        builder.setTitle("Authentication failed");
+                        builder.setMessage("Please try again later");
+                        builder.setPositiveButton("OK", (dialog, which) -> {
+                            usernameEdit.requestFocus();
+                        });
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
                     }
                 });
         });

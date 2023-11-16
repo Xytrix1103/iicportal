@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -60,21 +59,14 @@ public class FacilityAdaptor extends FirebaseRecyclerAdapter<BookingItem, Facili
     @Override
     protected void onBindViewHolder(@NonNull FacilityViewHolder holder, int position, @NonNull BookingItem model) {
         holder.facilityName.setText(model.getName());
-        Glide.with(holder.facilityImage.getContext()).load(model.getImage()).placeholder(R.drawable.baseline_image_placeholdeer).into(holder.facilityImage);
-
-        SharedPreferences sharedPreferences = context.getSharedPreferences("com.iicportal", 0);
-        String role = sharedPreferences.getString("role", "Student");
+        MainActivity.loadImage(model.getImage(), holder.facilityImage);
 
         if (isEdit) {
-            if (!role.equals("Admin") || !role.equals("Vendor")) {
-                holder.editFacility.setVisibility(View.VISIBLE);
-                holder.booknowBtn.setVisibility(View.GONE);
-                holder.editFacility.setOnClickListener(v -> {
-                    context.startActivity(new Intent(context, EditFacilityActivity.class).putExtra("key", getRef(position).getKey()));
-                });
-            } else {
-                holder.editFacility.setVisibility(View.GONE);
-            }
+            holder.editFacility.setVisibility(View.VISIBLE);
+            holder.booknowBtn.setVisibility(View.GONE);
+            holder.editFacility.setOnClickListener(v -> {
+                context.startActivity(new Intent(context, EditFacilityActivity.class).putExtra("key", getRef(position).getKey()));
+            });
         } else {
             holder.booknowBtn.setOnClickListener(v -> {
                 Log.d("BookingAdapter", "Book button clicked");
