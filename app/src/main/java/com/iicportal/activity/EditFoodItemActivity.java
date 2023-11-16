@@ -14,16 +14,13 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.iicportal.R;
@@ -72,10 +69,14 @@ public class EditFoodItemActivity extends AppCompatActivity {
                     }
                 });
 
-        itemRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                foodItem = dataSnapshot.getValue(FoodItem.class);
+        itemRef.get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.d("EditFoodItemDialogFragment", "Error getting data");
+            } else {
+                Log.d("EditFoodItemDialogFragment", "Data: " + task.getResult().getValue());
+
+                foodItem = task.getResult().getValue(FoodItem.class);
+
                 nameEditText.setText(foodItem.getName());
                 descriptionEditText.setText(foodItem.getDescription());
                 priceEditText.setText(String.valueOf(foodItem.getPrice()));
@@ -85,11 +86,6 @@ public class EditFoodItemActivity extends AppCompatActivity {
                 Log.d("EditFoodItemDialogFragment", "Image URI: " + imageUri);
                 editImageBtn.setVisibility(View.VISIBLE);
                 addImageBtn.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d("EditFoodItemDialogFragment", "Error getting data");
             }
         });
 
@@ -183,15 +179,22 @@ public class EditFoodItemActivity extends AppCompatActivity {
 
                 if (imageUri != null) {
                     String fileName = imageUri.getPath().substring(imageUri.getPath().lastIndexOf('/') + 1);
-                    Log.d("EditFoodItemDialogFragment", "Image URI: " + imageUri);
-                    Log.d("EditFoodItemDialogFragment", "File Name: " + fileName);
+                    Log.d("AddFoodItemActivity", "fileName: " + fileName);
                     StorageReference newImageRef = storage.getReference("canteen_food_images/" + fileName);
-                    newImageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
-                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
-                            itemRef.child("image").setValue(uri.toString());
-                            finish();
+                    if (foodItem.getImage() != imageUri.toString()) {
+                        newImageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
+                            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
+                                foodItem.setImage(uri.toString());
+                                itemRef.setValue(foodItem);
+                                finish();
+                            });
                         });
-                    });
+                    } else {
+                        itemRef.setValue(foodItem);
+                        finish();
+                    }
+                } else {
+                    itemRef.child("image").setValue(null);
                 }
             }
         });
