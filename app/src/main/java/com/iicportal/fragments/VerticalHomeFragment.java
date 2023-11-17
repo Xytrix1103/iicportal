@@ -233,15 +233,17 @@ public class VerticalHomeFragment extends Fragment {
 
                         // Only send notifications for ongoing orders whose status have been changed to READY
                         for (Status status : statusList) {
-                            OrderStatus orderStatus = (OrderStatus) status;
-                            if (orderStatus.getOrderKey().equals(orderKey)) {
-                                if (!orderStatus.getOrderStatus().equals(statusValue)) {
-                                    if (statusValue.equals("READY")) {
-                                        OrderNotification orderNotification = new OrderNotification(context);
-                                        orderNotification.sendNotification("Order Ready", String.format("Your order (%s) is ready for pickup or delivery.", orderId));
+                            if (status.getType().equals("order")) {
+                                OrderStatus orderStatus = (OrderStatus) status;
+                                if (orderStatus.getOrderKey().equals(orderKey)) {
+                                    if (!orderStatus.getOrderStatus().equals(statusValue)) {
+                                        if (statusValue.equals("READY")) {
+                                            OrderNotification orderNotification = new OrderNotification(context);
+                                            orderNotification.sendNotification("Order Ready", String.format("Your order (%s) is ready for pickup or delivery.", orderId));
+                                        }
                                     }
+                                    break;
                                 }
-                                break;
                             }
                         }
 
@@ -258,15 +260,17 @@ public class VerticalHomeFragment extends Fragment {
                     else if (statusValue.equals("COMPLETED")) {
                         // Only send notifications for ongoing orders whose status have been changed to COMPLETED
                         for (Status status : statusList) {
-                            OrderStatus orderStatus = (OrderStatus) status;
-                            if (orderStatus.getOrderKey().equals(orderKey)) {
-                                if (!orderStatus.getOrderStatus().equals(statusValue)) {
-                                    if (statusValue.equals("COMPLETED")) {
-                                        OrderNotification orderNotification = new OrderNotification(context);
-                                        orderNotification.sendNotification("Order Complete", String.format("Your order (%s) has been completed.", orderId));
+                            if (status.getType().equals("order")) {
+                                OrderStatus orderStatus = (OrderStatus) status;
+                                if (orderStatus.getOrderKey().equals(orderKey)) {
+                                    if (!orderStatus.getOrderStatus().equals(statusValue)) {
+                                        if (statusValue.equals("COMPLETED")) {
+                                            OrderNotification orderNotification = new OrderNotification(context);
+                                            orderNotification.sendNotification("Order Complete", String.format("Your order (%s) has been completed.", orderId));
+                                        }
                                     }
+                                    break;
                                 }
-                                break;
                             }
                         }
 
