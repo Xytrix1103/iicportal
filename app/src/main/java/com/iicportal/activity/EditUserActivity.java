@@ -26,7 +26,7 @@ public class EditUserActivity extends AppCompatActivity {
 
     TextInputEditText name, email, password, phone;
     Spinner role;
-    ImageView nameEdit, emailEdit, passwordEdit, phoneEdit, roleEdit;
+    ImageView nameEdit, emailEdit, passwordEdit, phoneEdit, roleEdit, deleteBtn;
     TextView cancelBtn;
     ImageView backBtn;
     Button saveBtn;
@@ -57,6 +57,19 @@ public class EditUserActivity extends AppCompatActivity {
         cancelBtn = findViewById(R.id.cancelBtn);
         saveBtn = findViewById(R.id.saveBtn);
         backBtn = findViewById(R.id.backBtnIcon);
+        deleteBtn = findViewById(R.id.deleteBtn);
+
+        deleteBtn.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(EditUserActivity.this);
+            builder.setTitle("Delete");
+            builder.setMessage("Are you sure you want to delete this user?");
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+                usersRef.child(key).removeValue();
+                finish();
+            });
+            builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+            builder.show();
+        });
 
         backBtn.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(EditUserActivity.this);

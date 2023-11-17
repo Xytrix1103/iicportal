@@ -55,6 +55,12 @@ public class EditFacilityActivity extends AppCompatActivity {
         ImageView editImageBtn = findViewById(R.id.editImageBtn);
         ImageView addImageBtn = findViewById(R.id.addImageBtn);
 
+        ImageView backBtnIcon = findViewById(R.id.backBtnIcon);
+
+        backBtnIcon.setOnClickListener(v -> {
+            finish();
+        });
+
         ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                     if (uri != null) {
