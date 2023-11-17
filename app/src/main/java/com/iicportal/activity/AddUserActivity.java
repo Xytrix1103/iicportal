@@ -60,6 +60,12 @@ public class AddUserActivity extends AppCompatActivity {
         saveBtn = findViewById(R.id.saveBtn);
         backBtn = findViewById(R.id.backBtnIcon);
 
+        ImageView backBtnIcon = findViewById(R.id.backBtnIcon);
+
+        backBtnIcon.setOnClickListener(v -> {
+            finish();
+        });
+
         backBtn.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Cancel");

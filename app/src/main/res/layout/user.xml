@@ -29,16 +29,6 @@
 
 	</RelativeLayout>
 
-	<TextView
-		android:id="@+id/user_role"
-		android:layout_width="60dp"
-		android:layout_height="wrap_content"
-		android:text="Admin"
-		android:layout_toStartOf="@+id/edit_user"
-		android:layout_centerVertical="true"
-		android:textColor="@color/black"
-		android:textSize="14sp"/>
-
 	<ImageView
 		android:id="@+id/edit_user"
 		android:layout_width="wrap_content"

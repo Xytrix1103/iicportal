@@ -14,10 +14,35 @@
 
         <RelativeLayout
             android:id="@+id/header"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/backBtnIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/baseline_arrow_back_24"/>
+
+            <TextView
+                android:id="@+id/headerText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/backBtnIcon"
+                android:text="@string/add_facility"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal">
+            android:layout_below="@id/header"
+            android:layout_marginTop="20dp">
 
             <RelativeLayout
                 android:id="@+id/imageWrapper"

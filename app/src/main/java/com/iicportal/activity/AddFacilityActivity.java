@@ -15,7 +15,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -48,6 +47,11 @@ public class AddFacilityActivity extends AppCompatActivity {
         ImageView image = findViewById(R.id.image);
         ImageView editImageBtn = findViewById(R.id.editImageBtn);
         ImageView addImageBtn = findViewById(R.id.addImageBtn);
+        ImageView backBtnIcon = findViewById(R.id.backBtnIcon);
+
+        backBtnIcon.setOnClickListener(v -> {
+            finish();
+        });
 
         ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {

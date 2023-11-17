@@ -122,6 +122,12 @@ public class AddFoodItemActivity extends AppCompatActivity {
         TextView cancelBtn = findViewById(R.id.cancelBtn);
         TextView saveBtn = findViewById(R.id.saveBtn);
 
+        ImageView backBtnIcon = findViewById(R.id.backBtnIcon);
+
+        backBtnIcon.setOnClickListener(v -> {
+            finish();
+        });
+
         cancelBtn.setOnClickListener(v -> {
             finish();
         });
