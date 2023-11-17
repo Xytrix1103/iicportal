@@ -208,7 +208,7 @@ public class BookingDialogFragment extends BottomSheetDialogFragment {
         // Schedule booking reminder notifications by sending WorkRequests to WorkManager
         Data oneHourBeforeData = new Data.Builder()
                 .putString("TITLE", "Facility Booking Reminder")
-                .putString("MESSAGE", String.format("Hey there, just reminding you that your %s booking for today at %s is starting in an hour.", bookingItem.getName(), selectedTimeSlot))
+                .putString("MESSAGE", String.format("Hey there, just reminding you that your %s booking for today at %s is starting in an hour or less.", bookingItem.getName(), selectedTimeSlot))
                 .build();
         Data bookingStartData = new Data.Builder()
                 .putString("TITLE", "Facility Booking Started")
