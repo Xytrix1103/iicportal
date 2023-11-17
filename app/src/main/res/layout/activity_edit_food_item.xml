@@ -48,7 +48,7 @@
 				android:id="@+id/imageWrapper"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginBottom="20dp">
+				android:layout_marginBottom="40dp">
 
 				<ImageView
 					android:id="@+id/image"
@@ -147,7 +147,6 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_below="@id/descHint"
-					android:layout_gravity="center_vertical"
 					android:hint="@string/categoryHint"
 					android:theme="@style/EditText.Default"
 					input:errorEnabled="true"
@@ -160,6 +159,7 @@
 						android:layout_height="80dp"
 						android:background="@color/transparent"
 						android:inputType="textMultiLine"
+						android:gravity="top"
 						android:paddingVertical="15dp"
 						android:textColor="@color/black"
 						android:textSize="16sp" />

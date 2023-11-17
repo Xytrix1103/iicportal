@@ -1,14 +1,11 @@
 package com.iicportal.activity;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -18,7 +15,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -36,18 +32,19 @@ public class AddFoodItemActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_food_item);
-        Context context = this;
+        setContentView(R.layout.activity_add_food_item);
+        String category = getIntent().getStringExtra("category");
         foodItem = new FoodItem();
 
         database = MainActivity.database;
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
 
+        TextView headerText = findViewById(R.id.headerText);
+        headerText.setText("Add " + category.substring(0, 1).toUpperCase() + category.substring(1));
         TextInputEditText nameEditText = findViewById(R.id.name);
         TextInputEditText descriptionEditText = findViewById(R.id.desc);
         TextInputEditText priceEditText = findViewById(R.id.price);
-        Spinner categorySpinner = findViewById(R.id.categorySpinner);
         ImageView image = findViewById(R.id.image);
         ImageView editImageBtn = findViewById(R.id.editImageBtn);
         ImageView addImageBtn = findViewById(R.id.addImageBtn);
@@ -65,23 +62,6 @@ public class AddFoodItemActivity extends AppCompatActivity {
                         Log.d("PhotoPicker", "No media selected");
                     }
                 });
-
-        database.getReference("ecanteen/categories/").get().addOnCompleteListener(task1 -> {
-            if (task1.isSuccessful()) {
-                String[] categories = new String[(int) task1.getResult().getChildrenCount()];
-                int i = 0;
-                for (DataSnapshot snapshot : task1.getResult().getChildren()) {
-                    categories[i] = snapshot.child("category").getValue(String.class);
-                    i++;
-                }
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                categorySpinner.setAdapter(adapter);
-                categorySpinner.setSelection(0);
-            } else {
-                Log.d("EditFoodItemDialogFragment", "Error getting data");
-            }
-        });
 
         PopupMenu popupMenu = new PopupMenu(this, editImageBtn);
         popupMenu.getMenuInflater().inflate(R.menu.food_item_image_menu, popupMenu.getMenu());
@@ -162,7 +142,7 @@ public class AddFoodItemActivity extends AppCompatActivity {
                         foodItem.setName(name);
                         foodItem.setDescription(description);
                         foodItem.setPrice(Double.parseDouble(price));
-                        foodItem.setCategory(categorySpinner.getSelectedItem().toString());
+                        foodItem.setCategory(category);
                         foodItem.setImage(uri.toString());
                         menuRef = database.getReference("ecanteen/fooditems/");
                         menuRef.push().setValue(foodItem);

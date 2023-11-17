@@ -183,7 +183,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="top"
                 android:hint="@string/message_hint"
-                android:inputType="textMultiLine"
                 android:lines="6"
                 android:paddingVertical="15dp"
                 android:textColor="@color/black"
