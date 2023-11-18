@@ -40,7 +40,7 @@
 			android:layout_toEndOf="@id/headerIcon"
 			android:text="@string/edit_ecanteen"
 			android:textColor="@color/black"
-			android:textSize="24sp"
+			android:textSize="18sp"
 			android:textStyle="bold"/>
 
 		<ImageView

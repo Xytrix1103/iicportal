@@ -61,7 +61,7 @@
     <LinearLayout
         android:id="@+id/facilityLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
         android:gravity="center"
@@ -81,7 +81,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/facilityRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:overScrollMode="never"
             android:layout_gravity="center_horizontal"/>
 

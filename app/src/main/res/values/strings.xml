@@ -146,4 +146,7 @@
     <string name="feedback">Feedback</string>
     <string name="feedback_description">Reach out to us with any feedback! We\'re all ears and we\'ll strive to improve your experience with this application.</string>
     <string name="feedback_details">Feedback Details</string>
+	<string name="edit_food_item">Edit Food Item</string>
+	<string name="add_food_item">Add Food Item</string>
+    <string name="edit_facility_title">Edit Facility</string>
 </resources>

@@ -32,13 +32,11 @@ public class UserAdaptor extends FirebaseRecyclerAdapter<User, UserAdaptor.UserV
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {
         public TextView email;
-        public TextView role;
         public ImageView edit;
 
         public UserViewHolder(View itemView) {
             super(itemView);
             email = itemView.findViewById(R.id.user_email);
-            role = itemView.findViewById(R.id.user_role);
             edit = itemView.findViewById(R.id.edit_user);
         }
     }
@@ -46,7 +44,6 @@ public class UserAdaptor extends FirebaseRecyclerAdapter<User, UserAdaptor.UserV
     @Override
     protected void onBindViewHolder(@NonNull UserViewHolder holder, int position, @NonNull User model) {
         holder.email.setText(model.getEmail());
-        holder.role.setText(model.getRole());
         holder.edit.setOnClickListener(v -> {
             context.startActivity(new Intent(context, EditUserActivity.class).putExtra("key", getRef(position).getKey()));
         });

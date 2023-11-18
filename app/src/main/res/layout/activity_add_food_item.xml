@@ -6,23 +6,49 @@
 	android:fillViewport="true"
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<RelativeLayout android:layout_width="match_parent"
+	<RelativeLayout
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:padding="20dp"
-		android:orientation="vertical">
+		android:orientation="vertical"
+		android:padding="20dp">
 
 		<RelativeLayout
 			android:id="@+id/header"
-			android:layout_width="wrap_content"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<ImageView
+				android:id="@+id/backBtnIcon"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
+				android:layout_marginEnd="10dp"
+				android:src="@drawable/baseline_arrow_back_24"/>
+
+			<TextView
+				android:id="@+id/headerText"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
+				android:layout_toEndOf="@id/backBtnIcon"
+				android:text="@string/add_food_item"
+				android:textColor="@color/black"
+				android:textSize="24sp"
+				android:textStyle="bold"/>
+
+		</RelativeLayout>
+
+		<RelativeLayout
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="10dp"
-			android:orientation="horizontal">
+			android:layout_below="@id/header"
+			android:layout_marginTop="20dp">
 
 			<RelativeLayout
 				android:id="@+id/imageWrapper"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginBottom="20dp">
+				android:layout_marginBottom="40dp">
 
 				<ImageView
 					android:id="@+id/image"
@@ -121,9 +147,9 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_below="@id/descHint"
-					android:layout_gravity="center_vertical"
 					android:hint="@string/categoryHint"
 					android:theme="@style/EditText.Default"
+					input:errorEnabled="true"
 					input:errorTextAppearance="@style/TextAppearance.AppCompat.Small"
 					input:hintEnabled="false">
 
@@ -131,8 +157,9 @@
 						android:id="@+id/desc"
 						android:layout_width="match_parent"
 						android:layout_height="80dp"
-						android:background="@color/transparent"
 						android:inputType="textMultiLine"
+						android:gravity="top"
+						android:background="@color/transparent"
 						android:paddingVertical="15dp"
 						android:textSize="16sp"
 						android:textColor="@color/black"/>
@@ -165,6 +192,7 @@
 					android:layout_gravity="center_vertical"
 					android:hint="@string/categoryHint"
 					android:theme="@style/EditText.Default"
+					input:errorEnabled="true"
 					input:errorTextAppearance="@style/TextAppearance.AppCompat.Small"
 					input:hintEnabled="false">
 
