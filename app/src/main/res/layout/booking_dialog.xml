@@ -161,7 +161,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:text="@string/save"
+            android:text="@string/confirm"
             android:theme="@style/Button.Primary"
             button:cornerRadius="40dp"
             button:elevation="20dp" />

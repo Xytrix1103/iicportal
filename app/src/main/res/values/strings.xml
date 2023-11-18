@@ -122,6 +122,7 @@
     <string name="chats">Chats</string>
     <string name="messages">Messages</string>
     <string name="total_orders">Total Orders</string>
+    <string name="confirm">Confirm</string>
 
 
     <string-array name="timeslot">
