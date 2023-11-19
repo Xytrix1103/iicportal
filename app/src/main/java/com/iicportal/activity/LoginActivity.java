@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,7 +17,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.iicportal.R;
-import com.iicportal.models.User;
 
 public class LoginActivity extends AppCompatActivity {
     TextInputEditText usernameEdit, passwordEdit;
@@ -91,34 +89,15 @@ public class LoginActivity extends AppCompatActivity {
                         usersRef.orderByChild("email").equalTo(username).get().addOnCompleteListener(task1 -> {
                             if (task1.isSuccessful()) {
                                 if (task1.getResult().exists()) {
-                                    String key = task1.getResult().getChildren().iterator().next().getKey();
-                                    if (task1.getResult().child(key).child("password").getValue().toString().equals(password) && task1.getResult().child(key).child("role").getValue().toString().equals("Vendor")) {
-                                        mAuth.createUserWithEmailAndPassword(username, password)
-                                                .addOnCompleteListener(this, task2 -> {
-                                                    if (task2.isSuccessful()) {
-                                                        Log.d("LoginActivity", "createUserWithEmail:success");
-                                                        user = mAuth.getCurrentUser();
-                                                        usersRef.child(user.getUid()).setValue(task1.getResult().child(key).getValue(User.class));
-                                                        usersRef.child(key).removeValue();
-                                                        reload();
-                                                    } else {
-                                                        Log.w("LoginActivity", "createUserWithEmail:failure", task2.getException());
-                                                        Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                                                Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
-
-                                    } else {
-                                        Log.d("LoginActivity", "Password is incorrect");
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                                        builder.setTitle("Password is incorrect");
-                                        builder.setMessage("Please enter the correct password");
-                                        builder.setPositiveButton("OK", (dialog, which) -> {
-                                            passwordEdit.requestFocus();
-                                        });
-                                        AlertDialog alertDialog = builder.create();
-                                        alertDialog.show();
-                                    }
+                                    Log.d("LoginActivity", "Password is incorrect");
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                                    builder.setTitle("Password is incorrect");
+                                    builder.setMessage("Please enter the correct password");
+                                    builder.setPositiveButton("OK", (dialog, which) -> {
+                                        passwordEdit.requestFocus();
+                                    });
+                                    AlertDialog alertDialog = builder.create();
+                                    alertDialog.show();
                                 } else {
                                     Log.d("LoginActivity", "User does not exist");
                                     AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
@@ -144,14 +123,6 @@ public class LoginActivity extends AppCompatActivity {
                         });
 
                         Log.w("LoginActivity", "signInWithEmail:failure", task.getException());
-                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                        builder.setTitle("Authentication failed");
-                        builder.setMessage("Please try again later");
-                        builder.setPositiveButton("OK", (dialog, which) -> {
-                            usernameEdit.requestFocus();
-                        });
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
                     }
                 });
         });
@@ -180,8 +151,22 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void reload() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        if (mAuth.getCurrentUser() != null) {
+            user = mAuth.getCurrentUser();
+            usersRef.child(user.getUid()).child("role").get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    String role = task.getResult().getValue(String.class);
+                    Log.d("LoginActivity", "Role: " + role);
+                    sharedPreferences.edit().putString("role", role).apply();
+                } else {
+                    Log.d("LoginActivity", "Error getting role: " + task.getException());
+                }
+            });
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            Log.d("LoginActivity", "User is null");
+        }
     }
 }

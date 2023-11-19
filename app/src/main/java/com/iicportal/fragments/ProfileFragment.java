@@ -27,7 +27,6 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.iicportal.R;
-import com.iicportal.activity.FeedbackActivity;
 import com.iicportal.activity.LoginActivity;
 import com.iicportal.activity.MainActivity;
 import com.iicportal.activity.ProfileUpdateActivity;
@@ -44,6 +43,7 @@ public class ProfileFragment extends Fragment {
     CardView contactButton;
     AdminDashboardFragment.OpenDrawerInterface openDrawerInterface;
     String[] initial = {"", "", "", ""};
+
     public ProfileFragment() {
         super(R.layout.profile_fragment);
         this.openDrawerInterface = null;
@@ -54,10 +54,10 @@ public class ProfileFragment extends Fragment {
         this.openDrawerInterface = openDrawerInterface;
     }
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        context = requireContext();
+    public View onCreateView(@NonNull android.view.LayoutInflater inflater, android.view.ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.profile_fragment, container, false);
     }
+
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -72,7 +72,7 @@ public class ProfileFragment extends Fragment {
         profileUpdateIcon = view.findViewById(R.id.profileUpdateIcon);
         pfp = view.findViewById(R.id.profileImage);
         menuButton = view.findViewById(R.id.menuIcon);
-        sharedPreferences = context.getSharedPreferences("com.iicportal", MODE_PRIVATE);
+        sharedPreferences = requireActivity().getSharedPreferences("com.iicportal", MODE_PRIVATE);
 
         database.getReference("users/"+user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -131,16 +131,16 @@ public class ProfileFragment extends Fragment {
         });
 
         profileUpdateIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ProfileUpdateActivity.class);
+            Intent intent = new Intent(requireActivity(), ProfileUpdateActivity.class);
             intent.putExtra("userID",user.getUid());
-            context.startActivity(intent);
+            requireActivity().startActivity(intent);
         });
 
         logoutButtonIcon = view.findViewById(R.id.logoutBtnIcon);
 
         logoutButtonIcon.setOnClickListener(v -> {
             mAuth.signOut();
-            Intent intent = new Intent(context, LoginActivity.class);
+            Intent intent = new Intent(requireActivity(), LoginActivity.class);
             startActivity(intent);
         });
     }
