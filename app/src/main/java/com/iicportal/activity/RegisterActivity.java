@@ -72,7 +72,7 @@ public class RegisterActivity extends AppCompatActivity {
             if (validateFields(fullName, phoneNumber, email, password, confirmPassword)) {
                 Query query = usersRef.orderByChild("email").equalTo(email);
 
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                query.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.getChildrenCount() > 0) {
@@ -159,6 +159,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private boolean validateField(String field, TextInputEditText editText, String errorMessage) {
         if (field.isEmpty()) {
+            Log.d("RegisterActivity", errorMessage);
             editText.setError(errorMessage);
             editText.requestFocus();
             return false;
@@ -174,6 +175,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(email);
+        Log.d("RegisterActivity", "Email is " + matcher.matches());
 
         return matcher.matches();
     }
@@ -182,6 +184,7 @@ public class RegisterActivity extends AppCompatActivity {
         String phoneNumberRegex = "^01[0-46-9][0-9]{7,8}$";
         Pattern pattern = Pattern.compile(phoneNumberRegex);
         Matcher matcher = pattern.matcher(phoneNumber);
+        Log.d("RegisterActivity", "Phone number is " + matcher.matches());
 
         return matcher.matches();
     }
@@ -193,7 +196,7 @@ public class RegisterActivity extends AppCompatActivity {
         String passwordRegex = "^(?=\\S+$).{8,}$";
         Pattern pattern = Pattern.compile(passwordRegex);
         Matcher matcher = pattern.matcher(password);
-
+        Log.d("RegisterActivity", "Password is " + matcher.matches());
         return matcher.matches();
     }
 }

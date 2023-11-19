@@ -91,6 +91,7 @@
                     android:layout_marginBottom="40dp"
                     android:hint="@string/fullNameHint"
                     android:theme="@style/EditText.Default"
+                    input:errorEnabled="true"
                     input:startIconDrawable="@drawable/baseline_person_24"
                     input:errorTextAppearance="@style/TextAppearance.AppCompat.Small"
                     input:hintEnabled="false">
@@ -125,6 +126,7 @@
                     android:layout_marginBottom="40dp"
                     android:hint="@string/phoneNumberHint"
                     android:theme="@style/EditText.Default"
+                    input:errorEnabled="true"
                     input:startIconDrawable="@drawable/baseline_phone_24"
                     input:hintEnabled="false">
 
@@ -158,6 +160,7 @@
                     android:layout_marginBottom="40dp"
                     android:hint="@string/emailHint"
                     android:theme="@style/EditText.Default"
+                    input:errorEnabled="true"
                     input:startIconDrawable="@drawable/baseline_email_24"
                     input:hintEnabled="false">
 
@@ -193,6 +196,7 @@
                     android:theme="@style/EditText.Default"
                     input:startIconDrawable="@drawable/baseline_lock_24"
                     input:hintEnabled="false"
+                    input:errorEnabled="true"
                     input:passwordToggleEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -226,6 +230,7 @@
                     android:theme="@style/EditText.Default"
                     input:startIconDrawable="@drawable/baseline_lock_24"
                     input:hintEnabled="false"
+                    input:errorEnabled="true"
                     input:passwordToggleEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText

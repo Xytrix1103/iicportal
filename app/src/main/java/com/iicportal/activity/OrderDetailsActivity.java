@@ -52,7 +52,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     ImageView backBtnIcon;
     Button button;
 
-    TextView sentToKitchenDateTime, readyForPickupDateTime, completedDateTime, status;
+    TextView sentToKitchenDateTime, readyForPickupDateTime, completedDateTime, status, headerText;
     RelativeLayout sentToKitchenBody, readyForPickupBody, completedBody, takeawayFeesBody;
 
     LinearProgressIndicator progressBar;
@@ -85,6 +85,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         itemAdaptor = new CheckoutItemAdaptor(options, context);
         recyclerView.setAdapter(itemAdaptor);
 
+        headerText = findViewById(R.id.headerText);
         progressBar = findViewById(R.id.progressBar);
         paymentMethod = findViewById(R.id.payment_method);
         orderOption = findViewById(R.id.collect_by);
@@ -108,11 +109,15 @@ public class OrderDetailsActivity extends AppCompatActivity {
         progressBar.setIndicatorColor(context.getResources().getColor(R.color.light_green_800));
         progressBar.setTrackColor(context.getResources().getColor(R.color.light_green_200));
 
+
         orderRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                headerText.setText(snapshot.getValue(Order.class).getOrderID());
+
                 if (snapshot.child("timestamp").exists()) {
-                    sentToKitchenDateTime.setText(new SimpleDateFormat("dd/MM/yyyy hh:mm a").format(Long.parseLong(snapshot.child("timestamp").getValue().toString())));
+                    sentToKitchenDateTime.setText(new SimpleDateFormat("dd/MM/yyyy hh:mm a").format(
+                            Long.parseLong(snapshot.child("timestamp").getValue().toString())));
                     sentToKitchenBody.setVisibility(TextView.VISIBLE);
                     status.setText("PREPARING");
                     status.setTextColor(context.getResources().getColor(R.color.black));
@@ -122,7 +127,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 }
 
                 if (snapshot.child("ready").exists() && Boolean.TRUE.equals(snapshot.child("ready").getValue(Boolean.class))) {
-                    readyForPickupDateTime.setText(new SimpleDateFormat("dd/MM/yyyy hh:mm a").format(Long.parseLong(snapshot.child("readyTimestamp").getValue().toString())));
+                    readyForPickupDateTime.setText(new SimpleDateFormat("dd/MM/yyyy hh:mm a").format(
+                            Long.parseLong(snapshot.child("readyTimestamp").getValue().toString())));
                     readyForPickupBody.setVisibility(TextView.VISIBLE);
                     status.setText("READY");
                     status.setTextColor(context.getResources().getColor(R.color.black));
@@ -132,7 +138,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 }
 
                 if (snapshot.child("completed").exists() && Boolean.TRUE.equals(snapshot.child("completed").getValue(Boolean.class))) {
-                    completedDateTime.setText(new SimpleDateFormat("dd/MM/yyyy hh:mm a").format(Long.parseLong(snapshot.child("completedTimestamp").getValue().toString())));
+                    completedDateTime.setText(new SimpleDateFormat("dd/MM/yyyy hh:mm a").format
+                            (Long.parseLong(snapshot.child("completedTimestamp").getValue().toString())));
                     completedBody.setVisibility(TextView.VISIBLE);
 
                     status.setText("COMPLETED");
